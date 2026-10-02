@@ -1,0 +1,4 @@
+build/
+assets/scene.bin
+artifacts/*.png
+!artifacts/render-reference/
