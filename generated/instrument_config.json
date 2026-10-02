@@ -1,6 +1,6 @@
 {
  "meta": {
-  "config_sha256": "9f19a22b912bcbcd12818602812148e6062ec696041230614017cec0d043ec06",
+  "config_sha256": "b759cbb0175ba15931b10f222b5cff59a8ffad0b9df6c0ba4a1df6c53fc36431",
   "generator": "tools/gen_config.py",
   "source": "design/instrument.yaml"
  },
@@ -438,6 +438,13 @@
    "source": "R722 9.1k / R723 1k via J9",
    "unit": "1",
    "value": 10.1
+  },
+  "RECEIVER_MIXER_CONVERSION_GAIN": {
+   "kind": "calculated",
+   "path": "receiver.mixer_conversion_gain",
+   "source": "ideal commutating (+-1 square-wave) double-balanced mixer: (4/pi)/2 = 2/pi; VERIFY on bench",
+   "unit": "1",
+   "value": 0.6366197723675814
   },
   "RECEIVER_NOISE_DENSITY_V_PER_RTHZ": {
    "kind": "estimate",

@@ -1,0 +1,6 @@
+{
+ "gamma_bar_hz_per_t": 42.577e6,
+ "f_tx_hz": 89400.0,
+ "b0_current_a": 1.5,
+ "source": "legacy/simulator/build/nmr_exact.wls lines 28-34"
+}

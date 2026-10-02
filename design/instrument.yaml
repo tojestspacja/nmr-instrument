@@ -98,6 +98,8 @@ lo:
 receiver:
   lna1_gain:        {value: 101.0, unit: "1", kind: design, source: "R712 10k / R713 100 (requires the J3 shunt!)"}
   lna2_gain:        {value: 10.1, unit: "1", kind: design, source: "R722 9.1k / R723 1k via J9"}
+  mixer_conversion_gain: {value: 0.6366197723675814, unit: "1", kind: calculated,
+                          source: "ideal commutating (+-1 square-wave) double-balanced mixer: (4/pi)/2 = 2/pi; VERIFY on bench"}
   if_gain:          {value: 10.0, unit: "1", kind: calculated, source: "electronics audit: OPA1612 network with 1k source -> ~10 (doc says 20); VERIFY on bench"}
   if_bandwidth:     {value: 14.2e3, unit: Hz, kind: calculated, source: "OPA1612 stage pole (C914/C915 560 pF, 20k)"}
   noise_density:    {value: 15.6e-9, unit: V/sqrt(Hz), kind: estimate, source: "tank + OPA1656 at the tank node (legacy physics.js); to be measured"}
