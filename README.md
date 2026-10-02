@@ -6,6 +6,10 @@
 > Nothing has been printed, cut or measured yet, and every spectrum on this page is
 > *simulated* from the probe's geometry.
 
+▶ **Try the bench: https://tojestspacja.github.io/nmr-instrument/**. Orbit the 3D setup, fire a pulse
+and watch the magnetization tip, dephase and come back as an FID and a spectrum. It's simulated with the
+Bloch equations in this probe's real fields.
+
 In this project, we'll take the class board, a little NMR console running at 2.1 mT and 89.4 kHz,
 and turn it into an instrument you can actually put a sample in. That means a housing for the boards,
 a probe that holds the coil and the sample, a magnet (well, a pair of coils) to make the field, and a
