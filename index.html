@@ -4,38 +4,120 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Benchtop NMR instrument</title>
-<meta name="description" content="A from-scratch benchtop NMR spectrometer: shared C++ physics core, firmware, and a browser digital twin.">
+<meta name="description" content="A from-scratch benchtop NMR spectrometer: mechanical build, probe and field, electronics and firmware, and a browser digital twin of the whole signal path.">
 <style>
-  :root { --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa7b4; --line:#2b3444; --accent:#58a6ff; }
-  @media (prefers-color-scheme: light){ :root:not([data-theme=dark]){ --bg:#f6f8fa; --panel:#fff; --ink:#1f2328; --muted:#57606a; --line:#d0d7de; --accent:#0969da; } }
-  :root[data-theme=dark]{ --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa7b4; --line:#2b3444; --accent:#58a6ff; }
-  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  main{max-width:720px;margin:0 auto;padding:48px 20px}
-  h1{font-size:28px;margin:0 0 6px} .lead{color:var(--muted);margin:0 0 28px}
-  .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:14px 0;text-decoration:none;color:inherit;transition:border-color .15s}
-  .card:hover{border-color:var(--accent)} .card h2{margin:0 0 4px;font-size:17px} .card p{margin:0;color:var(--muted);font-size:13.5px}
-  .tag{display:inline-block;font-size:11px;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:1px 9px;margin-left:8px;vertical-align:middle}
-  footer{color:var(--muted);font-size:12.5px;margin-top:28px;border-top:1px solid var(--line);padding-top:16px}
+  :root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2230;--ink:#e6edf3;--muted:#9aa7b4;--line:#2b3444;--accent:#58a6ff;
+        --tx:#f0883e;--rx:#3fb950;--spec:#bc8cff;--chip:#1c2230}
+  @media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f6f8fa;--panel:#fff;--panel2:#f0f3f7;--ink:#1f2328;
+    --muted:#57606a;--line:#d0d7de;--accent:#0969da;--tx:#bc4c00;--rx:#1a7f37;--spec:#8250df;--chip:#eef2f6}}
+  :root[data-theme=dark]{--bg:#0d1117;--panel:#161b22;--panel2:#1c2230;--ink:#e6edf3;--muted:#9aa7b4;--line:#2b3444;
+    --accent:#58a6ff;--tx:#f0883e;--rx:#3fb950;--spec:#bc8cff;--chip:#1c2230}
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
   a{color:var(--accent)}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header.top{border-bottom:1px solid var(--line)}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;flex-wrap:wrap}
+  .brand{font-weight:700;text-decoration:none;color:var(--ink)}
+  nav a{color:var(--muted);text-decoration:none;margin-left:14px;font-size:13.5px}
+  nav a:hover{color:var(--accent)}
+  .hero{padding:40px 0 10px}
+  h1{font-size:30px;margin:0 0 6px;letter-spacing:.2px} .byline{color:var(--muted);margin:0 0 18px;font-size:13.5px}
+  .status{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:13.5px;color:var(--ink);margin:0 0 22px}
+  figure{margin:22px 0} img{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
+  figcaption{color:var(--muted);font-size:12.5px;margin-top:7px}
+  h2{font-size:21px;margin:34px 0 10px} h3{font-size:16px;margin:22px 0 6px}
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+  @media (max-width:720px){.tools{grid-template-columns:1fr}}
+  .tool{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px;text-decoration:none;color:inherit;transition:border-color .15s}
+  .tool:hover{border-color:var(--accent)} .tool h3{margin:0 0 4px} .tool p{margin:0;color:var(--muted);font-size:13px}
+  .tool .tag{display:inline-block;font-size:10.5px;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:middle}
+  .chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0;font-size:13px}
+  .chain .st{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-weight:600}
+  .chain .ar{color:var(--muted)}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  @media (max-width:720px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .card h3{margin:0 0 6px} .card p{margin:0 0 8px;color:var(--muted);font-size:13.5px}
+  .btn{display:inline-block;border-radius:8px;padding:9px 15px;text-decoration:none;font-weight:600;font-size:14px}
+  .btn.primary{background:var(--accent);color:#fff} .btn.ghost{border:1px solid var(--line);color:var(--ink)}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+  ul{color:var(--ink)} li{margin:3px 0}
+  footer{border-top:1px solid var(--line);margin-top:40px;padding:20px 0;color:var(--muted);font-size:12.5px}
 </style>
 </head>
 <body>
-<main>
-  <h1>Benchtop NMR spectrometer</h1>
-  <p class="lead">A from-scratch benchtop NMR instrument — one shared C++ physics/DSP core that runs on the microcontroller, in the host tools, and (compiled to WebAssembly) in your browser.</p>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">Benchtop NMR · Project 3</a>
+    <nav>
+      <a href="#device">The device</a>
+      <a href="#signal">Signal path</a>
+      <a href="#build">Build it</a>
+      <a href="legacy/">Full walkthrough</a>
+      <a href="https://github.com/tojestspacja/nmr-instrument">Repo</a>
+    </nav>
+  </div>
+</header>
 
-  <a class="card" href="simulator/">
-    <h2>Digital-twin simulator <span class="tag">live</span></h2>
-    <p>Run FID, Hahn-echo, inversion-recovery and CPMG experiments on a modelled water sample. Driven by the real WebAssembly core — the same code the instrument runs.</p>
-  </a>
+<main class="wrap">
+  <section class="hero">
+    <h1>A benchtop NMR instrument, end to end</h1>
+    <p class="byline">Yi-Tsai Liang · TIGP Experimental Methods 2026 · Project 3</p>
+    <div class="status"><b>Design stage.</b> The mechanics, electronics and firmware are designed and cross-checked; nothing has been built or measured yet. Every spectrum and signal here is <em>simulated</em> from the instrument's own model — the same C++ core the firmware runs.</div>
+    <figure>
+      <img src="legacy/mechanical/instrument.png" alt="The whole bench: the housing with the boards on the right, the probe on a tripod inside two large B0 coils on the left, joined by cables" width="1800" height="1000">
+      <figcaption>The whole bench: housing and boards, the probe on its tripod inside the B₀ coil pair, three cables between them.</figcaption>
+    </figure>
+  </section>
 
-  <a class="card" href="legacy/">
-    <h2>Earlier bench walkthrough</h2>
-    <p>The original Project&nbsp;3 landing page and 3-D bench simulator, kept for reference.</p>
-  </a>
+  <section id="device">
+    <h2>One instrument, two things you can drive</h2>
+    <p>The project is a 2.1 mT, 89.4 kHz proton NMR spectrometer built around the class board: a printed housing for the boards, a wound probe that holds the coil and the sample, a Helmholtz pair for the field, and firmware that turns a pulse program into a spectrum. Two interactive views let you explore it — the physical bench, and the measurement signal path. Both run entirely in your browser.</p>
+    <div class="tools">
+      <a class="tool" href="legacy/simulator/">
+        <h3>3-D bench <span class="tag">physical</span></h3>
+        <p>The see-through probe, the water sample as voxels, the field, and the net magnetisation — the instrument as an object you can turn around.</p>
+      </a>
+      <a class="tool" href="simulator/">
+        <h3>Signal-path console <span class="tag">measurement</span></h3>
+        <p>Run FID / echo / inversion-recovery / CPMG and watch the firmware pipeline — pulse program → gates → ADC → DSP → spectrum — stage by stage.</p>
+      </a>
+    </div>
+  </section>
 
-  <footer>
-    Design-stage model — not a measurement. No calibrated probe, measured FID, or verified timing is claimed here.
+  <section id="signal">
+    <h2>The signal path</h2>
+    <p>The <a href="simulator/">console</a> is not a re-implementation — it drives the exact C++ physics/DSP/pulse core the microcontroller runs, compiled to WebAssembly. Each stage on that page is a stage of the real firmware:</p>
+    <div class="chain">
+      <span class="st">Pulse program</span><span class="ar">→</span>
+      <span class="st" style="border-color:var(--tx)">Gate engine</span><span class="ar">→</span>
+      <span class="st">ADC (ADS8688)</span><span class="ar">→</span>
+      <span class="st" style="border-color:var(--rx)">DSP pipeline</span><span class="ar">→</span>
+      <span class="st" style="border-color:var(--spec)">Spectrum</span>
+    </div>
+    <div class="cards">
+      <div class="card"><h3>Hardware-neutral program</h3><p>An experiment compiles to a small instruction stream (timing in engine ticks, phase in 1/65536 turn). The same bytes drive the RMT gate backend, the simulator and a future FPGA backend.</p></div>
+      <div class="card"><h3>Deterministic gates</h3><p>TX_EN, RX_BLANK and the DDS phase select are packed into RMT symbols and started on one clock edge; MCPWM capture timestamps every edge, so the timing is measured, not assumed.</p></div>
+      <div class="card"><h3>Hardware-paced ADC</h3><p>The ADS8688 streams over I²S at 125 kS/s per channel. I and Q are converted one aperture apart — a skew the shared DSP corrects with a fractional delay (you can toggle it on the console).</p></div>
+      <div class="card"><h3>One shared receive chain</h3><p>Volts → DC removal → digital mix to baseband → FIR + decimate → per-scan phase correction → coherent average → spectrum. The firmware, the host tools and the browser all run this one implementation.</p></div>
+    </div>
+    <div class="cta"><a class="btn primary" href="simulator/">Open the signal-path console →</a></div>
+  </section>
+
+  <section id="build">
+    <h2>Build it</h2>
+    <p>The full build walkthrough has the whole story with every design decision, measurement and OpenSCAD trick: the housing that holds the boards at two heights, the probe former you can actually wind, the Helmholtz field, and the fabrication files.</p>
+    <div class="cta">
+      <a class="btn primary" href="legacy/">Open the full build walkthrough →</a>
+      <a class="btn ghost" href="https://github.com/tojestspacja/nmr-instrument/tree/v2/legacy/fabrication">Fabrication files</a>
+    </div>
+    <h3>Hardware &amp; firmware</h3>
+    <p>The real electronics and the current working firmware live in the course's <a href="https://github.com/TIGP-Experimental-Methods/class-board-2026">class-board repository</a>, which stays authoritative for the board. This project's experimental successor firmware (shared C++ core, ESP-IDF control loop) is developed under <a href="https://github.com/tojestspacja/nmr-instrument/tree/v2/firmware">this repo's firmware/</a> and is not yet a replacement for the class board.</p>
+  </section>
+
+  <footer class="wrap">
+    Design-stage model — not a measurement. No calibrated probe, measured FID, spin echo, or verified timing is claimed here.
   </footer>
 </main>
 </body>

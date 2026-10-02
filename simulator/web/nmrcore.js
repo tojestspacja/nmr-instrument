@@ -3,7 +3,7 @@
 // Works in the browser and in Node (tests/wasm_parity.mjs).
 
 const LAYOUT = {          // byte sizes, checked against nmr_abi_layout() at load time
-  timing: 40, sequence: 72, limits: 64, model: 200, record: 64, pipeline: 64,
+  timing: 40, sequence: 72, limits: 64, model: 208, record: 64, pipeline: 72,
 };
 const F = {               // field offsets (wasm32: double 8-aligned)
   timing: { tick_hz: 0, tx_freq_hz: 8, pre_blank_s: 16, dead_time_s: 24, repetition_s: 32 },
@@ -13,11 +13,12 @@ const F = {               // field offsets (wasm32: double 8-aligned)
            earth_y: 56, earth_z: 64, tx_coil_current: 72, tank_f0: 80, tank_q: 88, rx_gain: 96, if_pole_hz: 104,
            noise_density: 112, lo_hz: 120, adc_full_scale: 128, adc_rate: 136, adc_t0: 144, offset_i: 152,
            offset_q: 160, adc_bits: [168, 'i32'], lo_coherent: [172, 'i32'], interp: [176, 'i32'],
-           beat_measurement_sigma: 184, seed: [192, 'u64'] },
+           beat_measurement_sigma: 184, seed: [192, 'u64'], iq_skew_samples: 200 },
   record: { scan: [0, 'u32'], window: [4, 'u32'], t_first: 8, t_excitation: 16, rx_phase_turns: 24,
             beat_phase_true: 32, beat_phase_measured: 40, f_tx: 48, n: [56, 'i32'] },
   pipeline: { adc_rate: 0, adc_full_scale: 8, fir_cutoff_hz: 16, offset_tail: 24, lo_hz: 32, adc_bits: [40, 'i32'],
-              decimation: [44, 'i32'], fir_taps: [48, 'i32'], correct_beat: [52, 'i32'], window_id: [56, 'i32'] },
+              decimation: [44, 'i32'], fir_taps: [48, 'i32'], correct_beat: [52, 'i32'], window_id: [56, 'i32'],
+              iq_skew_samples: 64 },
 };
 
 function wasiStubs(getMem, log) {

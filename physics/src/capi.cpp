@@ -29,7 +29,7 @@ nmr::InstrumentModel to_model(const nmr_model* c) {
     m.adc_full_scale = c->adc_full_scale; m.adc_rate = c->adc_rate; m.adc_t0 = c->adc_t0;
     m.offset_i = c->offset_i; m.offset_q = c->offset_q; m.adc_bits = c->adc_bits;
     m.lo_coherent = c->lo_coherent != 0; m.interp = c->interp; m.beat_measurement_sigma = c->beat_measurement_sigma;
-    m.seed = c->seed;
+    m.seed = c->seed; m.iq_skew_samples = c->iq_skew_samples;
     return m;
 }
 }  // namespace
@@ -235,6 +235,7 @@ int32_t nmr_process(const nmr_pipeline* p, double* out, int32_t cap, double* fs,
     c.adc_rate = p->adc_rate; c.adc_full_scale = p->adc_full_scale; c.adc_bits = p->adc_bits;
     c.decimation = static_cast<size_t>(p->decimation); c.fir_taps = static_cast<size_t>(p->fir_taps);
     c.fir_cutoff_hz = p->fir_cutoff_hz; c.offset_tail = p->offset_tail; c.correct_beat = p->correct_beat != 0;
+    c.iq_skew_samples = p->iq_skew_samples; c.iq_fd_taps = 31;
     const nmr::Processed pr = nmr::process(v, c);
     if (!pr.aligned) { g_err = "scans are not sample-aligned relative to excitation"; return -2; }
     const int32_t n = std::min<int32_t>(cap, static_cast<int32_t>(pr.average.size()));

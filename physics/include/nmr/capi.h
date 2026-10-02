@@ -56,6 +56,7 @@ typedef struct {
     int32_t adc_bits, lo_coherent, interp;
     double beat_measurement_sigma;
     uint64_t seed;
+    double iq_skew_samples;   /* I converted this many raw samples after Q (0 = ideal; hardware ~0.5, FW-IQ-001) */
 } nmr_model;
 NMR_API void nmr_default_model(nmr_model* m);
 
@@ -83,6 +84,7 @@ NMR_API int32_t nmr_load_record(const nmr_record_meta* meta, const int16_t* i, c
 typedef struct {
     double adc_rate, adc_full_scale, fir_cutoff_hz, offset_tail, lo_hz;
     int32_t adc_bits, decimation, fir_taps, correct_beat, window_id;
+    double iq_skew_samples;   /* I/Q aperture-skew correction: delay I this many raw samples onto Q's grid (FW-IQ-001) */
 } nmr_pipeline;
 NMR_API void nmr_default_pipeline(nmr_pipeline* p);
 /* average the records of one window; writes interleaved re,im; returns samples, sets *fs and *t0 */

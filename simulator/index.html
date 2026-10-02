@@ -3,69 +3,62 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Benchtop NMR — digital twin</title>
-<meta name="description" content="Browser NMR spectrometer simulator driven by the instrument's real C++ physics core compiled to WebAssembly.">
+<title>NMR console — signal path</title>
+<meta name="description" content="The instrument's firmware signal path — pulse program, gate engine, ADC, DSP and spectrum — run in the browser on the same C++ core the hardware runs, compiled to WebAssembly.">
 <style>
   :root {
-    --bg: #0d1117; --panel: #161b22; --panel2: #1c2230; --ink: #e6edf3; --muted: #9aa7b4; --line: #2b3444;
-    --accent: #58a6ff; --i: #58a6ff; --q: #f0883e; --mag: #3fb950; --spec: #bc8cff; --warn: #f85149; --grid: #222b38;
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --ink:#e6edf3; --muted:#9aa7b4; --line:#2b3444;
+    --accent:#58a6ff; --tx:#f0883e; --rx:#3fb950; --psel:#bc8cff; --i:#58a6ff; --q:#f0883e; --mag:#3fb950;
+    --spec:#bc8cff; --warn:#f85149; --grid:#222b38; --mark:#e3b341;
   }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --bg: #f6f8fa; --panel: #ffffff; --panel2: #f0f3f7; --ink: #1f2328; --muted: #57606a; --line: #d0d7de;
-      --accent: #0969da; --i: #0969da; --q: #bc4c00; --mag: #1a7f37; --spec: #8250df; --warn: #cf222e; --grid: #e7ecf1;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0d1117; --panel: #161b22; --panel2: #1c2230; --ink: #e6edf3; --muted: #9aa7b4; --line: #2b3444;
-    --accent: #58a6ff; --i: #58a6ff; --q: #f0883e; --mag: #3fb950; --spec: #bc8cff; --warn: #f85149; --grid: #222b38;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body { background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-  header { padding: 18px 16px 10px; border-bottom: 1px solid var(--line); }
-  h1 { font-size: 19px; margin: 0 0 2px; letter-spacing: .2px; }
-  .sub { color: var(--muted); font-size: 12.5px; }
-  .sub code { color: var(--accent); font-size: 11.5px; }
-  main { display: grid; grid-template-columns: 320px 1fr; gap: 16px; padding: 16px; max-width: 1400px; margin: 0 auto; }
-  @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
-  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
-  .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 0 0 10px; }
-  .controls { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow: auto; }
-  .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0; }
-  .row label { color: var(--muted); font-size: 12.5px; }
-  .row .val { font-variant-numeric: tabular-nums; color: var(--ink); font-size: 12.5px; min-width: 64px; text-align: right; }
-  input[type=range] { width: 130px; accent-color: var(--accent); }
-  select, input[type=number] { background: var(--panel2); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; font: inherit; }
-  select { width: 100%; }
-  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
-  .seg button { flex: 1; min-width: 60px; background: var(--panel2); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 6px 4px; cursor: pointer; font: inherit; }
-  .seg button[aria-pressed=true] { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .chk { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-  .chk input { accent-color: var(--accent); }
-  hr { border: none; border-top: 1px solid var(--line); margin: 14px 0; }
-  .plots { display: grid; gap: 16px; }
-  figure { margin: 0; }
-  figure figcaption { color: var(--muted); font-size: 12px; margin: 0 0 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-  canvas { width: 100%; display: block; background: var(--panel2); border-radius: 8px; }
-  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
-  .kpi { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
-  .kpi .k { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
-  .kpi .v { font-size: 18px; font-variant-numeric: tabular-nums; margin-top: 2px; }
-  .kpi .u { color: var(--muted); font-size: 11px; }
-  .legend { display: flex; gap: 12px; font-size: 11.5px; }
-  .legend span { display: inline-flex; align-items: center; gap: 5px; }
-  .sw { width: 11px; height: 3px; border-radius: 2px; display: inline-block; }
-  .status { font-size: 12px; color: var(--muted); }
-  .status.err { color: var(--warn); }
-  .note { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
-  a { color: var(--accent); }
+  @media (prefers-color-scheme: light){ :root:not([data-theme=dark]){
+    --bg:#f6f8fa; --panel:#fff; --panel2:#f0f3f7; --ink:#1f2328; --muted:#57606a; --line:#d0d7de;
+    --accent:#0969da; --tx:#bc4c00; --rx:#1a7f37; --psel:#8250df; --i:#0969da; --q:#bc4c00; --mag:#1a7f37;
+    --spec:#8250df; --warn:#cf222e; --grid:#e7ecf1; --mark:#9a6700; } }
+  :root[data-theme=dark]{ --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2b3444; --accent:#58a6ff; --tx:#f0883e; --rx:#3fb950; --psel:#bc8cff; --i:#58a6ff; --q:#f0883e;
+    --mag:#3fb950; --spec:#bc8cff; --warn:#f85149; --grid:#222b38; --mark:#e3b341; }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{padding:16px;border-bottom:1px solid var(--line)}
+  h1{font-size:18px;margin:0 0 2px} .sub{color:var(--muted);font-size:12.5px} .sub code{color:var(--accent);font-size:11.5px}
+  .sub a{color:var(--accent)}
+  main{display:grid;grid-template-columns:300px 1fr;gap:16px;padding:16px;max-width:1340px;margin:0 auto}
+  @media (max-width:860px){main{grid-template-columns:1fr}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .controls{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto}
+  h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 10px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 0}
+  .row label{color:var(--muted);font-size:12.5px} .row .val{font-variant-numeric:tabular-nums;font-size:12.5px;min-width:60px;text-align:right}
+  input[type=range]{width:120px;accent-color:var(--accent)}
+  select,input[type=number]{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 7px;font:inherit}
+  select{width:100%}
+  .seg{display:flex;gap:6px;flex-wrap:wrap} .seg button{flex:1;min-width:58px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 4px;cursor:pointer;font:inherit}
+  .seg button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .chk{display:flex;align-items:center;gap:8px;cursor:pointer} .chk input{accent-color:var(--accent)}
+  hr{border:none;border-top:1px solid var(--line);margin:13px 0}
+  .stages{display:grid;gap:14px}
+  .stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .stage .head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+  .stage .num{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px}
+  .stage .num b{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:12px}
+  .stage .desc{color:var(--muted);font-size:11.5px}
+  .legend{display:flex;gap:11px;font-size:11px;flex-wrap:wrap} .legend span{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:11px;height:3px;border-radius:2px;display:inline-block}
+  canvas{width:100%;display:block;background:var(--panel2);border-radius:8px}
+  pre.dis{background:var(--panel2);border-radius:8px;margin:0;padding:10px 12px;max-height:190px;overflow:auto;font:11.5px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--ink);white-space:pre}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
+  .kpi{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+  .kpi .k{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px} .kpi .v{font-size:17px;font-variant-numeric:tabular-nums;margin-top:2px} .kpi .u{color:var(--muted);font-size:10.5px}
+  .status{font-size:12px;color:var(--muted);margin-top:10px} .status.err{color:var(--warn)}
+  .note{font-size:11px;color:var(--muted);margin-top:6px}
+  .pill{display:inline-block;font-size:10.5px;color:var(--warn);border:1px solid var(--warn);border-radius:999px;padding:0 7px;margin-left:6px}
 </style>
 </head>
 <body>
 <header>
-  <h1>Benchtop NMR — digital twin</h1>
-  <div class="sub">The same C++ physics/DSP core that runs on the instrument, compiled to WebAssembly. <span id="cfg"></span></div>
+  <h1>NMR console — the signal path</h1>
+  <div class="sub">Each stage below is what the instrument firmware actually does, run here on the same C++ core (WebAssembly). <span id="cfg"></span> · <a href="../">full instrument →</a></div>
 </header>
 
 <main>
@@ -73,317 +66,295 @@
     <h2>Experiment</h2>
     <div class="seg" id="expSeg">
       <button data-kind="0" aria-pressed="true">FID</button>
-      <button data-kind="1">Hahn echo</button>
-      <button data-kind="2">Inv. recovery</button>
+      <button data-kind="1">Hahn</button>
+      <button data-kind="2">Inv. rec.</button>
       <button data-kind="3">CPMG</button>
     </div>
-
     <div id="params"></div>
+    <div class="row"><label class="chk"><input type="checkbox" id="cyclops" checked> CYCLOPS</label></div>
 
-    <div class="row"><label class="chk"><input type="checkbox" id="cyclops" checked> CYCLOPS phase cycle</label></div>
-
-    <hr>
-    <h2>Sample &amp; field</h2>
+    <hr><h2>Sample &amp; field</h2>
     <div class="row"><label>B₀ current</label><input type="range" id="b0" min="0.2" max="2.0" step="0.05"><span class="val" id="b0v"></span></div>
-    <div class="row"><label>T₂ (transverse)</label><input type="range" id="t2" min="0.01" max="2.0" step="0.01"><span class="val" id="t2v"></span></div>
-    <div class="row"><label>T₁ (longitudinal)</label><input type="range" id="t1" min="0.1" max="3.0" step="0.1"><span class="val" id="t1v"></span></div>
-    <div class="row"><label>f_tx (transmit)</label><input type="number" id="ftx" step="10" style="width:110px"></div>
-    <div class="row"><label>Sample grid</label>
-      <select id="grid"><option value="0.008">coarse (fast)</option><option value="0.005" selected>medium</option><option value="0.003">fine (slow)</option></select>
-    </div>
+    <div class="row"><label>T₂</label><input type="range" id="t2" min="0.01" max="2.0" step="0.01"><span class="val" id="t2v"></span></div>
+    <div class="row"><label>T₁</label><input type="range" id="t1" min="0.1" max="3.0" step="0.1"><span class="val" id="t1v"></span></div>
+    <div class="row"><label>f_tx (Hz)</label><input type="number" id="ftx" step="10" style="width:108px"></div>
+    <div class="row"><label>Sample grid</label><select id="grid"><option value="0.008">coarse</option><option value="0.005" selected>medium</option><option value="0.003">fine</option></select></div>
 
-    <hr>
-    <h2>Receiver &amp; DSP</h2>
+    <hr><h2>ADC &amp; receiver</h2>
+    <div class="row"><label class="chk"><input type="checkbox" id="skew"> I/Q aperture skew</label></div>
+    <div class="row"><label class="chk"><input type="checkbox" id="fix" checked> Correct skew (FW-IQ-001)</label></div>
     <div class="row"><label class="chk"><input type="checkbox" id="noise" checked> Receiver noise</label></div>
-    <div class="row"><label class="chk"><input type="checkbox" id="coherent" checked> LO phase-coherent</label></div>
+    <div class="row"><label class="chk"><input type="checkbox" id="coherent" checked> LO coherent</label></div>
     <div class="row"><label class="chk"><input type="checkbox" id="beat" checked> Correct beat phase</label></div>
-    <div class="row"><label>Apodization</label>
-      <select id="win"><option value="0">Rectangular</option><option value="1" selected>Hann</option><option value="3">Half-Hann</option></select>
-    </div>
-    <div class="row"><label>Seed</label><input type="number" id="seed" value="1" min="1" style="width:90px"></div>
-    <div class="note">Every number below is computed by the WebAssembly core, not re-implemented in JavaScript. This is a design-stage model, not a measurement.</div>
+    <div class="row"><label>Apodization</label><select id="win"><option value="0">Rect</option><option value="1" selected>Hann</option><option value="3">Half-Hann</option></select></div>
+    <div class="row"><label>Seed</label><input type="number" id="seed" value="1" min="1" style="width:84px"></div>
+    <div class="note">Every number is computed by the WebAssembly core — the same code the ESP32 runs. Design-stage model, not a measurement.</div>
   </section>
 
-  <section class="plots">
+  <section class="stages">
     <div class="panel">
       <div class="kpis">
         <div class="kpi"><div class="k">Larmor (centre)</div><div class="v"><span id="kLarmor">–</span> <span class="u">Hz</span></div></div>
         <div class="kpi"><div class="k">Line offset</div><div class="v"><span id="kOffset">–</span> <span class="u">Hz</span></div></div>
         <div class="kpi"><div class="k">SNR</div><div class="v" id="kSnr">–</div></div>
-        <div class="kpi"><div class="k">Linewidth FWHM</div><div class="v"><span id="kFwhm">–</span> <span class="u">Hz</span></div></div>
+        <div class="kpi"><div class="k">FWHM</div><div class="v"><span id="kFwhm">–</span> <span class="u">Hz</span></div></div>
         <div class="kpi"><div class="k">Scans × voxels</div><div class="v" id="kScans">–</div></div>
-        <div class="kpi"><div class="k">ADC clipping</div><div class="v"><span id="kClip">–</span> <span class="u">%</span></div></div>
+        <div class="kpi"><div class="k">ADC clip</div><div class="v"><span id="kClip">–</span> <span class="u">%</span></div></div>
       </div>
-      <div class="status" id="status" style="margin-top:10px">loading core…</div>
+      <div class="status" id="status">loading core…</div>
     </div>
 
-    <figure class="panel">
-      <figcaption><span>Pulse sequence (one scan, schematic)</span><span class="legend"><span><i class="sw" style="background:var(--q)"></i>TX</span><span><i class="sw" style="background:var(--mag)"></i>acquire</span></span></figcaption>
-      <canvas id="seqC" height="120"></canvas>
-    </figure>
+    <div class="stage">
+      <div class="head"><span class="num"><b>1</b> Pulse program (IR)</span><span class="desc">compiled, hardware-neutral — what the firmware loads &amp; validates</span></div>
+      <pre class="dis" id="dis">—</pre>
+    </div>
 
-    <figure class="panel">
-      <figcaption><span>Free induction / echo — averaged baseband</span>
-        <span class="legend"><span><i class="sw" style="background:var(--i)"></i>I</span><span><i class="sw" style="background:var(--q)"></i>Q</span><span><i class="sw" style="background:var(--mag)"></i>|M|</span></span></figcaption>
-      <canvas id="timeC" height="240"></canvas>
-    </figure>
+    <div class="stage">
+      <div class="head"><span class="num"><b>2</b> Gate engine (RMT)</span>
+        <span class="legend"><span><i class="sw" style="background:var(--tx)"></i>TX_EN</span><span><i class="sw" style="background:var(--rx)"></i>RX</span><span><i class="sw" style="background:var(--psel)"></i>PSELECT</span><span><i class="sw" style="background:var(--mark)"></i>marker</span></span></div>
+      <canvas id="gateC" height="140"></canvas>
+      <div class="desc" style="margin-top:4px">The deterministic gate waveforms the RMT peripheral emits, decoded from the compiled program (one scan).</div>
+    </div>
 
-    <figure class="panel">
-      <figcaption><span>Spectrum (magnitude)</span><span class="legend"><span><i class="sw" style="background:var(--spec)"></i>|S(f)|</span></span></figcaption>
-      <canvas id="specC" height="240"></canvas>
-    </figure>
+    <div class="stage">
+      <div class="head"><span class="num"><b>3</b> ADC — ADS8688 over I²S</span>
+        <span class="legend"><span><i class="sw" style="background:var(--i)"></i>I code</span><span><i class="sw" style="background:var(--q)"></i>Q code</span></span></div>
+      <canvas id="adcC" height="170"></canvas>
+      <div class="desc" style="margin-top:4px">Raw 16-bit codes, 125 kS/s per channel. I and Q are converted one aperture apart — <span id="skewNote"></span></div>
+    </div>
+
+    <div class="stage">
+      <div class="head"><span class="num"><b>4</b> DSP pipeline</span>
+        <span class="legend"><span><i class="sw" style="background:var(--i)"></i>I</span><span><i class="sw" style="background:var(--q)"></i>Q</span><span><i class="sw" style="background:var(--mag)"></i>|M|</span></span></div>
+      <canvas id="timeC" height="200"></canvas>
+      <div class="desc" style="margin-top:4px">volts → DC removal → digital mix to baseband → FIR + decimate → phase-correct → coherent average. One shared implementation.</div>
+    </div>
+
+    <div class="stage">
+      <div class="head"><span class="num"><b>5</b> Spectrum</span><span class="legend"><span><i class="sw" style="background:var(--spec)"></i>|S(f)|</span></span></div>
+      <canvas id="specC" height="200"></canvas>
+    </div>
   </section>
 </main>
 
 <script type="module">
 import { loadCore } from './web/nmrcore.js';
-
 const $ = (id) => document.getElementById(id);
-const status = (msg, err = false) => { const s = $('status'); s.textContent = msg; s.classList.toggle('err', err); };
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const status = (m, e = false) => { const s = $('status'); s.textContent = m; s.classList.toggle('err', e); };
 
-// ---- parameter sets per experiment (seconds; shown in friendly units) ----
 const PARAMS = {
   0: [['acq_len', 'Acquisition', 'ms', 1e3, 10, 500, 5]],
-  1: [['tau', 'τ (90–180)', 'ms', 1e3, 2, 80, 1], ['acq_len', 'Acquisition', 'ms', 1e3, 10, 200, 5]],
+  1: [['tau', 'τ', 'ms', 1e3, 2, 80, 1], ['acq_len', 'Window', 'ms', 1e3, 10, 200, 5]],
   2: [['ti', 'Inversion TI', 'ms', 1e3, 5, 2000, 5], ['acq_len', 'Acquisition', 'ms', 1e3, 10, 300, 5]],
-  3: [['tau', 'Echo spacing τ', 'ms', 1e3, 1, 40, 1], ['n_echoes', 'Echoes', '', 1, 1, 32, 1], ['acq_len', 'Window', 'ms', 1e3, 2, 40, 1]],
+  3: [['tau', 'Echo τ', 'ms', 1e3, 1, 40, 1], ['n_echoes', 'Echoes', '', 1, 1, 32, 1], ['acq_len', 'Window', 'ms', 1e3, 2, 40, 1]],
 };
 const NAVG = ['n_avg', 'Averages', '', 1, 1, 32, 1];
+const SKEW = 0.5;   // ADS8688 auto-sequence: I converted half a raw sample after Q (FW-IQ-001)
 
 let core, kind = 0, nvox = 0, lastGrid = null, timer = null;
-const state = {};   // live param values in SI
+const state = {};
 
 function buildParams() {
-  const host = $('params');
-  host.innerHTML = '';
+  const host = $('params'); host.innerHTML = '';
   const seq = core.defaultSequence(kind);
   for (const [key, label, unit, scale, min, max, step] of [...PARAMS[kind], NAVG]) {
     const isInt = key === 'n_avg' || key === 'n_echoes';
-    const si = key in state ? state[key] : (key === 'n_avg' ? 4 : seq[key]);   // SI value
-    const disp = isInt ? si : si * scale;                                      // slider/display value
-    const row = document.createElement('div');
-    row.className = 'row';
+    const si = key in state ? state[key] : (key === 'n_avg' ? 4 : seq[key]);
+    const row = document.createElement('div'); row.className = 'row';
     row.innerHTML = `<label>${label}</label><input type="range" min="${min}" max="${max}" step="${step}"><span class="val"></span>`;
     const r = row.querySelector('input'), v = row.querySelector('.val');
-    r.value = Math.min(max, Math.max(min, disp));
-    const apply = () => {
-      const raw = parseFloat(r.value);
-      state[key] = isInt ? Math.round(raw) : raw / scale;
-      v.textContent = isInt ? String(Math.round(raw)) : `${raw.toFixed(step < 1 ? 1 : 0)} ${unit}`;
-    };
-    apply();
-    r.addEventListener('input', () => { apply(); schedule(); });
-    host.appendChild(row);
+    r.value = Math.min(max, Math.max(min, isInt ? si : si * scale));
+    const apply = () => { const raw = parseFloat(r.value); state[key] = isInt ? Math.round(raw) : raw / scale;
+      v.textContent = isInt ? String(Math.round(raw)) : `${raw.toFixed(step < 1 ? 1 : 0)} ${unit}`; };
+    apply(); r.addEventListener('input', () => { apply(); schedule(); }); host.appendChild(row);
   }
 }
+function sequence() { const s = core.defaultSequence(kind); s.cyclops = $('cyclops').checked ? 1 : 0;
+  for (const [key] of [...PARAMS[kind], NAVG]) if (key in state) s[key] = state[key]; return s; }
+function model() { const m = core.defaultModel();
+  m.b0_current = +$('b0').value; m.t1 = +$('t1').value; m.t2 = +$('t2').value; m.lo_coherent = $('coherent').checked ? 1 : 0;
+  m.seed = Math.max(1, parseInt($('seed').value) || 1); if (!$('noise').checked) m.noise_density = 0;
+  m.tank_f0 = +$('ftx').value; m.iq_skew_samples = $('skew').checked ? SKEW : 0; return m; }
 
-function sequence() {
-  const s = core.defaultSequence(kind);
-  s.cyclops = $('cyclops').checked ? 1 : 0;
-  for (const [key] of [...PARAMS[kind], NAVG]) if (key in state) s[key] = state[key];
-  return s;
+// ---- parse the disassembly into one scan's gate timeline ----
+function parseScan(text) {
+  const rows = [];
+  for (const ln of text.split('\n')) {
+    const m = ln.match(/^\s*\d+\t\s*([-\d.eE+]+)\s*us\t([A-Z_]+)\s+ch\d+\s+(-?\d+)/);
+    if (m) rows.push({ t: parseFloat(m[1]) * 1e-6, op: m[2], arg: parseInt(m[3]) });
+  }
+  let i0 = rows.findIndex((r) => r.op === 'SCAN_BEGIN');
+  if (i0 < 0) return null;
+  const t0 = rows[i0].t; const ev = [];
+  for (let i = i0; i < rows.length; i++) { ev.push({ ...rows[i], t: rows[i].t - t0 }); if (rows[i].op === 'SCAN_END' && i > i0) break; }
+  return ev;
 }
-
-function model() {
-  const m = core.defaultModel();
-  m.b0_current = parseFloat($('b0').value);
-  m.t1 = parseFloat($('t1').value);
-  m.t2 = parseFloat($('t2').value);
-  m.lo_coherent = $('coherent').checked ? 1 : 0;
-  m.seed = Math.max(1, parseInt($('seed').value) || 1);
-  if (!$('noise').checked) m.noise_density = 0;
-  m.tank_f0 = parseFloat($('ftx').value);     // tuned to the transmit frequency
-  return m;
-}
-
-function fwhm(freq, mag, pk) {
-  // half-maximum crossings on each side of the peak bin
-  let kp = 0;
-  for (let k = 1; k < freq.length; k++) if (Math.abs(freq[k] - pk.freq_hz) < Math.abs(freq[kp] - pk.freq_hz)) kp = k;
-  const h = mag[kp] / 2;
-  let lo = freq[0], hi = freq[freq.length - 1];
-  for (let k = kp; k > 0; k--) if (mag[k] < h) { lo = freq[k]; break; }
-  for (let k = kp; k < freq.length - 1; k++) if (mag[k] < h) { hi = freq[k]; break; }
-  return Math.max(0, hi - lo);
+function gateTimeline(ev) {
+  const tx = [{ t: 0, v: 0 }], rx = [{ t: 0, v: 0 }], ps = [{ t: 0, v: 0 }];
+  const marks = [], win = {};
+  const regs = []; let end = 0;
+  for (const e of ev) {
+    end = Math.max(end, e.t);
+    if (e.op === 'TX_GATE_ON') tx.push({ t: e.t, v: 1 });
+    else if (e.op === 'TX_GATE_OFF') tx.push({ t: e.t, v: 0 });
+    else if (e.op === 'RX_ENABLE') rx.push({ t: e.t, v: 1 });
+    else if (e.op === 'RX_BLANK') rx.push({ t: e.t, v: 0 });
+    else if (e.op === 'SET_PHASE') { let k = regs.indexOf(e.arg); if (k < 0) { k = regs.length; regs.push(e.arg); } ps.push({ t: e.t, v: Math.min(k, 1) }); }
+    else if (e.op === 'MARKER') marks.push({ t: e.t, id: e.arg });
+    else if (e.op === 'ACQ_ON') win.start = e.t;
+    else if (e.op === 'ACQ_OFF') win.end = e.t;
+  }
+  return { tx, rx, ps, marks, win, end: Math.max(end, 1e-6) };
 }
 
 function run() {
   if (!core) return;
   try {
-    const grid = $('grid').value;
-    if (grid !== lastGrid) { status('voxelising sample…'); nvox = core.voxelize(parseFloat(grid)); lastGrid = grid; }
+    if ($('grid').value !== lastGrid) { status('voxelising…'); nvox = core.voxelize(+$('grid').value); lastGrid = $('grid').value; }
     const t0 = performance.now();
     const seq = sequence();
-    const timing = { ...core.defaultTiming(), tx_freq_hz: parseFloat($('ftx').value) };
+    const timing = { ...core.defaultTiming(), tx_freq_hz: +$('ftx').value };
     const prog = core.compile(seq, timing);
+    const dis = core.disassemble(prog);
     const m = model();
     const recs = core.simulate(prog, m);
-    const pipe = { ...core.defaultPipeline(), correct_beat: $('beat').checked ? 1 : 0 };
+    const pipe = { ...core.defaultPipeline(), correct_beat: $('beat').checked ? 1 : 0,
+                   iq_skew_samples: ($('skew').checked && $('fix').checked) ? SKEW : 0 };
     const proc = core.process(pipe, 0);
     const spec = core.spectrum(proc.reim, proc.fs, parseInt($('win').value), 0, 4);
-    const span = proc.fs / 2;
-    const pk = core.peak(spec, -span, span, 15);
+    const span = proc.fs / 2, pk = core.peak(spec, -span, span, 15);
 
-    // physics readouts
-    const f = core.fieldsAt(0, 0, 0);
-    const b0mag = Math.hypot(...f.b0) * m.b0_current;
-    const larmor = m.gamma_bar * b0mag;
-    $('kLarmor').textContent = larmor.toFixed(0);
+    const f = core.fieldsAt(0, 0, 0), b0 = Math.hypot(...f.b0) * m.b0_current;
+    $('kLarmor').textContent = (m.gamma_bar * b0).toFixed(0);
     $('kOffset').textContent = (pk.freq_hz >= 0 ? '+' : '') + pk.freq_hz.toFixed(1);
     $('kSnr').textContent = pk.snr > 0 ? pk.snr.toFixed(0) : '—';
-    const mag = [];
-    for (let k = 0; k < spec.freq.length; k++) mag.push(Math.hypot(spec.reim[2 * k], spec.reim[2 * k + 1]));
+    const mag = []; for (let k = 0; k < spec.freq.length; k++) mag.push(Math.hypot(spec.reim[2 * k], spec.reim[2 * k + 1]));
     $('kFwhm').textContent = fwhm(spec.freq, mag, pk).toFixed(1);
     $('kScans').textContent = `${recs.length} × ${nvox}`;
     $('kClip').textContent = (core.simClipFraction() * 100).toFixed(1);
+    $('skewNote').innerHTML = $('skew').checked
+      ? `here skewed by ${SKEW} sample (~7.8° at the IF). ${$('fix').checked ? 'Correction <b>on</b>.' : '<span class="pill">uncorrected</span>'}`
+      : 'ideal (skew off).';
 
-    drawSequence(seq, timing);
+    // stage 1
+    const scan0 = dis.split('\n').filter((l) => l.trim()).slice(0, 19).join('\n');
+    $('dis').textContent = scan0 + (dis.split('\n').length > 20 ? '\n  … (' + recs.length + ' scans total)' : '');
+    // stage 2
+    const ev = parseScan(dis);
+    drawGates(ev ? gateTimeline(ev) : null);
+    // stage 3
+    drawADC(recs[0], m.adc_full_scale);
+    // stage 4-5
     drawTime(proc);
     drawSpectrum(spec.freq, mag, pk, span);
-    status(`${recs.length} scan(s), ${nvox} voxels, ${(performance.now() - t0).toFixed(0)} ms · f_IF ${(parseFloat($('ftx').value) - m.lo_hz).toFixed(0)} Hz`);
-  } catch (e) {
-    status('error: ' + e.message, true);
-    console.error(e);
-  }
+    status(`${recs.length} scan(s) · ${nvox} voxels · f_IF ${(+$('ftx').value - m.lo_hz).toFixed(0)} Hz · ${(performance.now() - t0).toFixed(0)} ms`);
+  } catch (e) { status('error: ' + e.message, true); console.error(e); }
 }
-
 const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 160); };
 
-// ---------- plotting ----------
-function fit(canvas) {
-  const dpr = window.devicePixelRatio || 1;
-  const w = canvas.clientWidth, h = canvas.getAttribute('height') | 0;
-  canvas.width = w * dpr; canvas.height = h * dpr;
-  const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  return { ctx, w, h };
-}
-const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-
-function axes(ctx, w, h, pad) {
-  ctx.clearRect(0, 0, w, h);
-  ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1;
-  ctx.strokeRect(pad.l, pad.t, w - pad.l - pad.r, h - pad.t - pad.b);
+function fwhm(freq, mag, pk) {
+  let kp = 0; for (let k = 1; k < freq.length; k++) if (Math.abs(freq[k] - pk.freq_hz) < Math.abs(freq[kp] - pk.freq_hz)) kp = k;
+  const h = mag[kp] / 2; let lo = freq[0], hi = freq[freq.length - 1];
+  for (let k = kp; k > 0; k--) if (mag[k] < h) { lo = freq[k]; break; }
+  for (let k = kp; k < freq.length - 1; k++) if (mag[k] < h) { hi = freq[k]; break; }
+  return Math.max(0, hi - lo);
 }
 
-function drawSequence(seq, timing) {
-  const { ctx, w, h } = fit($('seqC'));
-  const pad = { l: 10, r: 10, t: 24, b: 22 };
-  axes(ctx, w, h, pad);
-  // build a schematic event list (seconds from scan start)
-  const pre = timing.pre_blank_s, dead = timing.dead_time_s;
-  const ev = []; let t = pre;
-  const pulse = (len, lbl) => { ev.push({ t0: t, t1: t + len, type: 'tx', lbl }); t += len; };
-  const delay = (d) => { t += d; };
-  const acq = (len, lbl) => { ev.push({ t0: t, t1: t + len, type: 'acq', lbl }); t += len; };
-  if (kind === 0) { pulse(seq.t90, '90'); delay(dead + seq.acq_start); acq(seq.acq_len, 'FID'); }
-  else if (kind === 1) { pulse(seq.t90, '90'); delay(seq.tau); pulse(seq.t180, '180'); delay(seq.tau - seq.acq_len / 2); acq(seq.acq_len, 'echo'); }
-  else if (kind === 2) { pulse(seq.t180, '180'); delay(seq.ti); pulse(seq.t90, '90'); delay(dead + seq.acq_start); acq(seq.acq_len, 'FID'); }
-  else { pulse(seq.t90, '90'); for (let i = 0; i < seq.n_echoes; i++) { delay(seq.tau); pulse(seq.t180, '180'); delay(seq.tau - seq.acq_len / 2); acq(seq.acq_len, ''); delay(seq.acq_len / 2); } }
-  const tmax = t * 1.02, X = (s) => pad.l + s / tmax * (w - pad.l - pad.r);
-  const yMid = (h - pad.b + pad.t) / 2;
-  // baseline
-  ctx.strokeStyle = css('--line'); ctx.beginPath(); ctx.moveTo(pad.l, yMid); ctx.lineTo(w - pad.r, yMid); ctx.stroke();
-  ctx.font = '11px system-ui'; ctx.textAlign = 'center';
-  for (const e of ev) {
-    const x0 = X(e.t0), x1 = Math.max(X(e.t1), x0 + 2);
-    if (e.type === 'tx') { ctx.fillStyle = css('--q'); ctx.fillRect(x0, pad.t + 6, x1 - x0, yMid - pad.t - 6); }
-    else { ctx.fillStyle = css('--mag'); ctx.globalAlpha = 0.35; ctx.fillRect(x0, yMid + 2, x1 - x0, h - pad.b - yMid - 2); ctx.globalAlpha = 1; }
-    if (e.lbl) { ctx.fillStyle = css('--ink'); ctx.fillText(e.lbl, (x0 + x1) / 2, e.type === 'tx' ? pad.t : h - pad.b + 14); }
-  }
-  ctx.fillStyle = css('--muted'); ctx.textAlign = 'right';
-  ctx.fillText((tmax * 1e3).toFixed(0) + ' ms', w - pad.r, h - 6);
+// ---- plotting ----
+function fit(c) { const dpr = window.devicePixelRatio || 1, w = c.clientWidth, h = c.getAttribute('height') | 0;
+  c.width = w * dpr; c.height = h * dpr; const x = c.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0); return { ctx: x, w, h }; }
+
+function drawGates(g) {
+  const { ctx, w, h } = fit($('gateC')); ctx.clearRect(0, 0, w, h);
+  if (!g) return;
+  const padL = 70, padR = 12, padT = 8, padB = 18;
+  const lanes = [['TX_EN', g.tx, '--tx'], ['RX', g.rx, '--rx'], ['PSELECT', g.ps, '--psel']];
+  const lh = (h - padT - padB) / lanes.length, X = (t) => padL + t / g.end * (w - padL - padR);
+  // acquisition window shading across all lanes
+  if (g.win.start != null && g.win.end != null) { ctx.fillStyle = css('--rx'); ctx.globalAlpha = 0.12;
+    ctx.fillRect(X(g.win.start), padT, X(g.win.end) - X(g.win.start), h - padT - padB); ctx.globalAlpha = 1; }
+  ctx.font = '11px system-ui';
+  lanes.forEach(([name, pts, col], li) => {
+    const yTop = padT + li * lh + 6, yBot = padT + (li + 1) * lh - 6;
+    ctx.fillStyle = css('--muted'); ctx.textAlign = 'right'; ctx.fillText(name, padL - 8, (yTop + yBot) / 2 + 4);
+    ctx.strokeStyle = css(col); ctx.lineWidth = 1.6; ctx.beginPath();
+    let prev = pts[0].v, px = padL; const Y = (v) => (name === 'PSELECT' ? (v ? yTop : yBot) : (v ? yTop : yBot));
+    ctx.moveTo(padL, Y(prev));
+    for (const p of pts) { const x = X(p.t); ctx.lineTo(x, Y(prev)); ctx.lineTo(x, Y(p.v)); prev = p.v; }
+    ctx.lineTo(X(g.end), Y(prev)); ctx.stroke();
+  });
+  // markers
+  for (const mk of g.marks) { ctx.strokeStyle = css('--mark'); ctx.globalAlpha = 0.9; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(X(mk.t), padT); ctx.lineTo(X(mk.t), h - padB); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; }
+  ctx.fillStyle = css('--muted'); ctx.textAlign = 'right'; ctx.fillText((g.end * 1e3).toFixed(1) + ' ms', w - padR, h - 5);
+}
+
+function drawADC(rec, fullScale) {
+  const { ctx, w, h } = fit($('adcC')); ctx.clearRect(0, 0, w, h);
+  if (!rec || !rec.i.length) return;
+  const N = Math.min(240, rec.i.length);   // first samples, where the FID is strongest
+  const padL = 46, padR = 12, padT = 10, padB = 20;
+  const X = (k) => padL + k / (N - 1) * (w - padL - padR), Y = (c) => padT + (1 - (c / 32768 + 1) / 2) * (h - padT - padB);
+  ctx.strokeStyle = css('--grid'); ctx.beginPath(); ctx.moveTo(padL, Y(0)); ctx.lineTo(w - padR, Y(0)); ctx.stroke();
+  ctx.fillStyle = css('--muted'); ctx.font = '10px system-ui'; ctx.textAlign = 'right';
+  ctx.fillText('+FS', padL - 4, padT + 8); ctx.fillText('0', padL - 4, Y(0) + 3); ctx.fillText('−FS', padL - 4, h - padB);
+  const plot = (arr, col) => { ctx.strokeStyle = col; ctx.lineWidth = 1.2; ctx.beginPath();
+    for (let k = 0; k < N; k++) { const x = X(k), y = Y(arr[k]); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); };
+  plot(rec.i, css('--i')); plot(rec.q, css('--q'));
+  ctx.fillStyle = css('--muted'); ctx.textAlign = 'right'; ctx.fillText('first ' + N + ' samples', w - padR, h - 5);
 }
 
 function drawTime(proc) {
-  const { ctx, w, h } = fit($('timeC'));
-  const pad = { l: 46, r: 12, t: 12, b: 24 };
-  axes(ctx, w, h, pad);
-  const n = proc.reim.length / 2;
-  if (n < 2) return;
+  const { ctx, w, h } = fit($('timeC')); ctx.clearRect(0, 0, w, h);
+  const n = proc.reim.length / 2; if (n < 2) return;
   const I = (k) => proc.reim[2 * k], Q = (k) => proc.reim[2 * k + 1];
-  let amax = 1e-30;
-  for (let k = 0; k < n; k++) amax = Math.max(amax, Math.abs(I(k)), Math.abs(Q(k)));
-  const tms = (k) => (proc.t0 + k / proc.fs) * 1e3;
-  const tmax = tms(n - 1), tmin = tms(0);
-  const X = (k) => pad.l + (tms(k) - tmin) / (tmax - tmin) * (w - pad.l - pad.r);
-  const Y = (v) => pad.t + (1 - (v / amax + 1) / 2) * (h - pad.t - pad.b);
-  // zero line + y labels (mV)
-  ctx.strokeStyle = css('--grid'); ctx.beginPath(); ctx.moveTo(pad.l, Y(0)); ctx.lineTo(w - pad.r, Y(0)); ctx.stroke();
+  let a = 1e-30; for (let k = 0; k < n; k++) a = Math.max(a, Math.abs(I(k)), Math.abs(Q(k)));
+  const padL = 48, padR = 12, padT = 10, padB = 20;
+  const tms = (k) => (proc.t0 + k / proc.fs) * 1e3, tmax = tms(n - 1), tmin = tms(0);
+  const X = (k) => padL + (tms(k) - tmin) / (tmax - tmin) * (w - padL - padR), Y = (v) => padT + (1 - (v / a + 1) / 2) * (h - padT - padB);
+  ctx.strokeStyle = css('--grid'); ctx.beginPath(); ctx.moveTo(padL, Y(0)); ctx.lineTo(w - padR, Y(0)); ctx.stroke();
   ctx.fillStyle = css('--muted'); ctx.font = '10px system-ui'; ctx.textAlign = 'right';
-  ctx.fillText((amax * 1e3).toFixed(2) + ' mV', pad.l - 4, pad.t + 8);
-  ctx.fillText('0', pad.l - 4, Y(0) + 3);
-  ctx.textAlign = 'center'; ctx.fillText(tmax.toFixed(0) + ' ms', w - pad.r - 14, h - 6);
-  const line = (fn, color, alpha = 1) => {
-    ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.lineWidth = 1.3; ctx.beginPath();
-    for (let k = 0; k < n; k++) { const x = X(k), y = Y(fn(k)); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-    ctx.stroke(); ctx.globalAlpha = 1;
-  };
-  line((k) => Math.hypot(I(k), Q(k)), css('--mag'), 0.9);
-  line((k) => -Math.hypot(I(k), Q(k)), css('--mag'), 0.9);
-  line(I, css('--i'), 0.85);
-  line(Q, css('--q'), 0.7);
+  ctx.fillText((a * 1e3).toFixed(2) + ' mV', padL - 4, padT + 8); ctx.fillText('0', padL - 4, Y(0) + 3);
+  ctx.textAlign = 'center'; ctx.fillText(tmax.toFixed(0) + ' ms', w - padR - 12, h - 5);
+  const line = (fn, col, al = 1) => { ctx.strokeStyle = col; ctx.globalAlpha = al; ctx.lineWidth = 1.3; ctx.beginPath();
+    for (let k = 0; k < n; k++) { const x = X(k), y = Y(fn(k)); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); ctx.globalAlpha = 1; };
+  line((k) => Math.hypot(I(k), Q(k)), css('--mag'), .9); line((k) => -Math.hypot(I(k), Q(k)), css('--mag'), .9);
+  line(I, css('--i'), .85); line(Q, css('--q'), .7);
 }
 
 function drawSpectrum(freq, mag, pk, span) {
-  const { ctx, w, h } = fit($('specC'));
-  const pad = { l: 46, r: 12, t: 12, b: 26 };
-  axes(ctx, w, h, pad);
+  const { ctx, w, h } = fit($('specC')); ctx.clearRect(0, 0, w, h);
   let mmax = 1e-30; for (const m of mag) mmax = Math.max(mmax, m);
-  const lo = -span, hi = span;
-  const X = (f) => pad.l + (f - lo) / (hi - lo) * (w - pad.l - pad.r);
-  const Y = (v) => pad.t + (1 - v / mmax) * (h - pad.t - pad.b);
-  // zero-frequency axis + grid labels
+  const padL = 46, padR = 12, padT = 10, padB = 24, lo = -span, hi = span;
+  const X = (f) => padL + (f - lo) / (hi - lo) * (w - padL - padR), Y = (v) => padT + (1 - v / mmax) * (h - padT - padB);
   ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted'); ctx.font = '10px system-ui'; ctx.textAlign = 'center';
-  for (let g = -2; g <= 2; g++) {
-    const fx = g / 2 * span, x = X(fx);
-    ctx.globalAlpha = g === 0 ? 0.9 : 0.4; ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, h - pad.b); ctx.stroke(); ctx.globalAlpha = 1;
-    ctx.fillText((fx >= 0 ? '+' : '') + fx.toFixed(0), x, h - 8);
-  }
-  ctx.save(); ctx.translate(12, (h) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('|S(f)|', 0, 0); ctx.restore();
-  ctx.textAlign = 'center'; ctx.fillText('Hz from f_tx', (w) / 2, h - 2);
-  // curve
+  for (let g = -2; g <= 2; g++) { const fx = g / 2 * span, x = X(fx); ctx.globalAlpha = g === 0 ? .9 : .4;
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, h - padB); ctx.stroke(); ctx.globalAlpha = 1; ctx.fillText((fx >= 0 ? '+' : '') + fx.toFixed(0), x, h - 9); }
+  ctx.fillText('Hz from f_tx', w / 2, h - 1);
   ctx.strokeStyle = css('--spec'); ctx.lineWidth = 1.4; ctx.beginPath();
-  for (let k = 0; k < freq.length; k++) { const x = X(freq[k]), y = Y(mag[k]); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-  ctx.stroke();
-  // peak marker
-  if (pk.amplitude > 0) {
-    const x = X(pk.freq_hz), y = Y(pk.amplitude);
-    ctx.fillStyle = css('--accent'); ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 7); ctx.fill();
-    ctx.textAlign = x > w - 90 ? 'right' : 'left';
-    ctx.fillText(`${pk.freq_hz.toFixed(1)} Hz · SNR ${pk.snr.toFixed(0)}`, x + (x > w - 90 ? -6 : 6), Math.max(pad.t + 10, y - 6));
-  }
+  for (let k = 0; k < freq.length; k++) { const x = X(freq[k]), y = Y(mag[k]); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  if (pk.amplitude > 0) { const x = X(pk.freq_hz), y = Y(pk.amplitude); ctx.fillStyle = css('--accent');
+    ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 7); ctx.fill(); ctx.textAlign = x > w - 90 ? 'right' : 'left';
+    ctx.fillText(`${pk.freq_hz.toFixed(1)} Hz · SNR ${pk.snr.toFixed(0)}`, x + (x > w - 90 ? -6 : 6), Math.max(padT + 10, y - 6)); }
 }
 
 window.addEventListener('resize', () => { if (core) schedule(); });
-
-// ---------- wire up ----------
-function wireStatic() {
+function wire() {
   const sync = (id, fmt) => { const el = $(id), v = $(id + 'v'); const f = () => { if (v) v.textContent = fmt(el.value); schedule(); }; el.addEventListener('input', f); f(); };
-  sync('b0', (x) => parseFloat(x).toFixed(2) + ' A');
-  sync('t2', (x) => parseFloat(x).toFixed(2) + ' s');
-  sync('t1', (x) => parseFloat(x).toFixed(1) + ' s');
-  for (const id of ['cyclops', 'noise', 'coherent', 'beat', 'win', 'grid', 'seed', 'ftx']) $(id).addEventListener('input', schedule);
-  $('expSeg').addEventListener('click', (e) => {
-    const b = e.target.closest('button'); if (!b) return;
-    kind = parseInt(b.dataset.kind);
-    [...$('expSeg').children].forEach((c) => c.setAttribute('aria-pressed', c === b));
-    buildParams(); schedule();
-  });
+  sync('b0', (x) => (+x).toFixed(2) + ' A'); sync('t2', (x) => (+x).toFixed(2) + ' s'); sync('t1', (x) => (+x).toFixed(1) + ' s');
+  for (const id of ['cyclops', 'skew', 'fix', 'noise', 'coherent', 'beat', 'win', 'grid', 'seed', 'ftx']) $(id).addEventListener('input', schedule);
+  $('expSeg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; kind = +b.dataset.kind;
+    [...$('expSeg').children].forEach((c) => c.setAttribute('aria-pressed', c === b)); buildParams(); schedule(); });
 }
-
 (async () => {
   try {
     core = await loadCore('./web/nmrcore.wasm', { log: (s) => console.log('[core]', s) });
     $('cfg').innerHTML = 'config <code>' + core.configSha256().slice(0, 12) + '…</code>';
     const dm = core.defaultModel(), dt = core.defaultTiming();
     $('b0').value = dm.b0_current; $('t1').value = dm.t1; $('t2').value = dm.t2; $('ftx').value = dt.tx_freq_hz;
-    wireStatic();
-    buildParams();
-    run();
-  } catch (e) {
-    status('failed to load WebAssembly core: ' + e.message, true);
-    console.error(e);
-  }
+    wire(); buildParams(); run();
+  } catch (e) { status('failed to load core: ' + e.message, true); console.error(e); }
 })();
 </script>
 </body>

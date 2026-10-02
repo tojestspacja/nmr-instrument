@@ -39,7 +39,7 @@ class Model(C.Structure):
                                           "rx_gain", "if_pole_hz", "noise_density", "lo_hz", "adc_full_scale",
                                           "adc_rate", "adc_t0", "offset_i", "offset_q")] + \
                [(n, C.c_int32) for n in ("adc_bits", "lo_coherent", "interp")] + \
-               [("beat_measurement_sigma", C.c_double), ("seed", C.c_uint64)]
+               [("beat_measurement_sigma", C.c_double), ("seed", C.c_uint64), ("iq_skew_samples", C.c_double)]
 
 
 class RecordMeta(C.Structure):
@@ -50,7 +50,8 @@ class RecordMeta(C.Structure):
 
 class Pipeline(C.Structure):
     _fields_ = [(n, C.c_double) for n in ("adc_rate", "adc_full_scale", "fir_cutoff_hz", "offset_tail", "lo_hz")] + \
-               [(n, C.c_int32) for n in ("adc_bits", "decimation", "fir_taps", "correct_beat", "window_id")]
+               [(n, C.c_int32) for n in ("adc_bits", "decimation", "fir_taps", "correct_beat", "window_id")] + \
+               [("iq_skew_samples", C.c_double)]
 
 
 def _load():
