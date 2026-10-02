@@ -69,21 +69,43 @@
             v[2] * c + (n[0] * v[1] - n[1] * v[0]) * s + n[2] * d * (1 - c)];
   }
 
+  // Exact field maps (simulator/build/nmr_exact.wls, Mathematica: Biot-Savart for the B0 pair's real
+  // winding cross-section and every turn of the class coil; checked against SpinDynamica). Per voxel:
+  // position (mm), line offset from 89.4 kHz at 1.5 A with no Earth field (Hz), the coil's field
+  // perpendicular to B0 per amp (T/A) and its direction in the transverse plane (rad).
+  const MAPS = {};
+  function loadFieldMaps(base) {
+    const get = k => fetch(base + "fieldmap-" + k + ".json").then(r => r.ok ? r.json() : null).then(m => { if (m) MAPS[k] = m; }).catch(() => {});
+    return Promise.all(["tube", "bottle"].map(get));
+  }
+  function mapVoxels(m) {
+    return { pts: m.p.map(q => [q[0] / 1000, q[1] / 1000, q[2] / 1000]), vol: m.p.length * (m.grid_mm / 1000) ** 3,
+             df: m.df, b1: m.b1, phi: m.phi, centre: m.centre };
+  }
+
   // set up one experiment; returns everything the page needs
   function setup(o) {
-    const { pts, vol } = voxels(o.sample);
+    const map = MAPS[o.sample] && o.fields !== "approx" ? mapVoxels(MAPS[o.sample]) : null;
+    const { pts, vol } = map || voxels(o.sample);
     const fTx = o.fTx, I = o.b0I, tau = o.tau * 1e-6;
     const iTx = P.txV / Math.hypot(P.coilR, 2 * Math.PI * fTx * P.coilL);   // A pk in the coil
     const bPerA = MU0 * P.turns / P.coilLen;                                 // T/A, long-solenoid
     const dV = vol / pts.length;
-    const vox = pts.map(p => {
-      const prof = coilProfile(p[0]);
-      const B = bField(p, I, o.earthPar * 1e-6, o.earthPerp * 1e-6);
+    const vox = pts.map((p, i) => {
+      let B, b1, phi;
+      if (map) {                                                             // exact: the field scales with the current
+        B = Math.hypot((89400 + map.df[i]) / GAMMA_BAR * (I / P.hhI0) + o.earthPar * 1e-6, o.earthPerp * 1e-6);
+        b1 = map.b1[i]; phi = map.phi[i];
+      } else {                                                               // approximate: 4th-order Helmholtz, on-axis solenoid
+        B = bField(p, I, o.earthPar * 1e-6, o.earthPerp * 1e-6);
+        b1 = bPerA * coilProfile(p[0]); phi = 0;
+      }
       const dw = 2 * Math.PI * (GAMMA_BAR * B - fTx);                       // rad/s, in the frame at f_tx
-      const w1 = GAMMA * 0.5 * bPerA * iTx * prof;                          // rad/s, rotating component
-      const W = Math.hypot(w1, dw), n = [-w1 / W, 0, -dw / W];              // M rotates about -B_eff
+      const w1 = GAMMA * 0.5 * b1 * iTx;                                    // rad/s, rotating component
+      const W = Math.hypot(w1, dw);
+      const n = [-w1 * Math.cos(phi) / W, -w1 * Math.sin(phi) / W, -dw / W]; // M rotates about -B_eff
       const M0 = N_H * GAMMA * GAMMA * HBAR * HBAR * B / (4 * KB * P.temp);  // A/m
-      return { p, prof, dw, n, W, M0, m: rot([0, 0, 1], n, W * tau) };
+      return { p, b1, phi, dw, n, W, M0, m: rot([0, 0, 1], n, W * tau) };
     });
     // Mz before a scan in the averaged steady state, for this flip at the centre
     const centre = vox.reduce((a, v) => Math.abs(v.p[0]) < Math.abs(a.p[0]) ? v : a);
@@ -95,11 +117,12 @@
     const fLo = fTx - P.fIF;
     const dt = 1 / P.rate, ns = Math.round(P.tAcq / dt);
     const wL = 2 * Math.PI * fTx;
-    const amp = vox.map(v => wL * bPerA * v.prof * v.M0 * dV);               // V of emf per voxel (reciprocity)
+    const amp = vox.map(v => wL * v.b1 * v.M0 * dV);                         // V of emf per voxel (reciprocity)
     const S = new Float64Array(2 * ns);                                       // complex baseband, noise-free
     for (let i = 0; i < vox.length; i++) {
       const v = vox[i];
-      let re = v.m[0] * amp[i], im = v.m[1] * amp[i];
+      const cp = Math.cos(v.phi), sp = Math.sin(v.phi);                   // received with the coil's phase, e^{-i phi}
+      let re = (v.m[0] * cp + v.m[1] * sp) * amp[i], im = (v.m[1] * cp - v.m[0] * sp) * amp[i];
       const c = Math.cos(-v.dw * dt), s = Math.sin(-v.dw * dt), d = Math.exp(-dt / P.T2);
       for (let k = 0; k < ns; k++) {
         S[2 * k] += re; S[2 * k + 1] += im;
@@ -144,8 +167,9 @@
       vox, tau, dt, ns, I: I_, Q: Q_, env, fLine: fPeak, fwhm, fLo, fTx, iTx, mzSS, avgFactor, tankGain, t2s,
       sigmaAdc: sigma * P.gain, vol, mTot, emfUntuned, tankSignal: emfUntuned * tankGain * avgFactor,
       flipCentre: Math.acos(Math.max(-1, Math.min(1, centre.m[2]))) * 180 / Math.PI,
-      t90Centre: (Math.PI / 2) / (GAMMA * 0.5 * bPerA * iTx * coilProfile(0)),
-      b1Centre: 0.5 * bPerA * iTx * coilProfile(0),
+      t90Centre: (Math.PI / 2) / (GAMMA * 0.5 * iTx * (map ? map.centre.b1 : bPerA * coilProfile(0))),
+      b1Centre: 0.5 * iTx * (map ? map.centre.b1 : bPerA * coilProfile(0)),
+      fields: map ? "exact" : "approx",
       firstSample: Math.round(P.tDead / dt),
     };
   }
@@ -190,6 +214,6 @@
     }
     return out;
   }
-  root.NMR = { P, SAMPLES, setup, state, spectrum, coilProfile, GAMMA_BAR };
+  root.NMR = { P, SAMPLES, setup, state, spectrum, coilProfile, GAMMA_BAR, loadFieldMaps, MAPS };
   if (typeof module !== "undefined") module.exports = root.NMR;
 })(typeof window !== "undefined" ? window : globalThis);

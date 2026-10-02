@@ -161,6 +161,7 @@ dl.ro dd { margin: 0; text-align: right; }
           <label for="c-earth">Earth ∥ B0</label><input type="range" id="c-earth" min="-50" max="50" step="1" value="0"><output id="o-earth" class="num" for="c-earth">0 µT</output>
         </div>
         <div class="row"><span>Sample</span><div class="seg" id="smp" role="group" aria-label="Sample"><button data-s="tube" aria-pressed="true">50 mL tube</button><button data-s="bottle" aria-pressed="false">Bottle, full bore</button></div></div>
+        <div class="row"><span>Fields</span><div class="seg" id="fld" role="group" aria-label="Field model"><button data-f="exact" aria-pressed="true">Exact</button><button data-f="approx" aria-pressed="false">Approximate</button></div></div>
         <div class="row"><span>Averages</span><div class="seg" id="avg" role="group" aria-label="Averages"><button data-n="1" aria-pressed="true">1</button><button data-n="4" aria-pressed="false">4</button><button data-n="16" aria-pressed="false">16</button><button data-n="64" aria-pressed="false">64</button></div></div>
         <div class="plot"><div class="pt"><span>Receiver I channel, ADC volts</span><span>25 kS/s, IF 5.4 kHz</span></div><canvas id="p-rx" width="640" height="230"></canvas></div>
         <div class="plot"><div class="pt"><span>Spectrum of the 200 ms record</span><span id="p-sp-l"></span></div><canvas id="p-sp" width="640" height="200"></canvas></div>
@@ -194,11 +195,13 @@ dl.ro dd { margin: 0; text-align: right; }
           <li><span class="pill bad">stop</span><span class="what">TX and RX on one coil</span>
             <span class="why">The RX diodes clamp at ±0.7 V across the transmitter's ±7.95 V: <span class="num">1.54 A</span> through R813 trips the OPA564's 1.5 A limit on the first pulse. Needs a board-side decision (TX diodes + RX series element, or a second, crossed receive coil).</span></li>
           <li><span class="pill warn">mind</span><span class="what">Signal size</span>
-            <span class="why">The 50 mL tube gives <span class="num">0.83 µV</span> at the coil, <span class="num">8.1 µV</span> at the tank: a fifth of the 40 µV the receiver was sized for (TeachSpin's estimate). ADC peak 0.21 V, single-sample SNR 4. Average, or use the full-bore bottle (15 µV).</span></li>
-          <li><span class="pill warn">mind</span><span class="what">90° pulse length</span>
-            <span class="why">The workbook's 417 µs assumes an endless solenoid. This coil (length 2.4 × its diameter) gives <span class="num">13.0 µT</span> rotating at its centre: 90° takes <span class="num">451 µs</span>; 417 µs tips 83°.</span></li>
+            <span class="why">Exact fields, 50 mL tube: <span class="num">0.90 µV</span> at the coil, <span class="num">8.8 µV</span> at the tank, a fifth of the 40 µV the receiver was sized for (TeachSpin's estimate). ADC peak about 0.22 V, single-sample SNR about 4. Average, or use the full-bore bottle (15.9 µV).</span></li>
+          <li><span class="pill warn">mind</span><span class="what">B0 at 1.5 A</span>
+            <span class="why">The pair's real winding cross-section (28 × 27 mm) gives <span class="num">2.1035 mT</span>, not the thin-wire formula's 2.0997: the line sits at <span class="num">89 560 Hz</span>, 160 Hz above f_tx. Set f_tx to the line, or run the pair at <span class="num">1.497 A</span>.</span></li>
+          <li><span class="pill ok">ok</span><span class="what">90° pulse length</span>
+            <span class="why">All 400 turns, exactly: the second layer holds only 178 turns (x −50 … +30 mm), so B1 at the coil centre is <span class="num">14.07 µT</span> rotating and 90° takes <span class="num">417 µs</span>, as the workbook says. (The approximate model assumes an even winding and gives 451 µs.)</span></li>
           <li><span class="pill ok">ok</span><span class="what">B0 homogeneity</span>
-            <span class="why">Worst case 1688 ppm at the winding ends, but most of the water sits where the error is under 50 ppm: simulated T2* <span class="num">72 ms</span>, line <span class="num">6 Hz</span> wide (Libbrecht's rig: about 75 ms).</span></li>
+            <span class="why">Exact fields: <span class="num">298 Hz</span> between the most extreme voxels, but most of the water sits where the field is even: line <span class="num">6 Hz</span> FWHM, T2* <span class="num">80 ms</span> (Libbrecht's rig: about 75 ms).</span></li>
           <li><span class="pill warn">mind</span><span class="what">B0 drift</span>
             <span class="why">Voltage-driven, <span class="num">23 W</span> warms 9.2 kg of copper by 0.39 K/min: the line falls <span class="num">138 Hz/min</span>, 7 Hz between averaged scans against a ~2 Hz line. Drive B0 at constant current, or measure it each scan and correct f_LO.</span></li>
           <li><span class="pill ok">ok</span><span class="what">RX tank with the coax</span>
@@ -211,7 +214,7 @@ dl.ro dd { margin: 0; text-align: right; }
             <span class="why">TX pair <span class="num">590 mm</span> · RX coax <span class="num">784 mm</span> · B0 leads <span class="num">1011 mm</span>, with 15 % slack.</span></li>
         </ul>
       </section>
-      <p class="foot">Built from <code>instrument.scad</code>, <code>probe.scad</code>, <code>housing.scad</code> and <code>cut-housing.scad</code> (<code>mechanical/</code> in this repository), 2 Oct 2026. The pulse experiment solves the Bloch equations for 3000 voxels of the sample in the B0 pair's real field (4th-order Helmholtz error, the Earth's field), the coil's finite-solenoid B1, reciprocity pickup, the Q = 10 tank and the receiver noise (15.6 nV/√Hz over 15 kHz). It is shown in the frame rotating at f_tx: in the lab the magnetization turns 89 400 times a second.</p>
+      <p class="foot">Built from <code>instrument.scad</code>, <code>probe.scad</code>, <code>housing.scad</code> and <code>cut-housing.scad</code> (<code>mechanical/</code> in this repository), 2 Oct 2026. The pulse experiment solves the Bloch equations for every voxel of the water (2.5 mm grid, 3555 voxels in the tube) in exact fields computed in Mathematica (<code>build/nmr_exact.wls</code>): Biot–Savart for the B0 pair with its real winding cross-section and for each of the class coil's 400 turns, including the direction of B1 at every voxel. With identical inputs it matches SpinDynamica (Bengs and Levitt, Magn. Reson. Chem. 2017, doi:10.1002/mrc.4642) to 0.1 % in signal, 1 Hz in line position and 1 % in T2*. Then reciprocity pickup, the Q = 10 tank and the receiver noise (15.6 nV/√Hz over 15 kHz). Shown in the frame rotating at f_tx: in the lab the magnetization turns 89 400 times a second.</p>
     </aside>
   </div>
 </div>
@@ -371,9 +374,9 @@ dl.ro dd { margin: 0; text-align: right; }
   const pulseBtn = $("pulse");
   const ctl = { tau: $("c-tau"), ftx: $("c-ftx"), b0: $("c-b0"), earth: $("c-earth") };
   const waterCentre = new THREE.Vector3(0, 0, AXIS);
-  let sample = "tube", nAvg = 1, sim = null, spec = null, specRange = null, firing = null, seed = 1;
+  let sample = "tube", nAvg = 1, fields = "exact", sim = null, spec = null, specRange = null, firing = null, seed = 1;
   const fmt = (v, d = 0) => v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/,/g, " ");
-  const params = () => ({ sample, nAvg, seed, tau: +ctl.tau.value, fTx: +ctl.ftx.value, b0I: +ctl.b0.value, earthPar: +ctl.earth.value, earthPerp: 0 });
+  const params = () => ({ sample, nAvg, seed, fields, tau: +ctl.tau.value, fTx: +ctl.ftx.value, b0I: +ctl.b0.value, earthPar: +ctl.earth.value, earthPerp: 0 });
   function outputs() {
     $("o-tau").textContent = ctl.tau.value + " µs";
     $("o-ftx").textContent = fmt(+ctl.ftx.value) + " Hz";
@@ -403,11 +406,13 @@ dl.ro dd { margin: 0; text-align: right; }
     }));
   }
   segs("smp", b => { sample = b.dataset.s; rerun(); });
+  segs("fld", b => { fields = b.dataset.f; rerun(); });
   segs("avg", b => { nAvg = +b.dataset.n; rerun(); });
 
   function readouts() {
     const s = sim, off = s.fLine - s.fTx, snr = s.env[s.firstSample] / s.sigmaAdc;
     const rows = [
+      ["Field model", s.fields === "exact" ? "exact (Biot–Savart, Mathematica)" : "approximate (4th order, on-axis coil)"],
       ["Proton line", fmt(s.fLine) + " Hz"],
       ["Line − f_tx", (off >= 0 ? "+" : "−") + fmt(Math.abs(off)) + " Hz"],
       ["f_LO", fmt(s.fLo) + " Hz"],
@@ -516,7 +521,7 @@ dl.ro dd { margin: 0; text-align: right; }
     const pos = voxGeo.attributes.position.array, col = voxGeo.attributes.color.array;
     const grey = new THREE.Color(css("--muted")), hue = new THREE.Color(), tip = new THREE.Color(), A = 7;
     for (let j = 0; j < NV && j < sim.vox.length; j++) {
-      const v = sim.vox[j], m = st[j], d = toScene(m);
+      const iv = Math.floor((j + 0.5) * sim.vox.length / NV), v = sim.vox[iv], m = st[iv], d = toScene(m);   // spread over the whole sample
       const x = v.p[0] * 1000, y = v.p[1] * 1000, z = AXIS + v.p[2] * 1000;
       pos.set([x - d.x * A / 2, y - d.y * A / 2, z - d.z * A / 2, x + d.x * A / 2, y + d.y * A / 2, z + d.z * A / 2], j * 6);
       const mt = Math.min(1, Math.hypot(m[0], m[1]));
@@ -668,7 +673,7 @@ dl.ro dd { margin: 0; text-align: right; }
     controls.update(); renderer.render(scene, camera); requestAnimationFrame(frame);
   }
 
-  runSim(); settle();
+  NMR.loadFieldMaps("m/").then(() => { runSim(); settle(); });
   Promise.all(PARTS.map(load)).then(() => { document.getElementById("loading").hidden = true; apply(); applyXray(); })
     .catch(e => { document.getElementById("loading").textContent = "Could not load the models: " + e.message; });
   requestAnimationFrame(frame);
