@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tojestspacja.github.io/nmr-instrument/design/schema/instrument.schema.json",
+  "title": "Benchtop NMR instrument definition",
+  "type": "object",
+  "required": ["schema_version", "instrument", "constants", "nucleus", "sample", "b0", "rf_coil", "tx", "dds", "lo",
+               "receiver", "acquisition", "timing", "limits", "mechanical"],
+  "additionalProperties": false,
+  "$defs": {
+    "unit": {
+      "enum": ["1", "m", "s", "Hz", "A", "V", "ohm", "H", "F", "T", "K", "J*s", "J/K", "H/m", "ohm*m", "1/K",
+               "J/(kg*K)", "kg/m^3", "Hz/T", "1/m^3", "T/A", "V/sqrt(Hz)"]
+    },
+    "kind": {"enum": ["target", "design", "datasheet", "calculated", "estimate", "measured", "constant"]},
+    "quantity": {
+      "type": "object",
+      "required": ["value", "unit", "kind", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {"type": "number"},
+        "unit": {"$ref": "#/$defs/unit"},
+        "kind": {"$ref": "#/$defs/kind"},
+        "source": {"type": "string", "minLength": 3}
+      }
+    },
+    "group": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "anyOf": [{"$ref": "#/$defs/quantity"}, {"type": "string"}]
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": 1},
+    "instrument": {
+      "type": "object",
+      "required": ["name", "revision", "hardware_reference"],
+      "additionalProperties": false,
+      "properties": {"name": {"type": "string"}, "revision": {"type": "string"}, "hardware_reference": {"type": "string"}}
+    },
+    "constants": {"$ref": "#/$defs/group"},
+    "nucleus": {"$ref": "#/$defs/group"},
+    "sample": {"$ref": "#/$defs/group"},
+    "b0": {"$ref": "#/$defs/group"},
+    "rf_coil": {"$ref": "#/$defs/group"},
+    "tx": {"$ref": "#/$defs/group"},
+    "dds": {"$ref": "#/$defs/group"},
+    "lo": {"$ref": "#/$defs/group"},
+    "receiver": {"$ref": "#/$defs/group"},
+    "acquisition": {"$ref": "#/$defs/group"},
+    "timing": {"$ref": "#/$defs/group"},
+    "limits": {"$ref": "#/$defs/group"},
+    "mechanical": {"$ref": "#/$defs/group"}
+  }
+}

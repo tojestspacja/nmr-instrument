@@ -1,0 +1,24 @@
+** Drc report for front-panel.kicad_pcb **
+** Created on 2026-10-03T01:20:53 **
+** Report includes: Errors, Warnings, Exclusions **
+
+** Found 0 DRC violations **
+
+** Found 0 unconnected pads **
+
+** Found 2 Footprint errors **
+[footprint_symbol_field_mismatch]: Missing symbol field 'LCSC' in footprint
+    Local override; warning
+    @(86.8500 mm, 110.6800 mm): Footprint J411
+[footprint_symbol_field_mismatch]: Missing symbol field 'LCSC' in footprint
+    Local override; warning
+    @(59.3750 mm, 110.6050 mm): Footprint J412
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

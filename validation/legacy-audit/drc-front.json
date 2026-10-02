@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-03T01:20:50",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [
+        {
+            "description": "Missing symbol field 'LCSC' in footprint",
+            "items": [
+                {
+                    "description": "Footprint J411",
+                    "pos": {
+                        "x": 86.850001,
+                        "y": 110.68
+                    },
+                    "uuid": "cb36c5c4-e223-44a8-82ea-3f0439c87d97"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_field_mismatch"
+        },
+        {
+            "description": "Missing symbol field 'LCSC' in footprint",
+            "items": [
+                {
+                    "description": "Footprint J412",
+                    "pos": {
+                        "x": 59.375002,
+                        "y": 110.605
+                    },
+                    "uuid": "dbd3132e-9f8d-5608-8129-b4018287111e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_field_mismatch"
+        }
+    ],
+    "source": "front-panel.kicad_pcb",
+    "unconnected_items": [],
+    "violations": []
+}

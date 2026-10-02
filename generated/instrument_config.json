@@ -1,0 +1,740 @@
+{
+ "meta": {
+  "config_sha256": "9f19a22b912bcbcd12818602812148e6062ec696041230614017cec0d043ec06",
+  "generator": "tools/gen_config.py",
+  "source": "design/instrument.yaml"
+ },
+ "params": {
+  "ACQUISITION_AVERAGES": {
+   "kind": "target",
+   "path": "acquisition.averages",
+   "source": "multiple of 4 for CYCLOPS",
+   "unit": "1",
+   "value": 8
+  },
+  "ACQUISITION_DECIMATED_RATE_HZ": {
+   "kind": "calculated",
+   "path": "acquisition.decimated_rate",
+   "source": "acquisition.raw_rate / acquisition.decimation",
+   "unit": "Hz",
+   "value": 25000.0
+  },
+  "ACQUISITION_DECIMATION": {
+   "kind": "design",
+   "path": "acquisition.decimation",
+   "source": "to 25 kS/s complex; must keep rate/decim > 2|IF|",
+   "unit": "1",
+   "value": 4
+  },
+  "ACQUISITION_DURATION_S": {
+   "kind": "target",
+   "path": "acquisition.duration",
+   "source": "~6 T2* of the field-limited line; legacy 2 s mostly noise (docs/first-fid.md)",
+   "unit": "s",
+   "value": 0.5
+  },
+  "ACQUISITION_RAW_RATE_HZ": {
+   "kind": "target",
+   "path": "acquisition.raw_rate",
+   "source": "per channel; legacy rate_hz; 2 channels = 200 kS/s aggregate",
+   "unit": "Hz",
+   "value": 100000.0
+  },
+  "ACQUISITION_REPETITION_TIME_S": {
+   "kind": "target",
+   "path": "acquisition.repetition_time",
+   "source": ">= T1 for water; shorter with CuSO4 doping",
+   "unit": "s",
+   "value": 3.0
+  },
+  "ACQUISITION_SAMPLES": {
+   "kind": "calculated",
+   "path": "acquisition.samples",
+   "source": "round(duration * raw_rate / decimation) complex samples",
+   "unit": "1",
+   "value": 12500
+  },
+  "ACQUISITION_START_DELAY_S": {
+   "kind": "target",
+   "path": "acquisition.start_delay",
+   "source": "end of pulse to first sample (dead time + margin)",
+   "unit": "s",
+   "value": 0.0012
+  },
+  "B0_COPPER_MASS_KG": {
+   "kind": "calculated",
+   "path": "b0.copper_mass",
+   "source": "2 N 2 pi R * pi d^2/4 * rho_mass",
+   "unit": "kg",
+   "value": 9.196971258383728
+  },
+  "B0_CURRENT_A": {
+   "kind": "target",
+   "path": "b0.current",
+   "source": "legacy design operating point",
+   "unit": "A",
+   "value": 1.5
+  },
+  "B0_CURRENT_DRIVE_DRIFT_RATE_HZ_PER_S": {
+   "kind": "calculated",
+   "path": "b0.current_drive_drift_rate",
+   "source": "constant current: B ~ 1/R_geometric -> df/dt = -f alpha_expansion dT/dt",
+   "unit": "Hz/s",
+   "value": -0.009700178736914264
+  },
+  "B0_CURRENT_REGULATION": {
+   "kind": "target",
+   "path": "b0.current_regulation",
+   "source": "|dI/I| over an averaging set; line core ~2 Hz / 89.4 kHz = 22 ppm (docs/b0-stability.md)",
+   "unit": "1",
+   "value": 2e-05
+  },
+  "B0_FIELD_PER_AMP_THIN_WIRE_T_PER_A": {
+   "kind": "calculated",
+   "path": "b0.field_per_amp_thin_wire",
+   "source": "(4/5)^1.5 mu0 N / R",
+   "unit": "T/A",
+   "value": 0.0014027150062578162
+  },
+  "B0_FIELD_THIN_WIRE_T": {
+   "kind": "calculated",
+   "path": "b0.field_thin_wire",
+   "source": "(4/5)^1.5 mu0 N I / R",
+   "unit": "T",
+   "value": 0.0021040725093867244
+  },
+  "B0_HEATING_RATE_ADIABATIC_K_PER_S": {
+   "kind": "calculated",
+   "path": "b0.heating_rate_adiabatic",
+   "source": "P / (m c), no cooling: an upper bound",
+   "unit": "K/s",
+   "value": 0.0065624545504126145
+  },
+  "B0_LARMOR_THIN_WIRE_HZ": {
+   "kind": "calculated",
+   "path": "b0.larmor_thin_wire",
+   "source": "gamma_bar * b0.field_thin_wire",
+   "unit": "Hz",
+   "value": 89583.80068050645
+  },
+  "B0_POWER_20C_W": {
+   "kind": "calculated",
+   "path": "b0.power_20c",
+   "source": "I^2 R_20C",
+   "unit": "W",
+   "value": 23.236561765568815
+  },
+  "B0_RADIUS_M": {
+   "kind": "design",
+   "path": "b0.radius",
+   "source": "legacy probe.scad hh_R",
+   "unit": "m",
+   "value": 0.2
+  },
+  "B0_RESISTANCE_20C_OHM": {
+   "kind": "calculated",
+   "path": "b0.resistance_20c",
+   "source": "rho_Cu * 2 N 2 pi R / (pi d^2/4)",
+   "unit": "ohm",
+   "value": 10.327360784697252
+  },
+  "B0_SPACING_M": {
+   "kind": "design",
+   "path": "b0.spacing",
+   "source": "Helmholtz: spacing = radius",
+   "unit": "m",
+   "value": 0.2
+  },
+  "B0_SUPPLY_COMPLIANCE_V": {
+   "kind": "design",
+   "path": "b0.supply_compliance",
+   "source": "class-board +VEXT maximum (requirements.md:77)",
+   "unit": "V",
+   "value": 18.0
+  },
+  "B0_TURNS_PER_COIL": {
+   "kind": "design",
+   "path": "b0.turns_per_coil",
+   "source": "legacy probe.scad: ceil(B0 R / ((4/5)^1.5 mu0 I)) = ceil(311.36)",
+   "unit": "1",
+   "value": 312
+  },
+  "B0_VOLTAGE_20C_V": {
+   "kind": "calculated",
+   "path": "b0.voltage_20c",
+   "source": "I * R_20C",
+   "unit": "V",
+   "value": 15.491041177045878
+  },
+  "B0_VOLTAGE_DRIVE_DRIFT_RATE_HZ_PER_S": {
+   "kind": "calculated",
+   "path": "b0.voltage_drive_drift_rate",
+   "source": "voltage drive: df/dt = -f alpha_Cu dT/dt",
+   "unit": "Hz/s",
+   "value": -2.310406208246852
+  },
+  "B0_WINDING_DEPTH_M": {
+   "kind": "calculated",
+   "path": "b0.winding_depth",
+   "source": "legacy probe.scad hh_h (radial build at 80 % fill)",
+   "unit": "m",
+   "value": 0.027
+  },
+  "B0_WINDING_WIDTH_M": {
+   "kind": "design",
+   "path": "b0.winding_width",
+   "source": "legacy probe.scad hh_w (axial)",
+   "unit": "m",
+   "value": 0.028
+  },
+  "B0_WIRE_COPPER_DIAMETER_M": {
+   "kind": "datasheet",
+   "path": "b0.wire_copper_diameter",
+   "source": "AWG16 copper diameter",
+   "unit": "m",
+   "value": 0.001291
+  },
+  "CONSTANTS_COPPER_DENSITY_KG_PER_M3": {
+   "kind": "constant",
+   "path": "constants.copper_density",
+   "source": "copper",
+   "unit": "kg/m^3",
+   "value": 8960.0
+  },
+  "CONSTANTS_COPPER_EXPANSION_PER_K": {
+   "kind": "constant",
+   "path": "constants.copper_expansion",
+   "source": "copper linear expansion, 20 C",
+   "unit": "1/K",
+   "value": 1.65e-05
+  },
+  "CONSTANTS_COPPER_HEAT_CAPACITY_J_PER_KG_K": {
+   "kind": "constant",
+   "path": "constants.copper_heat_capacity",
+   "source": "copper, 25 C",
+   "unit": "J/(kg*K)",
+   "value": 385.0
+  },
+  "CONSTANTS_COPPER_RESISTIVITY_20C_OHM_M": {
+   "kind": "constant",
+   "path": "constants.copper_resistivity_20c",
+   "source": "IACS annealed copper, 20 C",
+   "unit": "ohm*m",
+   "value": 1.724e-08
+  },
+  "CONSTANTS_COPPER_TEMPCO_PER_K": {
+   "kind": "constant",
+   "path": "constants.copper_tempco",
+   "source": "annealed copper, 20 C",
+   "unit": "1/K",
+   "value": 0.00393
+  },
+  "CONSTANTS_HBAR_J_S": {
+   "kind": "constant",
+   "path": "constants.hbar",
+   "source": "CODATA 2018",
+   "unit": "J*s",
+   "value": 1.054571817e-34
+  },
+  "CONSTANTS_K_BOLTZMANN_J_PER_K": {
+   "kind": "constant",
+   "path": "constants.k_boltzmann",
+   "source": "SI 2019 exact",
+   "unit": "J/K",
+   "value": 1.380649e-23
+  },
+  "CONSTANTS_MU0_H_PER_M": {
+   "kind": "constant",
+   "path": "constants.mu0",
+   "source": "CODATA 2018",
+   "unit": "H/m",
+   "value": 1.25663706212e-06
+  },
+  "DDS_FREQUENCY_BITS": {
+   "kind": "datasheet",
+   "path": "dds.frequency_bits",
+   "source": "AD9834",
+   "unit": "1",
+   "value": 28
+  },
+  "DDS_MAX_OUTPUT_FREQUENCY_HZ": {
+   "kind": "design",
+   "path": "dds.max_output_frequency",
+   "source": "MCLK/4 practical limit with the 3 MHz filter",
+   "unit": "Hz",
+   "value": 12500000.0
+  },
+  "DDS_MCLK_HZ": {
+   "kind": "design",
+   "path": "dds.mclk",
+   "source": "Si5351 CLK0 (Sequencer.cpp prepareHardware)",
+   "unit": "Hz",
+   "value": 50000000.0
+  },
+  "DDS_PHASE_BITS": {
+   "kind": "datasheet",
+   "path": "dds.phase_bits",
+   "source": "AD9834",
+   "unit": "1",
+   "value": 12
+  },
+  "LIMITS_B0_CURRENT_MAX_A": {
+   "kind": "design",
+   "path": "limits.b0_current_max",
+   "source": "DRV8871 I_TRIP via R920 32k; v2 CC driver keeps 2.0 A",
+   "unit": "A",
+   "value": 2.0
+  },
+  "LIMITS_OPA564_SUPPLY_ABS_MAX_V": {
+   "kind": "datasheet",
+   "path": "limits.opa564_supply_abs_max",
+   "source": "OPA564 absolute maximum (design-decisions D-41)",
+   "unit": "V",
+   "value": 26.0
+  },
+  "LIMITS_TX_MAX_DUTY": {
+   "kind": "estimate",
+   "path": "limits.tx_max_duty",
+   "source": "OPA564 / R813 average dissipation; to be measured",
+   "unit": "1",
+   "value": 0.01
+  },
+  "LIMITS_TX_MAX_PULSE_S": {
+   "kind": "design",
+   "path": "limits.tx_max_pulse",
+   "source": "legacy t90 cap 5000 us; R813 1 W thermal",
+   "unit": "s",
+   "value": 0.005
+  },
+  "LIMITS_VEXT_MAX_V": {
+   "kind": "datasheet",
+   "path": "limits.vext_max",
+   "source": "requirements.md:77",
+   "unit": "V",
+   "value": 18.0
+  },
+  "LIMITS_VEXT_MIN_V": {
+   "kind": "datasheet",
+   "path": "limits.vext_min",
+   "source": "requirements.md:77",
+   "unit": "V",
+   "value": 7.0
+  },
+  "LO_CLK1_FREQUENCY_HZ": {
+   "kind": "calculated",
+   "path": "lo.clk1_frequency",
+   "source": "lo.frequency * lo.multiplier",
+   "unit": "Hz",
+   "value": 336000.0
+  },
+  "LO_CRYSTAL_HZ": {
+   "kind": "datasheet",
+   "path": "lo.crystal",
+   "source": "Y701",
+   "unit": "Hz",
+   "value": 25000000.0
+  },
+  "LO_FREQUENCY_HZ": {
+   "kind": "target",
+   "path": "lo.frequency",
+   "source": "legacy default f_lo",
+   "unit": "Hz",
+   "value": 84000.0
+  },
+  "LO_MULTIPLIER": {
+   "kind": "design",
+   "path": "lo.multiplier",
+   "source": "Si5351 CLK1 = 4 f_LO into the Johnson counter",
+   "unit": "1",
+   "value": 4
+  },
+  "MECHANICAL_BOARD_GAP_M": {
+   "kind": "design",
+   "path": "mechanical.board_gap",
+   "source": "8.5 mm socket on 2.5 mm insulator (housing brief)",
+   "unit": "m",
+   "value": 0.011
+  },
+  "NUCLEUS_GAMMA_BAR_HZ_PER_T": {
+   "kind": "constant",
+   "path": "nucleus.gamma_bar",
+   "source": "CODATA 2018 shielded proton gyromagnetic ratio / 2pi (H2O, spherical sample, 25 C); legacy used 42.577e6 (unshielded, rounded)",
+   "unit": "Hz/T",
+   "value": 42576384.74
+  },
+  "NUCLEUS_SPIN": {
+   "kind": "constant",
+   "path": "nucleus.spin",
+   "source": "1H nuclear spin quantum number",
+   "unit": "1",
+   "value": 0.5
+  },
+  "RECEIVER_ADC_BITS": {
+   "kind": "datasheet",
+   "path": "receiver.adc_bits",
+   "source": "ADS8688",
+   "unit": "1",
+   "value": 16
+  },
+  "RECEIVER_ADC_CHANNEL_I": {
+   "kind": "design",
+   "path": "receiver.adc_channel_i",
+   "source": "COND_OUT1 -> AIN_3P (netlist; pins.h:32)",
+   "unit": "1",
+   "value": 3
+  },
+  "RECEIVER_ADC_CHANNEL_Q": {
+   "kind": "design",
+   "path": "receiver.adc_channel_q",
+   "source": "COND_OUT2 -> AIN_2P",
+   "unit": "1",
+   "value": 2
+  },
+  "RECEIVER_ADC_FULL_SCALE_V": {
+   "kind": "design",
+   "path": "receiver.adc_full_scale",
+   "source": "ADS8688 range code 1 (+-2.5 x Vref)",
+   "unit": "V",
+   "value": 5.12
+  },
+  "RECEIVER_ADC_MAX_AGGREGATE_RATE_HZ": {
+   "kind": "datasheet",
+   "path": "receiver.adc_max_aggregate_rate",
+   "source": "ADS8688 500 kSPS total",
+   "unit": "Hz",
+   "value": 500000.0
+  },
+  "RECEIVER_DEAD_TIME_S": {
+   "kind": "target",
+   "path": "receiver.dead_time",
+   "source": "legacy t_dead_us; coil ring-down to the noise floor (docs/tx-rx.md)",
+   "unit": "s",
+   "value": 0.001
+  },
+  "RECEIVER_IF_BANDWIDTH_HZ": {
+   "kind": "calculated",
+   "path": "receiver.if_bandwidth",
+   "source": "OPA1612 stage pole (C914/C915 560 pF, 20k)",
+   "unit": "Hz",
+   "value": 14200.0
+  },
+  "RECEIVER_IF_GAIN": {
+   "kind": "calculated",
+   "path": "receiver.if_gain",
+   "source": "electronics audit: OPA1612 network with 1k source -> ~10 (doc says 20); VERIFY on bench",
+   "unit": "1",
+   "value": 10.0
+  },
+  "RECEIVER_LNA1_GAIN": {
+   "kind": "design",
+   "path": "receiver.lna1_gain",
+   "source": "R712 10k / R713 100 (requires the J3 shunt!)",
+   "unit": "1",
+   "value": 101.0
+  },
+  "RECEIVER_LNA2_GAIN": {
+   "kind": "design",
+   "path": "receiver.lna2_gain",
+   "source": "R722 9.1k / R723 1k via J9",
+   "unit": "1",
+   "value": 10.1
+  },
+  "RECEIVER_NOISE_DENSITY_V_PER_RTHZ": {
+   "kind": "estimate",
+   "path": "receiver.noise_density",
+   "source": "tank + OPA1656 at the tank node (legacy physics.js); to be measured",
+   "unit": "V/sqrt(Hz)",
+   "value": 1.56e-08
+  },
+  "RF_COIL_B1_PER_AMP_CENTRE_T_PER_A": {
+   "kind": "calculated",
+   "path": "rf_coil.b1_per_amp_centre",
+   "source": "Biot-Savart, two-layer winding (legacy fieldmap-tube.json centre.b1; re-derived in physics tests)",
+   "unit": "T/A",
+   "value": 0.005029625
+  },
+  "RF_COIL_INDUCTANCE_H": {
+   "kind": "estimate",
+   "path": "rf_coil.inductance",
+   "source": "workbook blocks/a.md; to be measured (validation/bench)",
+   "unit": "H",
+   "value": 0.00253
+  },
+  "RF_COIL_LAYER1_RADIUS_M": {
+   "kind": "design",
+   "path": "rf_coil.layer1_radius",
+   "source": "former 40 mm + 0.45 mm wire / 2 (legacy nmr_exact.wls:50)",
+   "unit": "m",
+   "value": 0.020225
+  },
+  "RF_COIL_LAYER2_RADIUS_M": {
+   "kind": "design",
+   "path": "rf_coil.layer2_radius",
+   "source": "second layer (legacy nmr_exact.wls:50)",
+   "unit": "m",
+   "value": 0.020675
+  },
+  "RF_COIL_LAYERS": {
+   "kind": "design",
+   "path": "rf_coil.layers",
+   "source": "222 + 178 turns",
+   "unit": "1",
+   "value": 2
+  },
+  "RF_COIL_LENGTH_M": {
+   "kind": "design",
+   "path": "rf_coil.length",
+   "source": "winding length",
+   "unit": "m",
+   "value": 0.1
+  },
+  "RF_COIL_QUALITY_FACTOR": {
+   "kind": "estimate",
+   "path": "rf_coil.quality_factor",
+   "source": "sheet_nmr_rx.py:253; to be measured",
+   "unit": "1",
+   "value": 10.0
+  },
+  "RF_COIL_REACTANCE_OHM": {
+   "kind": "calculated",
+   "path": "rf_coil.reactance",
+   "source": "2 pi f_tx L",
+   "unit": "ohm",
+   "value": 1421.1434191484932
+  },
+  "RF_COIL_RESISTANCE_OHM": {
+   "kind": "estimate",
+   "path": "rf_coil.resistance",
+   "source": "workbook; sheet_nmr_rx.py:253",
+   "unit": "ohm",
+   "value": 6.7
+  },
+  "RF_COIL_RINGDOWN_TIME_CONSTANT_S": {
+   "kind": "calculated",
+   "path": "rf_coil.ringdown_time_constant",
+   "source": "tau = 2Q/omega = Q/(pi f) (energy decays at 2/tau)",
+   "unit": "s",
+   "value": 3.560513268275063e-05
+  },
+  "RF_COIL_TANK_CAPACITANCE_F": {
+   "kind": "calculated",
+   "path": "rf_coil.tank_capacitance",
+   "source": "1 / ((2 pi f_tx)^2 L)",
+   "unit": "F",
+   "value": 1.2526931554903926e-09
+  },
+  "RF_COIL_TANK_PARALLEL_RESISTANCE_OHM": {
+   "kind": "calculated",
+   "path": "rf_coil.tank_parallel_resistance",
+   "source": "Q omega L",
+   "unit": "ohm",
+   "value": 14211.434191484932
+  },
+  "RF_COIL_TURNS": {
+   "kind": "design",
+   "path": "rf_coil.turns",
+   "source": "workbook blocks/a.md; legacy probe.scad",
+   "unit": "1",
+   "value": 400
+  },
+  "RF_COIL_WIRE_PITCH_M": {
+   "kind": "datasheet",
+   "path": "rf_coil.wire_pitch",
+   "source": "AWG26 enamelled outer diameter",
+   "unit": "m",
+   "value": 0.00045
+  },
+  "RF_IF_FREQUENCY_HZ": {
+   "kind": "calculated",
+   "path": "rf.if_frequency",
+   "source": "tx.frequency - lo.frequency",
+   "unit": "Hz",
+   "value": 5400.0
+  },
+  "SAMPLE_CONE_LENGTH_M": {
+   "kind": "design",
+   "path": "sample.cone_length",
+   "source": "conical tip; legacy physics.js cone",
+   "unit": "m",
+   "value": 0.02
+  },
+  "SAMPLE_CURIE_MAGNETIZATION_A_PER_M": {
+   "kind": "calculated",
+   "path": "sample.curie_magnetization",
+   "source": "N gamma^2 hbar^2 B0 / (4 k T)",
+   "unit": "A/m",
+   "value": 6.920392913700962e-06
+  },
+  "SAMPLE_PROTON_DENSITY_PER_M3": {
+   "kind": "calculated",
+   "path": "sample.proton_density",
+   "source": "2 x 55.51 mol/L x N_A (water, 20 C)",
+   "unit": "1/m^3",
+   "value": 6.687e+28
+  },
+  "SAMPLE_RADIUS_M": {
+   "kind": "design",
+   "path": "sample.radius",
+   "source": "50 mL tube inner radius; legacy physics.js SAMPLES.tube r",
+   "unit": "m",
+   "value": 0.014
+  },
+  "SAMPLE_T1_S": {
+   "kind": "estimate",
+   "path": "sample.t1",
+   "source": "tap water at low field; legacy nmr-params.scad water_T1",
+   "unit": "s",
+   "value": 2.5
+  },
+  "SAMPLE_T2_S": {
+   "kind": "estimate",
+   "path": "sample.t2",
+   "source": "tap water at low field; legacy nmr-params.scad water_T2",
+   "unit": "s",
+   "value": 2.0
+  },
+  "SAMPLE_TEMPERATURE_K": {
+   "kind": "target",
+   "path": "sample.temperature",
+   "source": "room temperature",
+   "unit": "K",
+   "value": 293.0
+  },
+  "SAMPLE_X_CYL_END_M": {
+   "kind": "design",
+   "path": "sample.x_cyl_end",
+   "source": "end of the cylindrical body; legacy physics.js x1",
+   "unit": "m",
+   "value": 0.025
+  },
+  "SAMPLE_X_MIN_M": {
+   "kind": "design",
+   "path": "sample.x_min",
+   "source": "tube body start in the sleeve; legacy physics.js x0",
+   "unit": "m",
+   "value": -0.058
+  },
+  "TIMING_CAPTURE_CLOCK_HZ": {
+   "kind": "datasheet",
+   "path": "timing.capture_clock",
+   "source": "ESP32-S3 MCPWM capture timer (APB)",
+   "unit": "Hz",
+   "value": 80000000.0
+  },
+  "TIMING_CAPTURE_RESOLUTION_S": {
+   "kind": "calculated",
+   "path": "timing.capture_resolution",
+   "source": "1 / timing.capture_clock",
+   "unit": "s",
+   "value": 1.25e-08
+  },
+  "TIMING_MAX_WAIT_TICKS": {
+   "kind": "design",
+   "path": "timing.max_wait_ticks",
+   "source": "32-bit WAIT operand (~429 s at 10 MHz)",
+   "unit": "1",
+   "value": 4294967295
+  },
+  "TIMING_PRE_BLANK_S": {
+   "kind": "target",
+   "path": "timing.pre_blank",
+   "source": "receiver blanked before TX gate rises",
+   "unit": "s",
+   "value": 2e-05
+  },
+  "TIMING_TICK_HZ": {
+   "kind": "design",
+   "path": "timing.tick",
+   "source": "pulse-program tick, 100 ns (ADR-0004); RMT 80 MHz / 8",
+   "unit": "Hz",
+   "value": 10000000.0
+  },
+  "TIMING_TICK_PERIOD_S": {
+   "kind": "calculated",
+   "path": "timing.tick_period",
+   "source": "1 / timing.tick",
+   "unit": "s",
+   "value": 1e-07
+  },
+  "TX_AMPLITUDE_V": {
+   "kind": "design",
+   "path": "tx.amplitude",
+   "source": "OPA564 swing at +VEXT 18 V, G 25 (sheet_nmr_tx.py:145)",
+   "unit": "V",
+   "value": 7.95
+  },
+  "TX_B1_ROTATING_CENTRE_T": {
+   "kind": "calculated",
+   "path": "tx.b1_rotating_centre",
+   "source": "1/2 * b1_per_amp_centre * coil_current",
+   "unit": "T",
+   "value": 1.2829238597834753e-05
+  },
+  "TX_COIL_CURRENT_A": {
+   "kind": "calculated",
+   "path": "tx.coil_current",
+   "source": "(V_tx - V_diode) / |R + j omega L| (untuned coil during TX, ADR-0007)",
+   "unit": "A",
+   "value": 0.005101469233922908
+  },
+  "TX_CURRENT_LIMIT_A": {
+   "kind": "design",
+   "path": "tx.current_limit",
+   "source": "OPA564 ISET R809 11k",
+   "unit": "A",
+   "value": 1.5
+  },
+  "TX_EXCITATION_BANDWIDTH_HZ": {
+   "kind": "calculated",
+   "path": "tx.excitation_bandwidth",
+   "source": "~1/(4 t90): +-half-width of a hard 90 pulse's flat region",
+   "unit": "Hz",
+   "value": 545.8515283842795
+  },
+  "TX_FREQUENCY_HZ": {
+   "kind": "target",
+   "path": "tx.frequency",
+   "source": "legacy default f_tx; retune to the measured line",
+   "unit": "Hz",
+   "value": 89400.0
+  },
+  "TX_SERIES_DIODE_DROP_V": {
+   "kind": "estimate",
+   "path": "tx.series_diode_drop",
+   "source": "silicon diode at mA (ADR-0007 TX series crossed diodes)",
+   "unit": "V",
+   "value": 0.7
+  },
+  "TX_T180_S": {
+   "kind": "calculated",
+   "path": "tx.t180",
+   "source": "2 x t90",
+   "unit": "s",
+   "value": 0.000916
+  },
+  "TX_T90_CALCULATED_S": {
+   "kind": "calculated",
+   "path": "tx.t90_calculated",
+   "source": "pi/2 = 2 pi gamma_bar B1rot t  ->  t = 1/(4 gamma_bar B1rot)",
+   "unit": "s",
+   "value": 0.00045768886293540134
+  },
+  "TX_T90_S": {
+   "kind": "calculated",
+   "path": "tx.t90",
+   "source": "pi/(2 gamma B1rot) at the coil centre with the ADR-0007 TX series diodes (5.10 mA); legacy 417 us had no diode drop. Replace with a nutation measurement",
+   "unit": "s",
+   "value": 0.000458
+  }
+ },
+ "strings": {
+  "INSTRUMENT_HARDWARE_REFERENCE": "class-board-2026 main @ eef00d20a10deca994a8efe07c588c22af2b9db0 (board v0.7, pins.h v0.7)",
+  "INSTRUMENT_NAME": "benchtop-nmr",
+  "INSTRUMENT_REVISION": "v2.0-dev",
+  "MECHANICAL_BOARD_STEP_MAIN": "hardware/release/class-board.step",
+  "MECHANICAL_BOARD_STEP_PANEL": "hardware/release/front-panel.step",
+  "MECHANICAL_PCB_REVISION": "v0.7",
+  "NUCLEUS_ISOTOPE": "1H",
+  "SAMPLE_NAME": "water-50mL-tube"
+ }
+}

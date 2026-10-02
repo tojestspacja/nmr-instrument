@@ -1,0 +1,81 @@
+** Drc report for class-board.kicad_pcb **
+** Created on 2026-10-03T01:20:46 **
+** Report includes: Errors, Warnings, Exclusions **
+
+** Found 0 DRC violations **
+
+** Found 0 unconnected pads **
+
+** Found 21 Footprint errors **
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(106.4000 mm, 108.3000 mm): Footprint FID1
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(171.9500 mm, 105.0000 mm): Footprint FID2
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(91.9500 mm, 77.0500 mm): Footprint FID3
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(4.0000 mm, 19.0000 mm): Footprint H1
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(176.0000 mm, 19.0000 mm): Footprint H2
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(4.0000 mm, 111.0000 mm): Footprint H3
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(176.0000 mm, 111.0000 mm): Footprint H4
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Do not populate' settings differ
+    Local override; warning
+    @(80.2000 mm, 81.3000 mm): Footprint J1
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(80.2000 mm, 81.3000 mm): Footprint J1
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Do not populate' settings differ
+    Local override; warning
+    @(80.2000 mm, 56.3000 mm): Footprint J2
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(80.2000 mm, 56.3000 mm): Footprint J2
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Do not populate' settings differ
+    Local override; warning
+    @(162.6250 mm, 19.4750 mm): Footprint J6
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(162.6250 mm, 19.4750 mm): Footprint J6
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Do not populate' settings differ
+    Local override; warning
+    @(171.7300 mm, 30.8700 mm): Footprint J7
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(171.7300 mm, 30.8700 mm): Footprint J7
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Do not populate' settings differ
+    Local override; warning
+    @(6.2700 mm, 101.7500 mm): Footprint J8
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(6.2700 mm, 101.7500 mm): Footprint J8
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(151.6250 mm, 101.6000 mm): Footprint R811
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(145.0500 mm, 100.1750 mm): Footprint R812
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Do not populate' settings differ
+    Local override; warning
+    @(81.1000 mm, 39.9500 mm): Footprint J13
+[footprint_symbol_mismatch]: Footprint attributes don't match symbol: 'Exclude from bill of materials' settings differ
+    Local override; warning
+    @(81.1000 mm, 39.9500 mm): Footprint J13
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

@@ -1,0 +1,137 @@
+# The canonical definition of the instrument. The ONLY hand-edited copy of these numbers.
+#
+# Every quantity is {value, unit, kind, source}:
+#   unit   - SI (see design/schema/instrument.schema.json for the allowed set)
+#   kind   - target     : what we aim for (a set-point)
+#            design     : chosen in the design (a dimension, a component value)
+#            datasheet  : a manufacturer's figure
+#            calculated : derived by a documented calculation (source says which)
+#            estimate   : a judgement, to be replaced by a measurement
+#            measured   : measured on this instrument (source names the record in validation/)
+#            constant   : a physical constant
+#   source - where the value comes from (file:line, document, calculation)
+# Quantities that follow from others (IF, tank capacitance, coil resistance, ...) are NOT stored here:
+# tools/gen_config.py computes them into generated/ so they cannot disagree.
+# Edit this file, then run `py tools/gen_config.py`; CI fails if generated/ is stale.
+
+schema_version: 1
+
+instrument:
+  name: benchtop-nmr
+  revision: v2.0-dev
+  hardware_reference: "class-board-2026 main @ eef00d20a10deca994a8efe07c588c22af2b9db0 (board v0.7, pins.h v0.7)"
+
+constants:
+  hbar:          {value: 1.054571817e-34, unit: J*s,   kind: constant, source: "CODATA 2018"}
+  k_boltzmann:   {value: 1.380649e-23,    unit: J/K,   kind: constant, source: "SI 2019 exact"}
+  mu0:           {value: 1.25663706212e-6, unit: H/m,  kind: constant, source: "CODATA 2018"}
+  copper_resistivity_20c: {value: 1.724e-8, unit: ohm*m, kind: constant, source: "IACS annealed copper, 20 C"}
+  copper_tempco:          {value: 0.00393,  unit: 1/K,   kind: constant, source: "annealed copper, 20 C"}
+  copper_heat_capacity:   {value: 385.0,    unit: J/(kg*K), kind: constant, source: "copper, 25 C"}
+  copper_density:         {value: 8960.0,   unit: kg/m^3, kind: constant, source: "copper"}
+  copper_expansion:       {value: 16.5e-6,  unit: 1/K,   kind: constant, source: "copper linear expansion, 20 C"}
+
+nucleus:
+  isotope: 1H
+  gamma_bar:  {value: 42.57638474e6, unit: Hz/T, kind: constant,
+               source: "CODATA 2018 shielded proton gyromagnetic ratio / 2pi (H2O, spherical sample, 25 C); legacy used 42.577e6 (unshielded, rounded)"}
+  spin: {value: 0.5, unit: "1", kind: constant, source: "1H nuclear spin quantum number"}
+
+sample:
+  name: water-50mL-tube
+  proton_density: {value: 6.687e28, unit: 1/m^3, kind: calculated, source: "2 x 55.51 mol/L x N_A (water, 20 C)"}
+  temperature:    {value: 293.0, unit: K, kind: target, source: "room temperature"}
+  t1:             {value: 2.5, unit: s, kind: estimate, source: "tap water at low field; legacy nmr-params.scad water_T1"}
+  t2:             {value: 2.0, unit: s, kind: estimate, source: "tap water at low field; legacy nmr-params.scad water_T2"}
+  # geometry in the probe frame: x along the RF-coil axis, origin at the winding centre; y along B0
+  radius:         {value: 0.014, unit: m, kind: design, source: "50 mL tube inner radius; legacy physics.js SAMPLES.tube r"}
+  x_min:          {value: -0.058, unit: m, kind: design, source: "tube body start in the sleeve; legacy physics.js x0"}
+  x_cyl_end:      {value: 0.025, unit: m, kind: design, source: "end of the cylindrical body; legacy physics.js x1"}
+  cone_length:    {value: 0.020, unit: m, kind: design, source: "conical tip; legacy physics.js cone"}
+
+b0:
+  # Helmholtz pair, axis along y. Reference design (legacy probe.scad); not yet built.
+  radius:          {value: 0.200, unit: m, kind: design, source: "legacy probe.scad hh_R"}
+  spacing:         {value: 0.200, unit: m, kind: design, source: "Helmholtz: spacing = radius"}
+  turns_per_coil:  {value: 312, unit: "1", kind: design, source: "legacy probe.scad: ceil(B0 R / ((4/5)^1.5 mu0 I)) = ceil(311.36)"}
+  winding_width:   {value: 0.028, unit: m, kind: design, source: "legacy probe.scad hh_w (axial)"}
+  winding_depth:   {value: 0.027, unit: m, kind: calculated, source: "legacy probe.scad hh_h (radial build at 80 % fill)"}
+  wire_copper_diameter: {value: 1.291e-3, unit: m, kind: datasheet, source: "AWG16 copper diameter"}
+  current:         {value: 1.5, unit: A, kind: target, source: "legacy design operating point"}
+  supply_compliance: {value: 18.0, unit: V, kind: design, source: "class-board +VEXT maximum (requirements.md:77)"}
+  current_regulation: {value: 20e-6, unit: "1", kind: target,
+                       source: "|dI/I| over an averaging set; line core ~2 Hz / 89.4 kHz = 22 ppm (docs/b0-stability.md)"}
+
+rf_coil:
+  # the class probe coil (transmit and receive)
+  turns:            {value: 400, unit: "1", kind: design, source: "workbook blocks/a.md; legacy probe.scad"}
+  length:           {value: 0.100, unit: m, kind: design, source: "winding length"}
+  layers:           {value: 2, unit: "1", kind: design, source: "222 + 178 turns"}
+  layer1_radius:    {value: 0.020225, unit: m, kind: design, source: "former 40 mm + 0.45 mm wire / 2 (legacy nmr_exact.wls:50)"}
+  layer2_radius:    {value: 0.020675, unit: m, kind: design, source: "second layer (legacy nmr_exact.wls:50)"}
+  wire_pitch:       {value: 0.45e-3, unit: m, kind: datasheet, source: "AWG26 enamelled outer diameter"}
+  inductance:       {value: 2.53e-3, unit: H, kind: estimate, source: "workbook blocks/a.md; to be measured (validation/bench)"}
+  resistance:       {value: 6.7, unit: ohm, kind: estimate, source: "workbook; sheet_nmr_rx.py:253"}
+  quality_factor:   {value: 10.0, unit: "1", kind: estimate, source: "sheet_nmr_rx.py:253; to be measured"}
+  b1_per_amp_centre: {value: 5.029625e-3, unit: T/A, kind: calculated,
+                      source: "Biot-Savart, two-layer winding (legacy fieldmap-tube.json centre.b1; re-derived in physics tests)"}
+
+tx:
+  frequency:        {value: 89400.0, unit: Hz, kind: target, source: "legacy default f_tx; retune to the measured line"}
+  amplitude:        {value: 7.95, unit: V, kind: design, source: "OPA564 swing at +VEXT 18 V, G 25 (sheet_nmr_tx.py:145)"}
+  current_limit:    {value: 1.5, unit: A, kind: design, source: "OPA564 ISET R809 11k"}
+  t90:              {value: 458e-6, unit: s, kind: calculated, source: "pi/(2 gamma B1rot) at the coil centre with the ADR-0007 TX series diodes (5.10 mA); legacy 417 us had no diode drop. Replace with a nutation measurement"}
+  t180:             {value: 916e-6, unit: s, kind: calculated, source: "2 x t90"}
+  series_diode_drop: {value: 0.7, unit: V, kind: estimate, source: "silicon diode at mA (ADR-0007 TX series crossed diodes)"}
+
+dds:
+  mclk:             {value: 50.0e6, unit: Hz, kind: design, source: "Si5351 CLK0 (Sequencer.cpp prepareHardware)"}
+  frequency_bits:   {value: 28, unit: "1", kind: datasheet, source: "AD9834"}
+  phase_bits:       {value: 12, unit: "1", kind: datasheet, source: "AD9834"}
+  max_output_frequency: {value: 12.5e6, unit: Hz, kind: design, source: "MCLK/4 practical limit with the 3 MHz filter"}
+
+lo:
+  frequency:        {value: 84000.0, unit: Hz, kind: target, source: "legacy default f_lo"}
+  multiplier:       {value: 4, unit: "1", kind: design, source: "Si5351 CLK1 = 4 f_LO into the Johnson counter"}
+  crystal:          {value: 25.0e6, unit: Hz, kind: datasheet, source: "Y701"}
+
+receiver:
+  lna1_gain:        {value: 101.0, unit: "1", kind: design, source: "R712 10k / R713 100 (requires the J3 shunt!)"}
+  lna2_gain:        {value: 10.1, unit: "1", kind: design, source: "R722 9.1k / R723 1k via J9"}
+  if_gain:          {value: 10.0, unit: "1", kind: calculated, source: "electronics audit: OPA1612 network with 1k source -> ~10 (doc says 20); VERIFY on bench"}
+  if_bandwidth:     {value: 14.2e3, unit: Hz, kind: calculated, source: "OPA1612 stage pole (C914/C915 560 pF, 20k)"}
+  noise_density:    {value: 15.6e-9, unit: V/sqrt(Hz), kind: estimate, source: "tank + OPA1656 at the tank node (legacy physics.js); to be measured"}
+  dead_time:        {value: 1.0e-3, unit: s, kind: target, source: "legacy t_dead_us; coil ring-down to the noise floor (docs/tx-rx.md)"}
+  adc_full_scale:   {value: 5.12, unit: V, kind: design, source: "ADS8688 range code 1 (+-2.5 x Vref)"}
+  adc_bits:         {value: 16, unit: "1", kind: datasheet, source: "ADS8688"}
+  adc_channel_i:    {value: 3, unit: "1", kind: design, source: "COND_OUT1 -> AIN_3P (netlist; pins.h:32)"}
+  adc_channel_q:    {value: 2, unit: "1", kind: design, source: "COND_OUT2 -> AIN_2P"}
+  adc_max_aggregate_rate: {value: 500.0e3, unit: Hz, kind: datasheet, source: "ADS8688 500 kSPS total"}
+
+acquisition:
+  raw_rate:         {value: 100.0e3, unit: Hz, kind: target, source: "per channel; legacy rate_hz; 2 channels = 200 kS/s aggregate"}
+  decimation:       {value: 4, unit: "1", kind: design, source: "to 25 kS/s complex; must keep rate/decim > 2|IF|"}
+  start_delay:      {value: 1.2e-3, unit: s, kind: target, source: "end of pulse to first sample (dead time + margin)"}
+  duration:         {value: 0.5, unit: s, kind: target, source: "~6 T2* of the field-limited line; legacy 2 s mostly noise (docs/first-fid.md)"}
+  repetition_time:  {value: 3.0, unit: s, kind: target, source: ">= T1 for water; shorter with CuSO4 doping"}
+  averages:         {value: 8, unit: "1", kind: target, source: "multiple of 4 for CYCLOPS"}
+
+timing:
+  tick:             {value: 1.0e7, unit: Hz, kind: design, source: "pulse-program tick, 100 ns (ADR-0004); RMT 80 MHz / 8"}
+  max_wait_ticks:   {value: 4294967295, unit: "1", kind: design, source: "32-bit WAIT operand (~429 s at 10 MHz)"}
+  capture_clock:    {value: 80.0e6, unit: Hz, kind: datasheet, source: "ESP32-S3 MCPWM capture timer (APB)"}
+  pre_blank:        {value: 20e-6, unit: s, kind: target, source: "receiver blanked before TX gate rises"}
+
+limits:
+  vext_min:         {value: 7.0, unit: V, kind: datasheet, source: "requirements.md:77"}
+  vext_max:         {value: 18.0, unit: V, kind: datasheet, source: "requirements.md:77"}
+  opa564_supply_abs_max: {value: 26.0, unit: V, kind: datasheet, source: "OPA564 absolute maximum (design-decisions D-41)"}
+  b0_current_max:   {value: 2.0, unit: A, kind: design, source: "DRV8871 I_TRIP via R920 32k; v2 CC driver keeps 2.0 A"}
+  tx_max_pulse:     {value: 5.0e-3, unit: s, kind: design, source: "legacy t90 cap 5000 us; R813 1 W thermal"}
+  tx_max_duty:      {value: 0.01, unit: "1", kind: estimate, source: "OPA564 / R813 average dissipation; to be measured"}
+
+mechanical:
+  pcb_revision: "v0.7"
+  board_step_main:  "hardware/release/class-board.step"
+  board_step_panel: "hardware/release/front-panel.step"
+  board_gap:        {value: 0.011, unit: m, kind: design, source: "8.5 mm socket on 2.5 mm insulator (housing brief)"}

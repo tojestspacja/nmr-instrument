@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+build/
+.pio/
+node_modules/
+.pytest_cache/

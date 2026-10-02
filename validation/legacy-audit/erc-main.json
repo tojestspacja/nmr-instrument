@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-03T01:19:44",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71",
+            "violations": []
+        },
+        {
+            "path": "/base_mcu/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/0a09ce84-79ab-518f-b4b4-c928b96ca5c7",
+            "violations": []
+        },
+        {
+            "path": "/b2_power/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/d5630740-bb99-510a-af06-d2fe7228f1c6",
+            "violations": []
+        },
+        {
+            "path": "/b1_inputs/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/5252c7cc-85b3-5eaf-aa08-4fcc9b4f667c",
+            "violations": []
+        },
+        {
+            "path": "/b3_outputs/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/7ae97914-0c9a-5bdb-b3aa-266a51aecd84",
+            "violations": []
+        },
+        {
+            "path": "/b5_dio_trig/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/2562e949-1e58-5048-8406-1b1b4a27bc6f",
+            "violations": []
+        },
+        {
+            "path": "/nmr_rx/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/27fece37-25e5-55f8-9b4c-3407e1c1ba01",
+            "violations": []
+        },
+        {
+            "path": "/nmr_tx/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/bbb6eea2-e7dc-5d96-9a3a-152d51422209",
+            "violations": []
+        },
+        {
+            "path": "/c_switch/",
+            "uuid_path": "/21416d14-3056-576f-bbf8-3b43eaeb7e71/78275d2c-32f5-571d-82ff-e44959401d18",
+            "violations": [
+                {
+                    "description": "Pins of type Unspecified and Passive are connected",
+                    "items": [
+                        {
+                            "description": "Symbol J13 Pin 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.4511,
+                                "y": 2.6924
+                            },
+                            "uuid": "8b80554c-7382-4413-a57d-5cfd451d1ee4"
+                        },
+                        {
+                            "description": "Symbol R933 Pin 1 [Passive, Line]",
+                            "pos": {
+                                "x": 2.2733,
+                                "y": 2.6924
+                            },
+                            "uuid": "819216f7-1436-50dd-8c4d-4104d6238279"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "Pins of type Unspecified and Power input are connected",
+                    "items": [
+                        {
+                            "description": "Symbol J13 Pin 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.4511,
+                                "y": 2.7178
+                            },
+                            "uuid": "0bd6bb81-ad33-43d2-9977-9e19d8bdd343"
+                        },
+                        {
+                            "description": "Symbol #PWR09030 Pin 1 [GND, Power input, Line]",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 2.8194
+                            },
+                            "uuid": "62c70f36-2875-4da0-a98e-10ca3f5eb2a5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        }
+    ],
+    "source": "class-board.kicad_sch"
+}
