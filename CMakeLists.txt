@@ -28,7 +28,7 @@ if(MINGW)
 endif()
 
 enable_testing()
-foreach(t test_bloch test_field test_dsp test_pulse test_sim test_backend)
+foreach(t test_bloch test_field test_dsp test_pulse test_sim test_backend test_iq)
   add_executable(${t} physics/tests/${t}.cpp)
   target_link_libraries(${t} PRIVATE nmrcore)
   target_include_directories(${t} PRIVATE physics/tests)

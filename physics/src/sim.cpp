@@ -141,23 +141,29 @@ SimResult simulate(const pulse::Program& prog, const std::vector<Voxel>& vox, co
             pg[j] = p;
             res.emf_peak = std::max(res.emf_peak, std::abs(p));
         }
+        // Catmull-Rom between coarse points (exact at integer u, i.e. when k == 1 and the fractional part is 0).
+        const auto at = [&](double uu) -> cplx {
+            const size_t j = static_cast<size_t>(uu);
+            const double f = uu - static_cast<double>(j);
+            if (k == 1 && f == 0.0) return pg[j];
+            const cplx p0 = pg[j - 1], p1 = pg[j], p2 = pg[j + 1], p3 = pg[j + 2];
+            return 0.5 * ((2.0 * p1) + (p2 - p0) * f + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * (f * f) +
+                          (3.0 * p1 - p0 - 3.0 * p2 + p3) * (f * f * f));
+        };
+        const double skew = m.iq_skew_samples;                 // I sampled this many raw samples after Q
+        const double beat_phasor_hz = f_tx - m.lo_hz;
         rec.i.reserve(rec.i.size() + ns);
         rec.q.reserve(rec.q.size() + ns);
         for (size_t s = 0; s < ns; ++s) {
-            const double t = t_first + s * dt_adc;
-            // Catmull-Rom between coarse points (exact when k == 1)
+            const double t = t_first + s * dt_adc;             // Q sample time (and the complex-sample grid time)
             const double u = static_cast<double>(s) / k + 1.0;
-            const size_t j = static_cast<size_t>(u);
-            const double f = u - j;
-            cplx p;
-            if (k == 1) p = pg[j];
-            else {
-                const cplx p0 = pg[j - 1], p1 = pg[j], p2 = pg[j + 1], p3 = pg[j + 2];
-                p = 0.5 * ((2.0 * p1) + (p2 - p0) * f + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * (f * f) +
-                           (3.0 * p1 - p0 - 3.0 * p2 + p3) * (f * f * f));
-            }
-            const cplx z = p * std::polar(1.0, 2 * kPi * (f_tx - m.lo_hz) * t + beat_true);
-            const double vi = z.real() + m.offset_i + sigma * rng.gauss(), vq = z.imag() + m.offset_q + sigma * rng.gauss();
+            // I is sampled skew raw samples later; at skew == 0 this is exactly the old single-sample behaviour.
+            const cplx p_i = skew == 0.0 ? at(u) : at(u + skew / k);
+            const double t_i = t + skew * dt_adc;
+            const cplx z_i = p_i * std::polar(1.0, 2 * kPi * beat_phasor_hz * t_i + beat_true);
+            const double vi = z_i.real() + m.offset_i + sigma * rng.gauss();   // I noise first (RNG order preserved)
+            const cplx z_q = at(u) * std::polar(1.0, 2 * kPi * beat_phasor_hz * t + beat_true);
+            const double vq = z_q.imag() + m.offset_q + sigma * rng.gauss();
             const auto code = [&](double vlt) {
                 double c = std::round(vlt / lsb);
                 const double lim = std::ldexp(1.0, m.adc_bits - 1);

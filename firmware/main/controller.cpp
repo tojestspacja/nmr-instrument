@@ -280,6 +280,11 @@ esp_err_t Controller::run(RunReport& out) {
         pc.fir_cutoff_hz = 0;      // 0.4 x output rate
         pc.offset_tail = 0.1;
         pc.correct_beat = true;
+        // FW-IQ-001: the ADS8688 auto-sequence converts Q then I one conversion period apart (half a raw sample). The
+        // later channel is sampled +0.5 raw samples after the earlier; realign it. Sign from the channel order. The
+        // magnitude assumes one conversion per channel per frame (ADR-0009); VERIFY the aperture against the bus timing
+        // at bring-up (no physical I/Q alignment is claimed from a build).
+        pc.iq_skew_samples = (hw_.adc_ch_i > hw_.adc_ch_q) ? 0.5 : -0.5;
         const nmr::Processed proc = nmr::process(records_, pc);
         out.averaged = !proc.average.empty();
         out.aligned = proc.aligned;

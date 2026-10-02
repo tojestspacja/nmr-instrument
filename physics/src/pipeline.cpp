@@ -13,7 +13,7 @@ Processed process(const std::vector<RecordView>& recs, const PipelineConfig& c) 
     const dsp::FirDecimator fir(fc, c.adc_rate, c.fir_taps, c.decimation);
     out.fs = fs_out;
     size_t n_out = 0;
-    std::vector<double> vi, vq;
+    std::vector<double> vi, vq, vi_d;
     std::vector<dsp::cplx> bb, dec;
     double t_rel0 = 0;
     for (size_t r = 0; r < recs.size(); ++r) {
@@ -21,6 +21,11 @@ Processed process(const std::vector<RecordView>& recs, const PipelineConfig& c) 
         vi.resize(rv.n);
         vq.resize(rv.n);
         for (size_t k = 0; k < rv.n; ++k) { vi[k] = rv.i[k] * lsb; vq[k] = rv.q[k] * lsb; }
+        if (c.iq_skew_samples != 0.0) {   // realign I onto Q's sampling grid before the two are combined
+            vi_d.resize(rv.n);
+            dsp::frac_delay(vi.data(), rv.n, c.iq_skew_samples, c.iq_fd_taps, vi_d.data());
+            vi.swap(vi_d);
+        }
         dsp::cplx off = 0;
         if (c.offset_tail > 0) {
             // the IF tone averages out over the tail; what remains is the DC offset of each channel

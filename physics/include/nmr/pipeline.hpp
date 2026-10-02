@@ -30,6 +30,11 @@ struct PipelineConfig {
     double fir_cutoff_hz = 0;     // 0: 0.4 x output rate
     double offset_tail = 0.1;     // DC offset from the last fraction of each record (0 = none)
     bool correct_beat = true;     // apply the measured beat phase
+    // I/Q aperture-skew correction (FW-IQ-001). The ADC converts the two channels one conversion period apart, so I is
+    // sampled this many raw samples after Q (0 = no correction, the default; +0.5 for the ADS8688 auto-sequence with
+    // the Q channel numbered below I). The I channel is fractionally delayed onto Q's time grid before mixing.
+    double iq_skew_samples = 0.0;
+    size_t iq_fd_taps = 31;       // fractional-delay filter length (odd)
 };
 
 struct Processed {

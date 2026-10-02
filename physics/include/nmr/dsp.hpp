@@ -45,6 +45,12 @@ private:
 // Complex IF -> baseband: out[k] = (I[k] + j Q[k] - offset) e^{-i (2 pi f_if (t0 + k/fs))}.
 void mix_down(const double* i, const double* q, size_t n, cplx offset, double f_if, double fs, double t0, cplx* out);
 
+// Fractional-delay via a centred windowed-sinc FIR: out[k] ~= x(k - delay), delay in samples (fractional, either sign;
+// best for |delay| <~ 1). `taps` is odd; the input is treated as zero outside [0, n), so about taps/2 samples at each
+// end are edge transients while the interior is accurate. out must not alias x; out holds n samples. A delay of exactly
+// 0 copies x unchanged. Used to realign the ADC's I and Q apertures (one conversion period apart) onto one time grid.
+void frac_delay(const double* x, size_t n, double delay, size_t taps, double* out);
+
 cplx mean(const cplx* x, size_t n);
 void rotate(cplx* x, size_t n, double radians);        // x *= e^{-i radians}
 void accumulate(cplx* acc, const cplx* x, size_t n);   // acc += x

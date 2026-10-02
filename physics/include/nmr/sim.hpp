@@ -36,6 +36,7 @@ struct InstrumentModel {
     double adc_rate = 0;                // raw samples/s per channel
     double adc_t0 = 0;                  // phase of the free-running ADC grid [s]
     double offset_i = 0, offset_q = 0;  // [V] at the ADC
+    double iq_skew_samples = 0;         // I converted this many raw samples after Q (0 = ideal; hardware ~0.5, FW-IQ-001)
     // coherence (ADR-0006)
     bool lo_coherent = true;            // false: each scan starts at a random TX-LO beat phase
     double beat_measurement_sigma = 0;  // [rad] error of the per-scan beat-phase measurement (timestamps)

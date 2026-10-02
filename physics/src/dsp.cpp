@@ -82,6 +82,35 @@ void mix_down(const double* i, const double* q, size_t n, cplx off, double f_if,
     }
 }
 
+void frac_delay(const double* x, size_t n, double delay, size_t taps, double* out) {
+    if (delay == 0.0) {   // exact copy: the common no-skew path must not perturb the data
+        for (size_t k = 0; k < n; ++k) out[k] = x[k];
+        return;
+    }
+    if (taps < 3) taps = 3;
+    if (taps % 2 == 0) ++taps;              // odd: one centre tap
+    const long c = static_cast<long>(taps / 2);
+    const double m = static_cast<double>(taps) - 1.0;
+    std::vector<double> h(taps);
+    double sum = 0;
+    for (size_t j = 0; j < taps; ++j) {
+        const double arg = (static_cast<double>(j) - static_cast<double>(c)) - delay;   // sinc centred, shifted by delay
+        const double sinc = std::fabs(arg) < 1e-12 ? 1.0 : std::sin(kPi * arg) / (kPi * arg);
+        const double bl = 0.42 - 0.5 * std::cos(2 * kPi * j / m) + 0.08 * std::cos(4 * kPi * j / m);
+        h[j] = sinc * bl;
+        sum += h[j];
+    }
+    for (double& v : h) v /= sum;           // unity DC gain
+    for (size_t k = 0; k < n; ++k) {
+        double acc = 0;
+        for (size_t j = 0; j < taps; ++j) {
+            const long xi = static_cast<long>(k) - (static_cast<long>(j) - c);   // out[k] = sum_j h[j] x[k-(j-c)]
+            if (xi >= 0 && xi < static_cast<long>(n)) acc += h[j] * x[xi];
+        }
+        out[k] = acc;
+    }
+}
+
 cplx mean(const cplx* x, size_t n) {
     cplx s = 0;
     for (size_t k = 0; k < n; ++k) s += x[k];
