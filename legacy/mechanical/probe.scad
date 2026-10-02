@@ -41,8 +41,12 @@ part = "assembly";
 $fn = 96;
 fit = 0.3;                // every hole 0.3 mm larger than the part through it
 eps = 0.01;
+chamf = 1.2;              // 45 deg lead-in / edge break on mating parts (eases insertion, kills the print's sharp lip)
 mu0 = 4 * PI * 1e-7;
 include <nmr-params.scad>
+
+// a 45 deg lead-in cone that widens a bore of diameter d by `c` over a depth `c`, at its mouth (open upward at z=0)
+module leadin(d, c) translate([0, 0, -eps]) cylinder(d1 = d + 2 * c, d2 = d, h = c + eps);
 
 // ---------------------------------------------------------------- coil (from the docs)
 turns   = 400;
@@ -121,6 +125,9 @@ module former() {
             translate([0, 0, z_cheek2]) cylinder(d = cheek_d, h = cheek_t);       // lead-end cheek
         }
         translate([0, 0, -1]) cylinder(d = bore, h = former_l + 2);
+        // lead-in at both bore mouths: the sleeve (or a bare bottle) slides in without catching on a sharp print lip
+        leadin(bore, chamf);
+        translate([0, 0, former_l]) mirror([0, 0, 1]) leadin(bore, chamf);
         // both leads leave through the lead-end cheek, onto the stub
         for (a = [0, 20]) rotate(a) translate([wind_d / 2 + lead_d / 2, 0, z_wind[1] - 1])
             cylinder(d = lead_d, h = z_stub - z_wind[1] + 1 + eps, $fn = 16);
@@ -140,6 +147,8 @@ module sleeve() {
             cylinder(d = sleeve_od, h = fl_t + sleeve_l);
         }
         translate([0, 0, -1]) cylinder(d = sleeve_id, h = fl_t + sleeve_l + 2);
+        // lead-in at the open (top) end so the 50 mL tube's conical tip finds the bore
+        translate([0, 0, fl_t + sleeve_l]) mirror([0, 0, 1]) leadin(sleeve_id, chamf);
         // a notch in the flange to lever the sleeve out with a fingernail
         translate([sleeve_od / 2, -3, -1]) cube([cheek_d, 6, fl_t + 2]);
     }
@@ -304,3 +313,23 @@ echo(str("B0 pair: ", B0 * 1000, " mT at ", hh_I, " A -> 2 x ", hh_N, " turns AW
 // thing that widens the line is B0 drift: see instrument.scad.
 echo(str("B0 homogeneity, worst points of the winding: ", round(hh_rad * 1e6), " ppm across, ", round(hh_ax * 1e6),
          " ppm along -> extremes ", round(hh_df), " Hz apart (the tail of the line, not its width: spectrum.py)"));
+
+// ---------------------------------------------------------------- assembly self-checks (fail loudly in the console)
+sleeve_wall = (sleeve_od - sleeve_id) / 2;
+tip_z       = -fl_t - cap_h + smp_l;                 // 50 mL tube tip, in the former frame (z along the axis)
+fixing_gap  = (base_x[1] - 3.5) - (base_x[1] - anchor[0] - 2);   // corner fixing hole vs anchor block edge
+assert(sleeve_wall >= 0.8, str("sleeve wall ", sleeve_wall, " mm is under the 0.8 mm print minimum"));
+assert(tip_z <= former_l, str("50 mL tube tip (", tip_z, " mm) runs past the former end (", former_l, " mm)"));
+assert(build <= cheek_h, str("winding build ", build, " mm stands above the ", cheek_h, " mm cheek rim"));
+assert(hh_I < hb_trip && hh_I * hh_ohm <= vext_max, "B0 pair exceeds the H-bridge current or +VEXT limit");
+echo(str("CHECK ok: sleeve wall ", round(sleeve_wall * 100) / 100, " mm; tube tip ", round(tip_z),
+         "/", former_l, " mm; fixing-to-anchor gap ", round(fixing_gap), " mm; lead-in chamfer ", chamf, " mm"));
+
+// ---------------------------------------------------------------- bill of materials (one place, for the build)
+echo("BOM printed (PLA/PETG): former x1, sleeve x1, cradle x1  (OpenSCAD -> STL; see part=)");
+echo("BOM laser-cut (acrylic/ply): cut-probe.scad -> cradle rails x2, cheeks/leads, B0 rails + brace");
+echo(str("BOM wire: class coil ", round(wire_m), " m AWG26 (~",
+         round(wire_m * PI * pow(wire_cu / 2, 2) * 8.96), " g Cu); B0 pair ", round(hh_len), " m AWG16 (~",
+         round(hh_len * PI * pow(hh_cu / 2, 2) * 8.96 / 100) / 10, " kg Cu)"));
+echo(str("BOM hardware (no steel near the sample): brass/nylon 1/4\"-20 tripod nut x1, M3x? brass/nylon fixing x4, ",
+         "zip ties (", tie, " mm), 50 mL centrifuge tube, two-core screened cable"));
