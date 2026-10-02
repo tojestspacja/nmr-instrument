@@ -40,7 +40,7 @@ public:
     size_t frames() const { return taken_; }
     uint32_t overflows() const { return ovf_; }
     double frame_period_s() const { return 1.0 / cfg_.frame_rate; }
-    void on_overflow() { ++ovf_; }
+    void on_overflow() { ovf_ = ovf_ + 1; }   // not ++ (deprecated on a volatile in C++20; ISR diagnostic counter)
 private:
     AdcConfig cfg_{};
     void* tx_ = nullptr;
