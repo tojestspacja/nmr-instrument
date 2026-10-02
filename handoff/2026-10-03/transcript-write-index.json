@@ -1,0 +1,378 @@
+[
+  {
+    "source_line": 4474,
+    "path": "docs/audit.md",
+    "reported_lines": 100,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 4598,
+    "path": "design/instrument.yaml",
+    "reported_lines": 138,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 4738,
+    "path": "design/schema/instrument.schema.json",
+    "reported_lines": 57,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 4796,
+    "path": "tools/gen_config.py",
+    "reported_lines": 223,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5147,
+    "path": "tests/test_config.py",
+    "reported_lines": 117,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5311,
+    "path": "physics/include/nmr/units.hpp",
+    "reported_lines": 45,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5357,
+    "path": "physics/include/nmr/bloch.hpp",
+    "reported_lines": 62,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5420,
+    "path": "physics/include/nmr/field.hpp",
+    "reported_lines": 38,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5459,
+    "path": "physics/src/field.cpp",
+    "reported_lines": 76,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5537,
+    "path": "pulse/include/pulse/ir.hpp",
+    "reported_lines": 77,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5615,
+    "path": "pulse/include/pulse/program.hpp",
+    "reported_lines": 60,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5676,
+    "path": "pulse/include/pulse/compiler.hpp",
+    "reported_lines": 54,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5735,
+    "path": "pulse/src/program.cpp",
+    "reported_lines": 228,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 5964,
+    "path": "pulse/src/compiler.cpp",
+    "reported_lines": 169,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6135,
+    "path": "physics/include/nmr/dsp.hpp",
+    "reported_lines": 72,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6208,
+    "path": "physics/src/dsp.cpp",
+    "reported_lines": 164,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6469,
+    "path": "physics/include/nmr/probe.hpp",
+    "reported_lines": 48,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6518,
+    "path": "physics/src/probe.cpp",
+    "reported_lines": 76,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6596,
+    "path": "physics/include/nmr/sim.hpp",
+    "reported_lines": 72,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6669,
+    "path": "physics/src/sim.cpp",
+    "reported_lines": 227,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6912,
+    "path": "physics/include/nmr/pipeline.hpp",
+    "reported_lines": 47,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 6960,
+    "path": "physics/src/pipeline.cpp",
+    "reported_lines": 58,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7026,
+    "path": "physics/include/nmr/capi.h",
+    "reported_lines": 100,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7127,
+    "path": "physics/src/capi.cpp",
+    "reported_lines": 270,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7398,
+    "path": "CMakeLists.txt",
+    "reported_lines": 46,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7446,
+    "path": "physics/tests/check.hpp",
+    "reported_lines": 30,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7477,
+    "path": "physics/tests/test_bloch.cpp",
+    "reported_lines": 112,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7590,
+    "path": "physics/tests/test_field.cpp",
+    "reported_lines": 74,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7671,
+    "path": "physics/tests/test_dsp.cpp",
+    "reported_lines": 85,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7757,
+    "path": "physics/tests/test_pulse.cpp",
+    "reported_lines": 125,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 7901,
+    "path": "physics/tests/test_sim.cpp",
+    "reported_lines": 145,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 8047,
+    "path": "physics/benchmarks/bench_core.cpp",
+    "reported_lines": 71,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 8238,
+    "path": "validation/physics/golden/README.md",
+    "reported_lines": 13,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 8263,
+    "path": "tools/nmrpy/__init__.py",
+    "reported_lines": 199,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 8463,
+    "path": "tests/test_golden.py",
+    "reported_lines": 57,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 8629,
+    "path": "simulator/wasm/build.py",
+    "reported_lines": 50,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 8800,
+    "path": "simulator/web/nmrcore.js",
+    "reported_lines": 191,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 9216,
+    "path": "pulse/include/pulse/backend.hpp",
+    "reported_lines": 65,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 9282,
+    "path": "pulse/src/backend.cpp",
+    "reported_lines": 107,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 9391,
+    "path": "physics/tests/test_backend.cpp",
+    "reported_lines": 77,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 9592,
+    "path": "firmware/components/engine/include/engine.hpp",
+    "reported_lines": 78,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 9671,
+    "path": "firmware/components/engine/engine.cpp",
+    "reported_lines": 180,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 10181,
+    "path": "firmware/components/engine/engine.cpp",
+    "reported_lines": 201,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 10384,
+    "path": "firmware/components/adc/include/adc_stream.hpp",
+    "reported_lines": 56,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 10441,
+    "path": "firmware/components/adc/adc_stream.cpp",
+    "reported_lines": 136,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 10585,
+    "path": "firmware/components/rf/include/rf.hpp",
+    "reported_lines": 25,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  },
+  {
+    "source_line": 10611,
+    "path": "firmware/components/rf/rf.cpp",
+    "reported_lines": 125,
+    "evidence_class": "TRANSCRIPT_WRITE_EVENT_NOT_FINAL_FILE",
+    "present_in_uploaded_zip": false,
+    "warning": "Reported line count is not an extraction boundary. Reconcile subsequent Edit/Bash operations before recovering source."
+  }
+]

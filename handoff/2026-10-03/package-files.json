@@ -1,0 +1,140 @@
+{
+  "note": "Package fingerprint list excludes this manifest itself.",
+  "files": [
+    {
+      "path": "RESUME_AFTER_ACCOUNT_SWITCH.md",
+      "bytes": 1646,
+      "sha256": "7e1d925e6295e47998d4151d8a892e327ba07b9cee0a9ea3ae8cf2af9a55d852"
+    },
+    {
+      "path": "handoff/2026-10-03/AGENT_TASKS.md",
+      "bytes": 3166,
+      "sha256": "5f22faea6e7b897c7762e7926bc102e5f8cfc4aa137415821dba7cab3124bec7"
+    },
+    {
+      "path": "handoff/2026-10-03/CHECKPOINT_PROTOCOL.md",
+      "bytes": 2201,
+      "sha256": "efd8b8309aa3cd9fe5fda9f9012766faf6839cc20b7d60b251c4759ada67ceb4"
+    },
+    {
+      "path": "handoff/2026-10-03/CHECKPOINT_TEMPLATE.md",
+      "bytes": 2224,
+      "sha256": "4bc1c1d7611ae9106669dc91938d5c94aa8a815a22bdf25fcd5efcc2101cce35"
+    },
+    {
+      "path": "handoff/2026-10-03/CURRENT_STATE.md",
+      "bytes": 6232,
+      "sha256": "a08566536233a8acd8e81245b85e18235b976ce376633098f9724dd8dae4a8ed"
+    },
+    {
+      "path": "handoff/2026-10-03/DECISION_LOG.md",
+      "bytes": 4511,
+      "sha256": "7773459aaf3c21efe2f05c17bbadd60881211bbc95ee77c11c38e19f64de8865"
+    },
+    {
+      "path": "handoff/2026-10-03/HANDOFF_VALIDATION.md",
+      "bytes": 1507,
+      "sha256": "5c0d9700ac3d50ec25ccff0eb08a0ee43579dd5a20723bf9a1e582e5ff1f5269"
+    },
+    {
+      "path": "handoff/2026-10-03/NEXT_ACTIONS.md",
+      "bytes": 4635,
+      "sha256": "52441d17e776c86232c6e2a47362d59d97a514535bca88dffb4de8bca28094ce"
+    },
+    {
+      "path": "handoff/2026-10-03/OPEN_ISSUES.md",
+      "bytes": 8057,
+      "sha256": "8c98cf63573f6bd57844156d1f3969bb2cb494fb2aacb8547e2dbd707ccfb52f"
+    },
+    {
+      "path": "handoff/2026-10-03/README.md",
+      "bytes": 3744,
+      "sha256": "3f8ec071c87d720e647d2aacc3208050a300158f134e092b2a108f8020e3ca03"
+    },
+    {
+      "path": "handoff/2026-10-03/RECOVERY_PLAN.md",
+      "bytes": 4849,
+      "sha256": "5df0289d57505c2279b50d9722b6c4e432798e23517af7f045258443da948680"
+    },
+    {
+      "path": "handoff/2026-10-03/RESUME_PROMPT.md",
+      "bytes": 3019,
+      "sha256": "247de699cf61d6a1d2b478a19ba59aa0d30bc677cddde0ef17b0f03a416bdf4a"
+    },
+    {
+      "path": "handoff/2026-10-03/SOURCE_MANIFEST.md",
+      "bytes": 2894,
+      "sha256": "49fd45b70aa94dc1daac5b44997c6255d9f80c74cb4d11a79a5a2c43b667f231"
+    },
+    {
+      "path": "handoff/2026-10-03/TEST_EVIDENCE.md",
+      "bytes": 4427,
+      "sha256": "95fa93bd2d8fd29a7cb6ff2286c8964d175eedc77cd527dc591cd87fc3efe929"
+    },
+    {
+      "path": "handoff/2026-10-03/TRANSCRIPT_INDEX.md",
+      "bytes": 4962,
+      "sha256": "4fdeb43a1e54097f78524cf8829fb6a25b12577c39aa3bb4c1aeb4a1f1e1d778"
+    },
+    {
+      "path": "handoff/2026-10-03/capture_state.py",
+      "bytes": 8841,
+      "sha256": "1278b3a6805a30087b6712589c140123586032d312238a43dbad783e8918c575"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/archive-git-observation.json",
+      "bytes": 7723,
+      "sha256": "9b66c0751847eff5d707baeb5f22e5b2ca496afe9534d4b946d8019de91a901f"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/archive-source-excerpts.txt",
+      "bytes": 9724,
+      "sha256": "a3421c9ae0ba0cddbcee5512dcfe339cbbe76758aabd75bf40e97dfe8b701c27"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/handoff-package-checks.json",
+      "bytes": 1724,
+      "sha256": "868cdf6839c06e9d1a83c3032692bdd50d9f25321e51d169833ac1d4eea0e6b4"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/legacy-electronics-audit.md",
+      "bytes": 16207,
+      "sha256": "fa69333897999586ab9ceaf48f6d27b6069c82e5b6b84bf861c817c919ef787f"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/legacy-firmware-audit.md",
+      "bytes": 17602,
+      "sha256": "71c2e2b43fc7e56172243cffd151bc210b8d024951b1b16a6f272a0d47bb91c6"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/legacy-physics-audit.md",
+      "bytes": 16838,
+      "sha256": "c5b8690f441803e2473842e28604c031c77eb79842bf8d6d9c161c1ef0f0d3ec"
+    },
+    {
+      "path": "handoff/2026-10-03/evidence/prior-session-rebuild.txt",
+      "bytes": 478036,
+      "sha256": "b5324dff611a9c26d9420d51aa0ea631d00d28d7d48aacf5b4dd42803717df24"
+    },
+    {
+      "path": "handoff/2026-10-03/issues.json",
+      "bytes": 8332,
+      "sha256": "753f2c2e47569df707df28de17b88ebb1be337ecb30abe7afb6c74bd005c742f"
+    },
+    {
+      "path": "handoff/2026-10-03/snapshot-manifest.json",
+      "bytes": 50583,
+      "sha256": "59a70f533dc3f37eeeb2c2ff43bc54d256f02ed525367007b2096f299036760b"
+    },
+    {
+      "path": "handoff/2026-10-03/state.json",
+      "bytes": 1221,
+      "sha256": "5b9694a49c416436dc35c9e353ca9ed85a750ae5233a9a25fe8c30dbd6179649"
+    },
+    {
+      "path": "handoff/2026-10-03/transcript-write-index.json",
+      "bytes": 16015,
+      "sha256": "9b590cdafdfdcc9949a0ec4ad6602e70692e475e233a2dd7a8dcfdaa1f5178ef"
+    }
+  ]
+}

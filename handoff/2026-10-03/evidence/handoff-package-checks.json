@@ -1,0 +1,80 @@
+{
+  "scope": "Handoff/package validation only. No NMR software or hardware validation performed.",
+  "checks": [
+    {
+      "check": "missing-root error",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "unestablished empty tree",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "partial-v2 detection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "complete-sentinel detection is explicitly unverified",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "probe leaves synthetic source unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "external symlink not read",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "actual supplied archive classified as legacy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "actual extracted source and Git bytes unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "original source archive unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "all 160 source fingerprints still match",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "structured data parses",
+      "passed": true,
+      "detail": "5 JSON files"
+    },
+    {
+      "check": "local Markdown links resolve",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "all bootstrap read-order files included",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "additive install layout only",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no replacement .git or compiled payload",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

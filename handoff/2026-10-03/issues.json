@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-03",
+  "scope": "Handoff reconstruction, not a fresh hardware audit",
+  "issues": [
+    {
+      "id": "HANDOFF-001",
+      "severity": "blocker",
+      "status": "SOURCE_RECOVERY_REQUIRED",
+      "title": "The uploaded archive lacks the v2 working tree",
+      "basis": "Direct ZIP/Git inspection: main at 0914edb, no v2 ref or successor directories.",
+      "next_action": "Recover the live v2 tree and uncommitted firmware, or reconstruct missing source in isolation with provenance. Do not overwrite newer source.",
+      "evidence": "CURRENT_STATE.md; snapshot-manifest.json",
+      "suggested_owner": "Recovery owner",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "HANDOFF-002",
+      "severity": "major",
+      "status": "EVIDENCE_RECOVERY_REQUIRED",
+      "title": "Raw v2 validation artifacts are absent from the ZIP",
+      "basis": "The transcript reports saving outputs; the source snapshot has no validation tree.",
+      "next_action": "Recover raw logs/netlists or rerun the relevant checks. Preserve historical reports without promoting them.",
+      "evidence": "TRANSCRIPT L4575-L4597; evidence/legacy-*-audit.md",
+      "suggested_owner": "Verification owner",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "FW-RESUME-01",
+      "severity": "blocker",
+      "status": "TRANSCRIPT_REPORTED_WIP",
+      "title": "Firmware main/control integration is the interrupted continuation area",
+      "basis": "Gate engine, ADC and RF writes are recorded; next control-loop work was announced.",
+      "next_action": "Inspect live files for subsequent work, finish missing integration, and produce a complete build with raw exit status.",
+      "evidence": "TRANSCRIPT L10383-L10746",
+      "suggested_owner": "Integration builder",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "FW-IQ-001",
+      "severity": "major",
+      "status": "TRANSCRIPT_REPORTED_PENDING",
+      "title": "I/Q aperture-skew correction was announced but not shown completed",
+      "basis": "Last ADC handback proposes a fractional-delay correction, with a prior estimate of about 7.8 degrees.",
+      "next_action": "Verify conversion/channel timing; implement shared correction once; test sign, phase, transients and replay.",
+      "evidence": "TRANSCRIPT L10584; NEXT_ACTIONS.md",
+      "suggested_owner": "ADC/phase reviewer",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "FW-ADC-001",
+      "severity": "blocker",
+      "status": "PROPOSED_NOT_BENCH_VALIDATED",
+      "title": "I2S/DMA ADC framing needs protocol and timing verification",
+      "basis": "New streamer and 125 kS/s / decimation 5 config appear as source writes, not hardware throughput evidence.",
+      "next_action": "Verify ADC framing, startup latency, channel mapping, CS timing, loss detection and actual first-sample timing before accepting acquisition.",
+      "evidence": "TRANSCRIPT L9146-L9208; L10384-L10584",
+      "suggested_owner": "ADC/phase reviewer",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "SYS-PHASE-001",
+      "severity": "blocker",
+      "status": "PROPOSED_NOT_BENCH_VALIDATED",
+      "title": "TX/LO/acquisition phase-reference closure remains unmeasured",
+      "basis": "Legacy audits raise coherence concerns; v2 proposes capture inputs labeled ECO-1.",
+      "next_action": "Confirm actual wiring and missing-input handling; validate timestamps and coherent known-tone acquisition before NMR averaging claims.",
+      "evidence": "evidence/legacy-firmware-audit.md; TRANSCRIPT L9182-L9184",
+      "suggested_owner": "ADC/phase reviewer",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "HW-TXR-001",
+      "severity": "blocker",
+      "status": "LEGACY_REPORTED_OPEN",
+      "title": "Shared-coil transmit/receive isolation remains an instrument blocker",
+      "basis": "Historical electronics report describes separate TX/RX nets, clamp loading for a shared connection, and no isolating T/R switch.",
+      "next_action": "Check live board/source revision; validate a chosen topology and RX recovery. A calculated diode-drop parameter is not proof of applied hardware.",
+      "evidence": "evidence/legacy-electronics-audit.md; TRANSCRIPT L5111-L5146",
+      "suggested_owner": "Hardware reviewer",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "HW-B0-001",
+      "severity": "blocker",
+      "status": "LEGACY_REPORTED_OPEN",
+      "title": "B0 current/field stability has not been experimentally closed",
+      "basis": "Historical report describes voltage-driven operation and absent B0 current sensing at its audited revision.",
+      "next_action": "Verify revised current-drive/sensing design, compliance and drift/noise evidence; do not substitute simulation for measurements.",
+      "evidence": "evidence/legacy-electronics-audit.md; evidence/legacy-physics-audit.md",
+      "suggested_owner": "Hardware/physics reviewer",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "HW-SAFE-001",
+      "severity": "critical",
+      "status": "LEGACY_REPORTED_OPEN",
+      "title": "Fault wiring, LNA feedback and power protection need source-specific closure",
+      "basis": "Later audit reports unwired PA flags, J3-dependent feedback and power-sequencing/protection concerns.",
+      "next_action": "Check actual connectivity and hardware revision; validate safe states before connecting/energizing the real chain. Do not inherit an automatic-abort claim.",
+      "evidence": "evidence/legacy-electronics-audit.md",
+      "suggested_owner": "Hardware reviewer",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "SIM-PARITY-001",
+      "severity": "major",
+      "status": "REVALIDATION_REQUIRED",
+      "title": "WASM parity must be re-established after later config edits",
+      "basis": "One parity run precedes the 125 kS/s/decimation 5 and pin-map changes.",
+      "next_action": "Rebuild native and WASM from the same current sources/config; record passes, tolerances and skips.",
+      "evidence": "TRANSCRIPT L8996-L9065; L9146-L9208",
+      "suggested_owner": "Verification owner",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "DOCS-ADR-001",
+      "severity": "major",
+      "status": "AVAILABILITY_UNKNOWN",
+      "title": "Referenced ADRs are not supplied as verified files",
+      "basis": "ADR identifiers appear in code/comments; no ADR directory is present in the archive.",
+      "next_action": "Find live ADRs; reconstruct missing rationale explicitly as retrospective records, never as fabricated historical approvals.",
+      "evidence": "DECISION_LOG.md; snapshot-manifest.json",
+      "suggested_owner": "Continuity owner",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "HW-INTEGRATION-001",
+      "severity": "major",
+      "status": "BOUNDARY_TO_DOCUMENT",
+      "title": "Experimental successor firmware and course-source ownership need an explicit boundary",
+      "basis": "Archive README assigns real hardware/firmware to class-board; later v2 begins successor firmware in nmr-instrument.",
+      "next_action": "Document what is legacy-authoritative, experimental successor, and approved for promotion; do not overwrite the course repository.",
+      "evidence": "CURRENT_STATE.md; DECISION_LOG.md",
+      "suggested_owner": "Systems owner",
+      "resolution": null,
+      "live_revalidated": false
+    },
+    {
+      "id": "NMR-EVIDENCE-001",
+      "severity": "blocker",
+      "status": "NOT_EVIDENCED",
+      "title": "Real FID/spectrum/echo validation is still not evidenced",
+      "basis": "Archive describes no measurements; later text contains software work and a USB-device observation, not an NMR dataset.",
+      "next_action": "Retain hardware and NMR gates; save raw records and controls when real tests become authorized and available.",
+      "evidence": "README.md in source archive; TRANSCRIPT L5049-L5063; TEST_EVIDENCE.md",
+      "suggested_owner": "Independent verifier",
+      "resolution": null,
+      "live_revalidated": false
+    }
+  ]
+}

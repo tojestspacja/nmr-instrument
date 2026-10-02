@@ -1,0 +1,1137 @@
+{
+  "comparison_counts": {
+    "exact": 48,
+    "line_endings_only": 112
+  },
+  "files": [
+    {
+      "path": ".nojekyll",
+      "comparison": "exact",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lf_normalized_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "README.md",
+      "comparison": "exact",
+      "size_bytes": 2976,
+      "sha256": "8524b8f4ef5dd2b4120381e9d477b3cae1eec978234a5bc5cd42596bd8dbf594",
+      "lf_normalized_sha256": "8524b8f4ef5dd2b4120381e9d477b3cae1eec978234a5bc5cd42596bd8dbf594"
+    },
+    {
+      "path": "fabrication/CUT-LIST.md",
+      "comparison": "line_endings_only",
+      "size_bytes": 7527,
+      "sha256": "5bbfc16d9b07aabe2b129037e350f2d690c707762925aa62fad560e7de23c9da",
+      "lf_normalized_sha256": "14c0d6484076a3440fc456184f0ba3f3a851178ebcbf9d93b48a876057159d96"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__cover.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 74054,
+      "sha256": "a21073eb2cc3253423a8dfbfe5758c563b7db71c59dc1b7052d3344772fa76f6",
+      "lf_normalized_sha256": "fef1844f6b8c9cf6c0a4228da4ace3a2a7b4ac5a1d3945d30cbfe6be38b8fbe3"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__cover.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 17771,
+      "sha256": "90fa1a4dd916f35e65fed10dbf88902dc012146884392f5a16dc4c9ebcde8f98",
+      "lf_normalized_sha256": "82a790796f5a4167f18c72ebab63c3f21b3dd99a6c3357f3e75e6088e70e4811"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__cover.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 886793,
+      "sha256": "87b8fc25dbe1599b9c9c25e1e393308b6670c5a5f9ac8190fa89e8ce5f3ab292",
+      "lf_normalized_sha256": "a6d426df638fa3652caa6c86b5cbab1ef8c15570e67c98e8068116ba67600fd4"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__cover.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 210258,
+      "sha256": "653fccd380cfebd34e528a637c0925e0937f91b8a5802b98914181dca9e590fd",
+      "lf_normalized_sha256": "f901a630d5cbd034393d61c82cfd8c473b6e37fc1cfea94c2a8037ebb90192e2"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__cover.engrave_back.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 654,
+      "sha256": "395826743db9f455da9b9e71f47c8cc50295179090a9f9c0506c9a0a707e327e",
+      "lf_normalized_sha256": "1571f016fcd6d5bdc80c6fb3443582698d1d0914577981edc967ff48b90f3059"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__cover.engrave_back.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 445,
+      "sha256": "79b7c5c6a4cf43f54d203cab897dda852abd7e1f9e97987822a5f06c33f16866",
+      "lf_normalized_sha256": "1bf3ffabb16711b0cea0c116d6bed51668e68b7a764e9954b41c4dc02993d266"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__front.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 6370,
+      "sha256": "7de8b8f9bea74aeaee47eb102cd103065ff59baf5b1ff14edfdd604e64c000e3",
+      "lf_normalized_sha256": "9d3ec5bd86dc847dfa3e0af8603dea31e41e85ee3c9b3ccb308e5321befb6ff7"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__front.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1831,
+      "sha256": "a0eda13ba1ad9ea60ebb5a6ab95955b4b611367b5f0bd7310ec09b1d1fde41a4",
+      "lf_normalized_sha256": "4e6ceb1c170d3540b2758a6e17e67aa3483e611c1002f7951b7f519ac83b0528"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__front.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 100721,
+      "sha256": "8b8c5a0f59de2815f6729aea80e0cd13d73b91333d4e0ead92211d02476ab151",
+      "lf_normalized_sha256": "c36e2efb892ccb6311d765f15cee62030e7fbeb236950ae6d4d262b2eda3101f"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__front.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 24213,
+      "sha256": "5ab880ac10163adff6c8614431203989f465d835b2172d02a239700c15563720",
+      "lf_normalized_sha256": "eac29b5ca3b2a59a0eabd71a2138f3931902c49562214ec59aa501dc279df178"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__hood_frame.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 758,
+      "sha256": "054e01ff6271331bd16a8a356ac0c04aee0d8ab96b6c99ce9fcac28fcc16b20b",
+      "lf_normalized_sha256": "281addf19d89e82190ded17f1d2c1446b81481d56c0cf73467f845d242a7a858"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__hood_frame.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 497,
+      "sha256": "9e976efd539aae38e58842125a4db22e3796bfd555bd29dc08d3adc0c62249b5",
+      "lf_normalized_sha256": "b184a89fab2f77d640caf14e15680110d4def708018e34a92beb0f1b334b780a"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__plate.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 34958,
+      "sha256": "287a53f4d050cd4a3aa85f3cb239324c6aa9770ae5f589808dc90772546baaea",
+      "lf_normalized_sha256": "4ed955b03e487a6727e6cb3374cccc29579c63a203ce22593dbe40a7d2a1736d"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__plate.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 8500,
+      "sha256": "698abf4b197963608a1dde88ae518f244fcbc81062f0d93b554e2ae5df8e2eb6",
+      "lf_normalized_sha256": "9c8db01048c4b66b35cccc1718d5ce8e00ae4a772df7feec91eaf84686b1fc80"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__rear.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 6194,
+      "sha256": "3218da39d16df1d45b1ed6c938c04a1a97bdd77400d976679032738b318c214e",
+      "lf_normalized_sha256": "1979b8c7a87d46382a5a83967e31f913a1edc6dc4868fe3b273e92cb0ecce689"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__rear.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1797,
+      "sha256": "bbadf17a3d3effd1bffdab9720f385c266d05b2d629b7dad3a0ab6c13e3fdc45",
+      "lf_normalized_sha256": "ccb6db16a63c54bca822102b3e376f1769f64a3eb6e8e9362c562b67b7e4b83d"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__rear.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 175729,
+      "sha256": "60fa2767ebb2769f7a508f84b0c7e1422589e2d4bf08a6991809cbb500dfe9bd",
+      "lf_normalized_sha256": "9b64e439f7879aa2a6f37bfa2f00b1e1b3f4ae62fcb2a2d18036dadb05ce2fe8"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__rear.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 43234,
+      "sha256": "b93ed15027670fc7b0e4e45352c4faa0e4ec674ee78354ec25c13097d1a64c73",
+      "lf_normalized_sha256": "7b283fc3919a6cbb0fb37c3c1f59830c3ca444a75670a58b12bb2933ab7ef92c"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__side.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 3098,
+      "sha256": "55207074452025cc89f694d93a5436d0b497d5c92fdfa2cb35538a7bc16437f4",
+      "lf_normalized_sha256": "f8ad1ee41999c62d8851a7439422df15fc52ece9c9c9f6dd57ee3ef75d9ff264"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__side.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1041,
+      "sha256": "197e6c52b07c4abdd96904e2e3d71725ebce306551427e0ba020a7040c978da6",
+      "lf_normalized_sha256": "f931991639b883337e2212c32f471ed80547e7faa3f764c75e5cfb0c6bc59ee5"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__washer.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5006,
+      "sha256": "3f3ae376d808996372749cfa36102f987946d1ff8a0cb18a4749b216190b68b6",
+      "lf_normalized_sha256": "b362a5c52a43cfff818993d343a54911bf1c095238fb6500c7e161c6f3a2eeb6"
+    },
+    {
+      "path": "fabrication/laser/cut-housing__washer.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1556,
+      "sha256": "5cffaacad9ff97306ef4730eed5d05ef4c21b886acd6c7125ecc5add2608551a",
+      "lf_normalized_sha256": "a5c7be4efe3012f7c5753788177a9826a4e0279aa22a6add3b2562d4e243067b"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__b0_brace.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 1038,
+      "sha256": "547b4d08dfb21536c4d9560322fdd4b427ac960b8c4056e25cbefb98d6c3b7fe",
+      "lf_normalized_sha256": "dbfc8bbbdd86fe1b5092d521bb70e42f235d4249547e031427ede9469bf83292"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__b0_brace.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 578,
+      "sha256": "a97cb07a57c4c2b348f52a1245bb513f06f592080186b638b94df98059b14e55",
+      "lf_normalized_sha256": "642d9151c0224b776db6b87dadea57d759a47e86c14071365a92191cf9d0f51a"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__b0_rail.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 1634,
+      "sha256": "12cb88230baa0fa1cd4154d0347311979b9b458e1613eef225da5ac7f8bdfcc5",
+      "lf_normalized_sha256": "3098cce066465d5a329284c64fa1e89cd40460dc89645071a70d7866fdfca890"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__b0_rail.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 722,
+      "sha256": "9ff42206ba398de5c8a77aa8823476af5ee4638ea03157d2a606f57a5e24b463",
+      "lf_normalized_sha256": "e16cfa9cc653ef2023e623b9902ba1c11866969736f8f1cb515819131a081724"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 18446,
+      "sha256": "5cb927ff4e59714e1352ed7aebd3b2d606dfd2731d26a876d86ed33524257949",
+      "lf_normalized_sha256": "bde0df92e642818aaf51e8515a90ebac44047f229a370132e43e1eff22a19ab2"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 4910,
+      "sha256": "fb35f8badeaebf90a40d010896adf79ba5362baf54c4bb7a2f77b49b4d3bc457",
+      "lf_normalized_sha256": "34c4538bedb729b77fecb3c16e1dc9b501fb65eac603277258b6a4dd54445188"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 152653,
+      "sha256": "dc7df74f47cdc28cac2271f8e05588b03131c638445aa4fec48898193dc7c99d",
+      "lf_normalized_sha256": "20fcb1d4cb8832c8a90bbd40855150d924c025ae933c7250e7d95bdd12e4b9e6"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 38040,
+      "sha256": "52156255f28b4499c9ee61aee34b696bf2c71f1ec4794c4523a81d6cb0d73beb",
+      "lf_normalized_sha256": "6f2cb2ce327c2c7f4c8248a9f95716266fe7c1c873a75cd9b2ecfd2b3cab2655"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek_lead.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 20838,
+      "sha256": "fba33e6d585ef35adae4492a550efdf5e49f54eb7f93d93f63a1ef98e8f7720b",
+      "lf_normalized_sha256": "7628128862424a2f4ad46f538c3876045dd371a6774307c8c401f08be1f4e997"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek_lead.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 5514,
+      "sha256": "8991fe059fb55e72b6882ee7aba91fa99fb17ab8f6f4821048e90c42ebd790fc",
+      "lf_normalized_sha256": "6edb88b3ff8139d8a2a1acf31b4d9e263892a10401e6dc517f7eb54b42e9b495"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek_lead.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 148865,
+      "sha256": "d8cddbf689f4e9c5af695554ab0f2742ff7a51bc65a63b38720be0436a4fb9e4",
+      "lf_normalized_sha256": "66adca49dcc6b8d7babb0f26371a2567c252f2b343ce07ee21cb959785e44d6e"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cheek_lead.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 36871,
+      "sha256": "f22ac456f702d46f7747acb97adc9b9f83e5b14ec95829f5ffd7f8b5a3c8b2ea",
+      "lf_normalized_sha256": "61aa5bb71c518847b8cf427a997e114fdd18e639d70584fd7ffeeba5c418b3f1"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_anchor.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 2565,
+      "sha256": "5837629c4869dc765a15147d74e6f88c075793fc0238c88fead9b933bc7a8e33",
+      "lf_normalized_sha256": "4b76d61fcf276c96f24bbb7b7e1565e5d21d23ec983dd1a7cfe0f7f281fbba8f"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_anchor.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 954,
+      "sha256": "f2e1c12acf2d7d6845dabb6554eba62462734b55b4cffd729480e551a0d03cf3",
+      "lf_normalized_sha256": "b2c02b559634294682d6c9a8d8ce51ead784ec1722da4d5af3652a9603d8bece"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_base.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 14094,
+      "sha256": "94e6dac2126c625182d893200d49939887031516350e2b619f912d7e8b77b93f",
+      "lf_normalized_sha256": "e55ab828e79086c698cf79412ed426ef1a0e4b554580ba85826cb1060718b782"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_base.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 3823,
+      "sha256": "03a8c75f8b1128f1818e5ca5fb66e3fd27177d63dba28526ef204471e62ced41",
+      "lf_normalized_sha256": "17fd3316007322c0197ca5360fbafc3523df27819c51af4acc2e07866fd37645"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_base.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 356846,
+      "sha256": "ff6bd30bee281bc1cfd85c1f2a395b9cd805cc99547d1159860348930d57cb0a",
+      "lf_normalized_sha256": "1c8166bd7765b2deb5ce35ba9cfd6eba16c2ac95b635430fa7a64d6b50b05151"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_base.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 89562,
+      "sha256": "4f60685e1ba9f9a4a3108dc1fc5f709f10c5b98cd238fc6209418eba08b0944d",
+      "lf_normalized_sha256": "fff0190fc1677fd0ab7c60dc9b76cfb877a5e97fa067df83e4af0e4099099590"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_nutplate.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 846,
+      "sha256": "c642d11db21e30ae2f5b6b3615c6366f66ca372c3d54e72c3ed08b40aeb225b8",
+      "lf_normalized_sha256": "d24c35976ca21dd8c11804cff682b8bc23aebf6b4cfad30c1f38a25991bbfae2"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_nutplate.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 513,
+      "sha256": "e0cfcd536fc6201bfaa10ab319785c86d5e0dc7d53036a2c3212c926dd153b3a",
+      "lf_normalized_sha256": "7fdb6d41ce71cf010acef5b5c2b8759ca3a9d22c13f4685a0fade1235f61afea"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_saddle.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 6233,
+      "sha256": "ce164d2aba66be5d6a1948e67fca6aba586c754733b42e506fa7193ce2607602",
+      "lf_normalized_sha256": "226e3a1e84e35caca392c4d0b4ea1ab9ba27f99246ac980e60c2923872fb1e4f"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__cradle_saddle.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1908,
+      "sha256": "50afe7145140514fb0355e51798100279c612ddbfd788edb07daa3216cd71574",
+      "lf_normalized_sha256": "a25c061741ce377bd47f2d919611ce2d89e608230ebb0bf5cd8e1848531836da"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__sleeve_flange.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 18072,
+      "sha256": "3e361a7072b2ffe819b752e536e5379af603c9f57ce7f347af7eb8b838ede1a4",
+      "lf_normalized_sha256": "8841fa5af814606984d28b7d14277bfb9110619845679ffde199911cc3f5635c"
+    },
+    {
+      "path": "fabrication/laser/cut-probe__sleeve_flange.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 4794,
+      "sha256": "2473ba4a0f29bb07d0cf0af081c34997316cb4222e418100982754b821702b02",
+      "lf_normalized_sha256": "6cd1b85daf6b36819880e8c7fb4a2de357ad7ebf54b344739e9b97f763016885"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__card.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 470,
+      "sha256": "7c6c1225284c80576d35cdcd9db569236d50916c699cac1201908ec8cb32bba7",
+      "lf_normalized_sha256": "a3bed02f38e6f51879939b762b7956e1fd675fec470d67273dd07dbc719a5dc6"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__card.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 438,
+      "sha256": "c854e05a114a6ec12d30ea4b8b8a15f70191b038c5f3e55e0fc87968e9e35ac4",
+      "lf_normalized_sha256": "3c35313820d1e0852a3e447b3b226423855f247efa65b23b0d1a553153e37cd9"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__card.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 691159,
+      "sha256": "010780f2b186b87e16609cb0f201dad46839db1ca37b732a335e5e18556a06df",
+      "lf_normalized_sha256": "61ce93bcdca966ee7775a12000685ea5ed3f566fd2140d1b7cda7f9a32d84417"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__card.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 178623,
+      "sha256": "726f85d07658ab2d087ab6b141c57e36694af5fb10393bf7540be1ca051d95ed",
+      "lf_normalized_sha256": "063c13400df2ca050eb02e3a9325e9bc77f94f157c374e8e9ed174e851338798"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin0.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5323,
+      "sha256": "81c8f01541f2ae07d6272be8f25b06033579867758f4bde429f1d73afbfe37f4",
+      "lf_normalized_sha256": "dcfb77dc91c9a85eb1761a76810bc3eba92b47091688f890e4f0a49b355056ed"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin0.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1668,
+      "sha256": "d515a55c14d7ececaba7a9cc5000c25bae66802433ddb82e13ea9720a9236741",
+      "lf_normalized_sha256": "af658c73d66bb730332feeb3b6f37c13eb22fb2eb13242a1eca94cd9965f3633"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin0.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 10791,
+      "sha256": "980d7e685c43046abfa7d618d43b2fc4c59dd70b6c67ef508e8e5653f0e8bc88",
+      "lf_normalized_sha256": "47edcaec8f876f04779fc80e3a9a1c14db4eaefaab12cb22df0c6dd50b73fb4a"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin0.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 3096,
+      "sha256": "6372f34302cebde19d16aa6ab0e3e0496ade6347af925975198ef9caed744731",
+      "lf_normalized_sha256": "aaf458e3adef01ea1dcf188133429a42d67220ed248535177d4eaa8f550a931b"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin1.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5250,
+      "sha256": "59e967388ddad84112953f2cd25b3e92c18571208116c8db2ba4bb0b20033ec8",
+      "lf_normalized_sha256": "5df609642434a173b026743e7e1babbb6128c8f1f0d2a15fd34f2d493a570944"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin1.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1650,
+      "sha256": "12d61c3f20e2f284c30337331e01209714c58836f4fa4ea44f70069ce2ac7e7c",
+      "lf_normalized_sha256": "a38d2ba76284f1d8442991ca60f84d94ced0cd76d6e52be4243e90cfa9c03479"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin1.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 11711,
+      "sha256": "9adf14ad949e603347448c1433a64c5caced65a0b35554062115c1e0b581a193",
+      "lf_normalized_sha256": "16367ce6b22468a1d9178682498ba23f97ca7468ed8f733d67f3bf3cbc873084"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin1.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 3341,
+      "sha256": "8787bf54bf96e238010cea5da2492c7c092b67a14e4f09d8f0b4c52f1125bc0a",
+      "lf_normalized_sha256": "4bcafaba7d01e1e64110d279e477c375b8bc32064d5bb0e455db73aa0f97a9b9"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin2.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5335,
+      "sha256": "cb6bc558317a45ebb487a59f9369b4792ac1d80c3a5c8b726011754d028bfbbf",
+      "lf_normalized_sha256": "5bb1be889f0403cab210233bb4bcb7747ca8d39a104513e523f1b555d7bbbae6"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin2.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1674,
+      "sha256": "9a035dd10b44dafb6c73f1c5616c4a06b71bcff17a47a6626ed32d693990c7c2",
+      "lf_normalized_sha256": "cd990ed921f3d0bff756f541a6d7c5d51f7a246fc3816dc78059e9bb22931f8d"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin2.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 8640,
+      "sha256": "3fac4410e84050d80ceb78ff961877c4295644735d4e9ac550ee696bd8d7096b",
+      "lf_normalized_sha256": "2308ce20c9798f7895da5ad34e863ed5facd2262959f00a7272c2a4bf29b175c"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin2.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 2547,
+      "sha256": "b4c246d36b9c231323f3d7848eb7c884585b009f55be9f8f902a13e3558f74ad",
+      "lf_normalized_sha256": "14482d413d6fff8b642a2f4af8c04d2268526f81d940291e9261ca6f7f85dd47"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin3.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5331,
+      "sha256": "c24d22bd2339ab63ee0b440a81f8de324b009ec292dd830bbb62d96c2746d639",
+      "lf_normalized_sha256": "48d88c4709aa98384f1e48fad606465ed13e341eabfddaf5f14d3621754a01f1"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin3.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1672,
+      "sha256": "106dd5895d42049a9073c0874545539780f323d0feeabce5d67046ad0cbb3945",
+      "lf_normalized_sha256": "1bcf016728e01bd65e10832b8eb4126efec83099c2b544654996eba777facb3c"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin3.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 11703,
+      "sha256": "ccd4eff671004b59a3cfcb115b65b2d666ed939e3ba6bfed81611550750bfe3f",
+      "lf_normalized_sha256": "bc246db57fca02b9bed71686c0ea1d281bf92223a9ac38884d556516748e632a"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin3.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 3337,
+      "sha256": "090821aa5fa0ecf85cf3dbb0e3bb670e7b552501157b4e7e74377c76dadc3fc9",
+      "lf_normalized_sha256": "2fd39b14c261cbdba609437f82b8a68be83a01658cec81e00239fa00561f8bcf"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin4.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5248,
+      "sha256": "ed1e5f7e1821332dbf0f051759ddc297d151c55bd06aa2524515a71e1acf9745",
+      "lf_normalized_sha256": "c8bddd45a41e928c3f38ce2b600792c2e901e266cda47c30f60d66bf9c27e533"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin4.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1649,
+      "sha256": "8c2dd0475a195abd420021d8e4060afbdfefb1df59f30dd0f4eb31d98387dfa6",
+      "lf_normalized_sha256": "b3da92248b62c7924973a380483b6dfca309fc72d7b119efb7728f549e92846e"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin4.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 11103,
+      "sha256": "616beff05900a0f9b0c84001ac8da9c8bf40cd7eb490dce86ecd8c9a7ae520a7",
+      "lf_normalized_sha256": "710fd7002df7e0c22edb855e328a8832cf3189dc5088e4036dba0fc11066aeb6"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin4.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 3174,
+      "sha256": "4ce392ff365c122dfb8c8ce2d4185a45dbacdc9c5db73da89d9b658ca8bda573",
+      "lf_normalized_sha256": "621fc6cb5aad2f8fe62e4a6774405085c167c3d1a06597c57796092ac9add1d7"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin5.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5396,
+      "sha256": "8d15d013291f85b1120d9e875c5a5f6b26f744dfcda47e5e609e1b316fd75ea2",
+      "lf_normalized_sha256": "d342502a588f50731fd7fe457f4d01311fcd5e9d6ba67208226de5c1a40445f2"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin5.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1686,
+      "sha256": "f006d552ab098b248151ae46ca9318f125337f61f70ab708dffce085fb6bccec",
+      "lf_normalized_sha256": "55c9eae73765e75deeb19f2d85a4be3804c807bbffc2c0257a136181be4c7e55"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin5.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 11707,
+      "sha256": "c7400691f0fb7fd7e653da7a409cef1c1d898f514903a4ffe559c6fc89b6d469",
+      "lf_normalized_sha256": "49a72bc8e94fe086cdf072f5e343f312f5750b9d0cfd18b23ec5257d8eaef389"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin5.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 3333,
+      "sha256": "2665a3c477bf47d412476f38c490371bd603cc67db8acdd751ef0bfb14cadc06",
+      "lf_normalized_sha256": "e789f7769b3fe0ced4cfee2e7232846f6f3d83f05d14ed19ef997da7f52a079b"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin6.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5252,
+      "sha256": "071b27e87712aa360c381c08072c1e23b7e34f8ed2b2fa4a692e7687e2c0c121",
+      "lf_normalized_sha256": "1a59f6910a2a0b039e2f8bf9519f08c2058d318990a8783e502ca485b6ce5302"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin6.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1651,
+      "sha256": "bb1ededa6f629b99276500544628160901003d13b22143013a2f01d183957475",
+      "lf_normalized_sha256": "c2278a650234725ee4cb6ecd69fdbdecdf89fa33f11112dff012fca17124f965"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin6.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 6882,
+      "sha256": "5820f852236d5c268113d432e2926a8fcfbce63e1041e9709e9ae770396b4926",
+      "lf_normalized_sha256": "256863a88ade61cfd5245fdcff532f81de4abf9026b50a0469f1741c75fbcb88"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin6.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 2095,
+      "sha256": "fd1e516da85f07087aa2a19ef283102aa72fbde0b777cafe3693f057340524bc",
+      "lf_normalized_sha256": "41a0f842959f92a349d5ba485749baeb4eeeb467f0c894e3194b1765d92f5caf"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin7.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5325,
+      "sha256": "ee95b49d74bd6dca98144649856f365222e416dbfcace98ce3335ae7699d8a2f",
+      "lf_normalized_sha256": "04a58f7fd9baac1022e09b8629033a32432311a66c3fded62c5f79ca71ca61e6"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin7.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1669,
+      "sha256": "dc29d79aa17c9f794efe156c686db90e1e91199b0bdb13fd64c8be8be0eb3d99",
+      "lf_normalized_sha256": "61434bd49b8df2f94f87228e644f1a9afbfe0f85c191462be2194e7891b3d2ff"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin7.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 8666,
+      "sha256": "12f48b107f929a0ad693df5b97bbded48d027e17762f567c172c603a2841c08a",
+      "lf_normalized_sha256": "eee69e5efe2e5742436ab414230aec70ad077f54dede9fc66a6eca744a335271"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__fin7.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 2553,
+      "sha256": "35ad623037a8983f5640795efea5e0892d12f45c2ac6e47d435094dd872b00a1",
+      "lf_normalized_sha256": "3c703c47d431858cb811a4e4136386e40af9c016369775d419a1a74c718b99fc"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__plate.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 5758,
+      "sha256": "7d47bc6017f18e13bfb4d44b29d8048afdf8262d0154cdd7fed904466f5e0bef",
+      "lf_normalized_sha256": "cef55cad9ed3f5cd1996cb7fabbd518337c0b8af08f518a3a37203e6d620bde8"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__plate.cut.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 1789,
+      "sha256": "696cd664762337dee67a01ace1459ea3f28c59cffee6d03d06ce1d4e3291f220",
+      "lf_normalized_sha256": "2ac2d40c96e63ed7445bf37d3bd3a2776bd8b44559a4de3a17b9c8162c311607"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__plate.engrave.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 126201,
+      "sha256": "e925a4e034ac883afb2d16c920de3881356eedd9d1f7dcb321488f881a9f345e",
+      "lf_normalized_sha256": "2e767dc69056d9009b1fd7c84727bdab6bdd627e72323d633606571f0983b5e2"
+    },
+    {
+      "path": "fabrication/laser/cut-spectrum__plate.engrave.svg",
+      "comparison": "line_endings_only",
+      "size_bytes": 31366,
+      "sha256": "9cc5fb4bee8f4e433db931d2f161d0b57efdb2db71a29733ffb5768406529383",
+      "lf_normalized_sha256": "9438fa782b66bd0dde5142b6aa88ee899f9391aa0f2bb9ac940fc3d21fbe939d"
+    },
+    {
+      "path": "fabrication/water-jet/cut-probe__b0_flange.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 47286,
+      "sha256": "cf3c57347b8a996f28e5523f63c53e08206f7f4470d022fa8fccf569aec179df",
+      "lf_normalized_sha256": "b701e5813295f75bde08121fc081514ac7a1f5eebbc683e9d5d36b78623a05c7"
+    },
+    {
+      "path": "fabrication/water-jet/cut-probe__b0_flange_lead.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 49676,
+      "sha256": "3a3cc457fffb53dc65b68e8aa70bbb9a0951f516fdc7fff70c99d6318b581877",
+      "lf_normalized_sha256": "e918cadae43a7e5fb2bac7f04df5d58fa36c9a333de84ec450777b4374e2055e"
+    },
+    {
+      "path": "fabrication/water-jet/cut-probe__b0_spacer.cut.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 47254,
+      "sha256": "4926c0eec1872d121b2c9dabfd746e1904cc14181640f51a3b0210c6c5d2ad41",
+      "lf_normalized_sha256": "36c2219ccb3ab2159588617b2f87677801bec572bde96763edb217556460eaed"
+    },
+    {
+      "path": "hardware/README.md",
+      "comparison": "exact",
+      "size_bytes": 5499,
+      "sha256": "d4801d86c677654286abf0659ee360e3027d1ac0f863ec20291f1d0a6eace15d",
+      "lf_normalized_sha256": "d4801d86c677654286abf0659ee360e3027d1ac0f863ec20291f1d0a6eace15d"
+    },
+    {
+      "path": "index.html",
+      "comparison": "exact",
+      "size_bytes": 24653,
+      "sha256": "6a692a6b2c3b8c8ec16978f0ceea801aac73f29056111042229550dcd96c4af5",
+      "lf_normalized_sha256": "6a692a6b2c3b8c8ec16978f0ceea801aac73f29056111042229550dcd96c4af5"
+    },
+    {
+      "path": "mechanical/README.md",
+      "comparison": "exact",
+      "size_bytes": 2337,
+      "sha256": "6648169bf7dc31d9472ec471ea83e4efc7f9ba1eaec242c1fe46df71b3bbc2ee",
+      "lf_normalized_sha256": "6648169bf7dc31d9472ec471ea83e4efc7f9ba1eaec242c1fe46df71b3bbc2ee"
+    },
+    {
+      "path": "mechanical/base-shell.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 12547478,
+      "sha256": "1fa4ef979090af37c339a707657433c60ff37ef7b2a073db5e320e47115dda2d",
+      "lf_normalized_sha256": "b851328c7fb4a76f172316cb747cc55f325943873d426619ea307eaca8b4dd76"
+    },
+    {
+      "path": "mechanical/boards.scad",
+      "comparison": "exact",
+      "size_bytes": 753,
+      "sha256": "8730ec2a5631fea223410d7d03c5dd7a125c2467417b9e4104c6d6dc011dd251",
+      "lf_normalized_sha256": "8730ec2a5631fea223410d7d03c5dd7a125c2467417b9e4104c6d6dc011dd251"
+    },
+    {
+      "path": "mechanical/bottom-plate.dxf",
+      "comparison": "line_endings_only",
+      "size_bytes": 58484,
+      "sha256": "9eba8d99eca3b9c3bbc6d424d8bb6bee574abefb4cd18c1adb36ab7941bbf7c8",
+      "lf_normalized_sha256": "0784f9ccc3dfa473bb4c2339c721906100f64986f5bc9f9e5e369ecdfb78d9f0"
+    },
+    {
+      "path": "mechanical/coupon.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 2945670,
+      "sha256": "432c8a53b542a6438c0d036697fc6e5881fed25bbc018018c355b33156bdfece",
+      "lf_normalized_sha256": "d0ef6b8331100b6e442622e2e2bc0289549a4b686adf9d875150618b53d70026"
+    },
+    {
+      "path": "mechanical/cut-common.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 3879,
+      "sha256": "2245cc2e106ad8f1d4d8589b6baf7f3febad2ae707b2bb228dd77c77a666245f",
+      "lf_normalized_sha256": "97a78e179e3d1f09b8acd65271a5a1d3874d59f32c3a50bca8da28d7a90b859f"
+    },
+    {
+      "path": "mechanical/cut-housing.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 9879,
+      "sha256": "6ce1cbe990e8aedebd2834c3052e14880af3377af8995046bbd69c900d140b1f",
+      "lf_normalized_sha256": "49a20a72b9e25d534559386189dac9313d232e4ffe69cfeb1b88bfd0d9f1abce"
+    },
+    {
+      "path": "mechanical/cut-probe.scad",
+      "comparison": "exact",
+      "size_bytes": 11531,
+      "sha256": "6cee02afec0d4fee1dfcefbe99ab3ff820d5c771e317a4e7a340bbc8e23ee63a",
+      "lf_normalized_sha256": "6cee02afec0d4fee1dfcefbe99ab3ff820d5c771e317a4e7a340bbc8e23ee63a"
+    },
+    {
+      "path": "mechanical/cut-spectrum.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 10664,
+      "sha256": "73ec2313e23d57bbbadedad681835c35d03d773c97423911fb1e8fbb55c765f3",
+      "lf_normalized_sha256": "6dd3b6aa93a1dcf7f6074fa1bfd0b53cb78e0b21224a790826e3b4c0a7148201"
+    },
+    {
+      "path": "mechanical/export_cut.py",
+      "comparison": "exact",
+      "size_bytes": 7421,
+      "sha256": "3d0e8da1332e72d9add612a738d89c0cd3fc76b0e71b208606ce183b88bc4dd9",
+      "lf_normalized_sha256": "3d0e8da1332e72d9add612a738d89c0cd3fc76b0e71b208606ce183b88bc4dd9"
+    },
+    {
+      "path": "mechanical/hood.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 8318,
+      "sha256": "bb94ae2ee0b61fe01702e8932d6a15eb233f1b43319de8682128b48552306b21",
+      "lf_normalized_sha256": "18afd66bacff32deefac71c802be82ddb5a832bd659a962b10f4aa2d8e38ef34"
+    },
+    {
+      "path": "mechanical/housing.png",
+      "comparison": "exact",
+      "size_bytes": 98926,
+      "sha256": "94287a747a8a178ce7c0c5a82eef53ee9b9cea10e520ea98c99331473f631ab7",
+      "lf_normalized_sha256": "8451124047b17674d8f1eae2e120763a9608bbba9f10907423f5d892c58e025d"
+    },
+    {
+      "path": "mechanical/housing.scad",
+      "comparison": "exact",
+      "size_bytes": 24527,
+      "sha256": "14edd3a7b154cec56706b4490332c0518bcfd4e0c8fc4cd36d2db61cc4cbe23c",
+      "lf_normalized_sha256": "14edd3a7b154cec56706b4490332c0518bcfd4e0c8fc4cd36d2db61cc4cbe23c"
+    },
+    {
+      "path": "mechanical/img/boards.png",
+      "comparison": "exact",
+      "size_bytes": 37069,
+      "sha256": "3a6d03245ddae35f42b14c30dd32a0d3e3c6254570ce2d6f0b60b5ad297fca31",
+      "lf_normalized_sha256": "9b8119fe9833c4ee0c5cfdd308eab3e1e29f2b5db2576f7d660b1ef0108efa41"
+    },
+    {
+      "path": "mechanical/img/coupon.png",
+      "comparison": "exact",
+      "size_bytes": 17809,
+      "sha256": "771e4a61e0c6b8de3111170ab6726c5109e345ba828cc63cd1118bf8aca0b3f0",
+      "lf_normalized_sha256": "1e30babde63434f1cb3d1f24c44d952eef996c3e11e40bb9cf13bc833900cd30"
+    },
+    {
+      "path": "mechanical/img/cover.png",
+      "comparison": "exact",
+      "size_bytes": 15887,
+      "sha256": "51e373644f8d78462f419ce083a107993e0f0ee366674f68955b2fb1d8092f43",
+      "lf_normalized_sha256": "67f1d4fb6a180d5fa70016a5901506b880e07722869c593567e3c329f89e48f7"
+    },
+    {
+      "path": "mechanical/img/cut-box.png",
+      "comparison": "exact",
+      "size_bytes": 70607,
+      "sha256": "68280b321d6571d2dce5b12e5309cb73ff3e6b4a47a3822825ea4195d9ce7b10",
+      "lf_normalized_sha256": "406ac3fa16eae6dfcb713f71404002efb68695149419af1a71540a21812b2589"
+    },
+    {
+      "path": "mechanical/img/former.png",
+      "comparison": "exact",
+      "size_bytes": 23874,
+      "sha256": "c2904ed9fd7748a39b261c9254029feea1e0de579fce594d5e628a0c8fae2488",
+      "lf_normalized_sha256": "af6d04e540ba290bde599a5605de9a3772c174324ba23b2681bc9f4c1226ca56"
+    },
+    {
+      "path": "mechanical/img/hood.png",
+      "comparison": "exact",
+      "size_bytes": 21308,
+      "sha256": "5c4f5fa3a261148e886601406e7be9410ad1844ecb219e6845a16d1a9bab3f59",
+      "lf_normalized_sha256": "8f66b206ac17e53be698e93a1c6703035590bf3c929067b926786a0f12fd399e"
+    },
+    {
+      "path": "mechanical/img/shell-print.png",
+      "comparison": "exact",
+      "size_bytes": 36134,
+      "sha256": "fb665cd942c62c3536877ed35764f5478c7c4a22c82363ece14fad4fb41b6a7b",
+      "lf_normalized_sha256": "9e2998433086803598500bf7d3bc42f221dc77241035689bfedf8c55f62bb7e0"
+    },
+    {
+      "path": "mechanical/instrument.png",
+      "comparison": "exact",
+      "size_bytes": 86672,
+      "sha256": "42265cf93aa23a831af5aa522376e57b3a4742ceb4190bd7775fa316b3d6af39",
+      "lf_normalized_sha256": "71dd3631f3705f392a4b5f0dcbbf28428639b61f792b56852da0da35b6648962"
+    },
+    {
+      "path": "mechanical/instrument.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 7620,
+      "sha256": "b857461716c07e56e61d2e8be85a16dc431cb4e71781d8605e349366f5ce3e79",
+      "lf_normalized_sha256": "c833cbff664cc6ca19447ce7cd06ad751254a490074d61d2fd932abcfa494c74"
+    },
+    {
+      "path": "mechanical/nmr-params.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 2252,
+      "sha256": "4028d0b0dcc32b9ea0903563da3c65b3fc0d3fc6971aa8b43cfcdda7d212e03b",
+      "lf_normalized_sha256": "3f624dfd2a285226bd24b3ab04ec4d4318bfd3a04714d3241e6df61c13619925"
+    },
+    {
+      "path": "mechanical/probe-b0.png",
+      "comparison": "exact",
+      "size_bytes": 86892,
+      "sha256": "998accc635a996d8dfdada9c62b995524214b030677a882542b1f453ce2e5a0e",
+      "lf_normalized_sha256": "3eeced4432d3f1d7f2be9a2564a56f392609026d84ca7d08f5f1d04cf0f973ef"
+    },
+    {
+      "path": "mechanical/probe-cradle.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 3458114,
+      "sha256": "9c98a5e0e1ccc9076c41a486e165737e744c5fdb2aef76d6048367bd26cb4e6f",
+      "lf_normalized_sha256": "1d5f0d7c04f1c667d061cf0a0fb239012d5013412b2895e33b772753724801c3"
+    },
+    {
+      "path": "mechanical/probe-former.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 496167,
+      "sha256": "ebdfe6bc7b3753290932033ca23f3fabefec52f53ad8a48473419e1cacdbee40",
+      "lf_normalized_sha256": "fd42c9f676f1081224702e0fad52924cf03060e168134fd75193fc222066614e"
+    },
+    {
+      "path": "mechanical/probe-sleeve.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 196118,
+      "sha256": "2506a08747e6e96619a6bc087e9eeeaee46e15f0503ce4a88b4021361b8fb444",
+      "lf_normalized_sha256": "843948e6d4912e704e28ca925d5b7428525d5e2c4bc32fae6947df993b6a2c65"
+    },
+    {
+      "path": "mechanical/probe.png",
+      "comparison": "exact",
+      "size_bytes": 64246,
+      "sha256": "015350fddd58b8731d10fadf6a6b979f7992fc3bc4f2ced7f491ef064cdf0c3f",
+      "lf_normalized_sha256": "a58c34d825a6d92f5764bb66c77f03a2bf7421bbe244d37c51b0e5d81d8f7d0b"
+    },
+    {
+      "path": "mechanical/probe.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 18890,
+      "sha256": "1888c6e4ab9ba0211e27a2a81de745b140ef2ad062a26e8a35a45934739af7d7",
+      "lf_normalized_sha256": "c2ad8c69943aee72bdc61324a33656e7d47eb87bd19dccb16b1cd502e62f3a07"
+    },
+    {
+      "path": "mechanical/spectrum-data.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 13395,
+      "sha256": "9990f5cae7cf98c053b0099e26598662ae2c56eb9f4583c3f067afd3d22a5966",
+      "lf_normalized_sha256": "1dfb8b83d6241ad35fe2eb4e1b6a22d9ddd87d1bcb36679accfbcd72514ba7d8"
+    },
+    {
+      "path": "mechanical/spectrum-sheet.png",
+      "comparison": "exact",
+      "size_bytes": 58829,
+      "sha256": "849a563e485089ece1050035b62b6ce708e4738801a1b3659219b173d6b8ced9",
+      "lf_normalized_sha256": "d9bbdd05d3a81662e266fc900fae74b07cb59f13b1a02ada646d1852b86a3113"
+    },
+    {
+      "path": "mechanical/spectrum.png",
+      "comparison": "exact",
+      "size_bytes": 128466,
+      "sha256": "2a9fd739f8cfafe6fdd1f7351168d4fcb1cde6bd5b5bffdc1f90b5864a872786",
+      "lf_normalized_sha256": "ffb3edfc3c418ed5824822584b9dbec6daf54a617de01d46139b15b1115f38ea"
+    },
+    {
+      "path": "mechanical/spectrum.py",
+      "comparison": "line_endings_only",
+      "size_bytes": 18778,
+      "sha256": "25fa201076e8305f738acd4a260ab758ba2cba14f2c2fe015b1e946717818579",
+      "lf_normalized_sha256": "cb0ae17cf0b16b8e847afa2022ebc0067aa859a2164208e3fbacfbe6166a0e38"
+    },
+    {
+      "path": "mechanical/spectrum.scad",
+      "comparison": "line_endings_only",
+      "size_bytes": 8288,
+      "sha256": "074db0154539dbc87c1cb9254fa4c66dccb1ab0ffe4c76039f7faa1751065b59",
+      "lf_normalized_sha256": "15657bd0eb4e78557d396d9d4c96d5f40f370b1a07c05b45b1073da81fa53931"
+    },
+    {
+      "path": "mechanical/spectrum.stl",
+      "comparison": "line_endings_only",
+      "size_bytes": 8290250,
+      "sha256": "adf886f7c5b39a103d45c04088277d99b73d07728ea2841ca11cf79e095f7377",
+      "lf_normalized_sha256": "f5918d0fecabb7e8c23013c86533c2619c316e4ef9de10b790940e3364d2277f"
+    },
+    {
+      "path": "simulator/README.md",
+      "comparison": "line_endings_only",
+      "size_bytes": 5393,
+      "sha256": "31101f39c41939d1531d6551ed667c5a12120f71fa86a8894e1db49578b83e6b",
+      "lf_normalized_sha256": "f0a09ee68f18906cca745d47a95e1546c7dc7e08bc785a90347f73459dc05f30"
+    },
+    {
+      "path": "simulator/build/compact.py",
+      "comparison": "exact",
+      "size_bytes": 1149,
+      "sha256": "9ca4d9c7b45c164d467cf9bca56d5cba0c56424ca4aceb9b5b3a02ffcb5b74e7",
+      "lf_normalized_sha256": "9ca4d9c7b45c164d467cf9bca56d5cba0c56424ca4aceb9b5b3a02ffcb5b74e7"
+    },
+    {
+      "path": "simulator/build/exp-housing.scad",
+      "comparison": "exact",
+      "size_bytes": 821,
+      "sha256": "b445e3fb9f381a8ff6b1a4b3a52fc5f77c7cd301e99a2fbe900b59a0bf27eb0e",
+      "lf_normalized_sha256": "b445e3fb9f381a8ff6b1a4b3a52fc5f77c7cd301e99a2fbe900b59a0bf27eb0e"
+    },
+    {
+      "path": "simulator/build/exp-probe.scad",
+      "comparison": "exact",
+      "size_bytes": 2270,
+      "sha256": "4fd3b8b094be2f29ae6f989e2b4e38e17e59e7fa47b3ba4351ef67b2183f33b4",
+      "lf_normalized_sha256": "4fd3b8b094be2f29ae6f989e2b4e38e17e59e7fa47b3ba4351ef67b2183f33b4"
+    },
+    {
+      "path": "simulator/build/nmr_exact.wls",
+      "comparison": "line_endings_only",
+      "size_bytes": 9324,
+      "sha256": "cc26188211ce5a3ac0c086b5dd7b1e4341d42b33d0b0427161bba2909c467d00",
+      "lf_normalized_sha256": "7e992f429c64fd0a14b4c589fa704ae678157abae5c42b71829e21cb7408090a"
+    },
+    {
+      "path": "simulator/build/pack.py",
+      "comparison": "line_endings_only",
+      "size_bytes": 1001,
+      "sha256": "dd0475af8ae7f844112bc366cbd5afe2f75587d6179e5339933c9d6ee7ca42b7",
+      "lf_normalized_sha256": "e18f039f16dc6f144d5fa68d1bc13fdbee5aa5d99685b6b99f68553b29b8976f"
+    },
+    {
+      "path": "simulator/build/test-physics.js",
+      "comparison": "line_endings_only",
+      "size_bytes": 1401,
+      "sha256": "4629d201b5cff3bc6aae3bbb2de69980fff80efbe694996dcc371a80506d6bce",
+      "lf_normalized_sha256": "b672f01277d60e62203d0677b2315a3b0723b1093eae2c5e5effe252078c9541"
+    },
+    {
+      "path": "simulator/index.html",
+      "comparison": "exact",
+      "size_bytes": 49486,
+      "sha256": "84c429bc5b8dd63c72ef2f1007c13430f2e193cb7ea54ce825fc9f3885a78461",
+      "lf_normalized_sha256": "84c429bc5b8dd63c72ef2f1007c13430f2e193cb7ea54ce825fc9f3885a78461"
+    },
+    {
+      "path": "simulator/m/b0_rings.txt",
+      "comparison": "exact",
+      "size_bytes": 28668,
+      "sha256": "417d0e590ab7a1eb246d91ba7cbd61f3305e8440a6cf9ed634a7408e23d9ed71",
+      "lf_normalized_sha256": "417d0e590ab7a1eb246d91ba7cbd61f3305e8440a6cf9ed634a7408e23d9ed71"
+    },
+    {
+      "path": "simulator/m/b0_windings.txt",
+      "comparison": "exact",
+      "size_bytes": 13912,
+      "sha256": "95e1cfd5b65e296e007ee93e4678933d0a86487fae31bbd7aefdd480b9cfb7ab",
+      "lf_normalized_sha256": "95e1cfd5b65e296e007ee93e4678933d0a86487fae31bbd7aefdd480b9cfb7ab"
+    },
+    {
+      "path": "simulator/m/box.txt",
+      "comparison": "exact",
+      "size_bytes": 39392,
+      "sha256": "c40f7d0a5a86b8cab9c29f90b0ef4398d2096d4f511bc631c29fa9c1b6771066",
+      "lf_normalized_sha256": "c40f7d0a5a86b8cab9c29f90b0ef4398d2096d4f511bc631c29fa9c1b6771066"
+    },
+    {
+      "path": "simulator/m/cable_hb.txt",
+      "comparison": "exact",
+      "size_bytes": 3824,
+      "sha256": "9140d962794cf14a645f7f4cc91db9a0eef457b658174987a57b095ea14b5478",
+      "lf_normalized_sha256": "9140d962794cf14a645f7f4cc91db9a0eef457b658174987a57b095ea14b5478"
+    },
+    {
+      "path": "simulator/m/cable_rx.txt",
+      "comparison": "exact",
+      "size_bytes": 4008,
+      "sha256": "7473f03fd463c67be77d35b47da77a5def3e0f92f17037670611b90e736404c9",
+      "lf_normalized_sha256": "7473f03fd463c67be77d35b47da77a5def3e0f92f17037670611b90e736404c9"
+    },
+    {
+      "path": "simulator/m/cable_tx.txt",
+      "comparison": "exact",
+      "size_bytes": 3552,
+      "sha256": "823052f8b7bd68a25bcab2bc2ec96296e7cf06648a6676e3565a10d8a6a7d668",
+      "lf_normalized_sha256": "823052f8b7bd68a25bcab2bc2ec96296e7cf06648a6676e3565a10d8a6a7d668"
+    },
+    {
+      "path": "simulator/m/cradle.txt",
+      "comparison": "exact",
+      "size_bytes": 100520,
+      "sha256": "777016a6f28610f8405cc4d3b09be3786866632002f75585cd36b04c53aa37a5",
+      "lf_normalized_sha256": "777016a6f28610f8405cc4d3b09be3786866632002f75585cd36b04c53aa37a5"
+    },
+    {
+      "path": "simulator/m/dev.txt",
+      "comparison": "exact",
+      "size_bytes": 164,
+      "sha256": "8119e4eaf9aaa01974f3715604973322d9e764241ac8ae61c1890290e66b88c8",
+      "lf_normalized_sha256": "8119e4eaf9aaa01974f3715604973322d9e764241ac8ae61c1890290e66b88c8"
+    },
+    {
+      "path": "simulator/m/fieldmap-bottle.json",
+      "comparison": "exact",
+      "size_bytes": 221419,
+      "sha256": "af3fd747db540745cec889f3ff69664aa154f4977741606176165401519414b4",
+      "lf_normalized_sha256": "af3fd747db540745cec889f3ff69664aa154f4977741606176165401519414b4"
+    },
+    {
+      "path": "simulator/m/fieldmap-tube.json",
+      "comparison": "exact",
+      "size_bytes": 184441,
+      "sha256": "d29147c4a848ad572152f62549999208c04ca11aa3ef31fdcc5c8f05525b6f65",
+      "lf_normalized_sha256": "d29147c4a848ad572152f62549999208c04ca11aa3ef31fdcc5c8f05525b6f65"
+    },
+    {
+      "path": "simulator/m/former.txt",
+      "comparison": "exact",
+      "size_bytes": 15316,
+      "sha256": "1fcd4f6be828e433f4a75a5af75999e22d49864cef3e5a12539daa0d439bce9a",
+      "lf_normalized_sha256": "1fcd4f6be828e433f4a75a5af75999e22d49864cef3e5a12539daa0d439bce9a"
+    },
+    {
+      "path": "simulator/m/hood.txt",
+      "comparison": "exact",
+      "size_bytes": 412,
+      "sha256": "cecc3d728f14e62e0ed008625fea93630a14060031024cd09679ed40fcca0c1c",
+      "lf_normalized_sha256": "cecc3d728f14e62e0ed008625fea93630a14060031024cd09679ed40fcca0c1c"
+    },
+    {
+      "path": "simulator/m/main.txt",
+      "comparison": "exact",
+      "size_bytes": 939984,
+      "sha256": "f61af6dcc0afb85eb9b28828bff064e9956c4fb676633c5f9663bd2f7da4499f",
+      "lf_normalized_sha256": "f61af6dcc0afb85eb9b28828bff064e9956c4fb676633c5f9663bd2f7da4499f"
+    },
+    {
+      "path": "simulator/m/panel.txt",
+      "comparison": "exact",
+      "size_bytes": 936956,
+      "sha256": "673a53a07f5cc23e41da87913a2a8fc46f307f177badc8bae101e4d999e7b87f",
+      "lf_normalized_sha256": "673a53a07f5cc23e41da87913a2a8fc46f307f177badc8bae101e4d999e7b87f"
+    },
+    {
+      "path": "simulator/m/probe_cable.txt",
+      "comparison": "exact",
+      "size_bytes": 3328,
+      "sha256": "a83d6391f540fc12a8035d26b8609eda161398769ea14a883927a23ee750f57d",
+      "lf_normalized_sha256": "a83d6391f540fc12a8035d26b8609eda161398769ea14a883927a23ee750f57d"
+    },
+    {
+      "path": "simulator/m/sample.txt",
+      "comparison": "exact",
+      "size_bytes": 5164,
+      "sha256": "98ea3715985d08fd45bb36840d892d7ef3417df43025c29ac89f4f0c270d83ee",
+      "lf_normalized_sha256": "98ea3715985d08fd45bb36840d892d7ef3417df43025c29ac89f4f0c270d83ee"
+    },
+    {
+      "path": "simulator/m/shell.txt",
+      "comparison": "exact",
+      "size_bytes": 494876,
+      "sha256": "f5eb652fa39e974ba43d160f8618f94f3ec92c89214987c98c92776990e2399c",
+      "lf_normalized_sha256": "f5eb652fa39e974ba43d160f8618f94f3ec92c89214987c98c92776990e2399c"
+    },
+    {
+      "path": "simulator/m/sleeve.txt",
+      "comparison": "exact",
+      "size_bytes": 6232,
+      "sha256": "43b8b7b61324e5ee568f3f46e40aa7c8ede8a7d5f7bf96cf2a235ddfc2d7317c",
+      "lf_normalized_sha256": "43b8b7b61324e5ee568f3f46e40aa7c8ede8a7d5f7bf96cf2a235ddfc2d7317c"
+    },
+    {
+      "path": "simulator/m/ties.txt",
+      "comparison": "exact",
+      "size_bytes": 4020,
+      "sha256": "d5f1be6c74d2ab59dcfd6344ad38bcc9030ce7a1bc70019d8c748864fe8c6adb",
+      "lf_normalized_sha256": "d5f1be6c74d2ab59dcfd6344ad38bcc9030ce7a1bc70019d8c748864fe8c6adb"
+    },
+    {
+      "path": "simulator/m/tripod.txt",
+      "comparison": "exact",
+      "size_bytes": 1800,
+      "sha256": "72a6b4032fff63ad0436123bc6f984b6fdda611dd07cc97b8c0f5458e9ac764a",
+      "lf_normalized_sha256": "72a6b4032fff63ad0436123bc6f984b6fdda611dd07cc97b8c0f5458e9ac764a"
+    },
+    {
+      "path": "simulator/m/winding.txt",
+      "comparison": "exact",
+      "size_bytes": 4476,
+      "sha256": "f0e4a5816f032ab3f9a0c0b02d21115317a467f9d12058018c07e1a92c74987c",
+      "lf_normalized_sha256": "f0e4a5816f032ab3f9a0c0b02d21115317a467f9d12058018c07e1a92c74987c"
+    },
+    {
+      "path": "simulator/physics.js",
+      "comparison": "line_endings_only",
+      "size_bytes": 12914,
+      "sha256": "40cdb2e40d1d4271fcec4ae0ce15c48777e36581d5d0b62d58595a28165a81ba",
+      "lf_normalized_sha256": "7298941d9f4a9905cb9c548076370895dc55360f19bc7b3053a000d2d9834958"
+    },
+    {
+      "path": "tools/handin.py",
+      "comparison": "exact",
+      "size_bytes": 4112,
+      "sha256": "9c433674f734a7562f64376f2533243708f64d0080525db5bd429fca60ec0944",
+      "lf_normalized_sha256": "9c433674f734a7562f64376f2533243708f64d0080525db5bd429fca60ec0944"
+    }
+  ],
+  "source_archive": "nmr-instrument.zip",
+  "archive_sha256": "5b47c19c3b04185bcf76827f23cc0bc47bf2260fd1638702b030e88a8a95b8ba",
+  "archive_bytes": 13750572,
+  "archive_entries": 359,
+  "tracked_files": 160,
+  "branch_observed": "main",
+  "head_observed": "0914edbc5f9424503e6046394dd632a815474fc3",
+  "observation_date": "2026-10-03",
+  "note": "Uploaded snapshot only, not the live Windows checkout. No v2 ref or v2 working files observed. Original bytes unchanged; LF-normalized comparison is diagnostic only."
+}

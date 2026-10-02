@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "prepared_date": "2026-10-03",
+  "archive": {
+    "name": "nmr-instrument.zip",
+    "sha256": "5b47c19c3b04185bcf76827f23cc0bc47bf2260fd1638702b030e88a8a95b8ba",
+    "branch": "main",
+    "head": "0914edbc5f9424503e6046394dd632a815474fc3",
+    "v2_present": false
+  },
+  "continuation": {
+    "evidence_class": "TRANSCRIPT_REPORTED",
+    "branch_hint": "v2",
+    "milestone": "M4 firmware integration",
+    "last_operation": "Register RF component and inspect I2C API symbols",
+    "line_range": [
+      10737,
+      10746
+    ],
+    "next": "Recover/protect actual v2; inspect and finish main/control integration and I/Q sampling-skew correction; complete build without flashing"
+  },
+  "live_workspace": {
+    "observed": false,
+    "path_hint": "C:/Users/Liang/tigp-2026/nmr-instrument",
+    "branch": null,
+    "head": null,
+    "uncommitted_changes": null
+  },
+  "commit_hints": [
+    "b61c1e9",
+    "1223c06",
+    "de1a13f"
+  ],
+  "hardware": {
+    "historical_port": "COM6",
+    "historical_usb_vid_pid": "303A:1001",
+    "port_currently_verified": false,
+    "physical_nmr_measurement_evidenced": false
+  },
+  "credential_transfer": "not included",
+  "implementation_modified": false
+}
