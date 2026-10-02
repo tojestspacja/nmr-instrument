@@ -4,8 +4,8 @@ The parts live in cut-probe.scad, cut-housing.scad and cut-spectrum.scad; each l
 (piece = "list") with material, machine and quantity, so this script never keeps its own copy.
 For every piece it renders each layer the piece has - "cut", "engrave", "engrave_back" - to
 
-    cut/laser/<file>__<piece>.<layer>.svg   and .dxf   (laser: load both layers, cut last)
-    cut/water-jet/<file>__<piece>.cut.dxf               (one part per file, mm - what services want)
+    ../fabrication/laser/<file>__<piece>.<layer>.svg   and .dxf   (laser: load both layers, cut last)
+    ../fabrication/water-jet/<file>__<piece>.cut.dxf               (one part per file, mm - what services want)
 
     py export_cut.py                 # B0 rings for the water-jet (default)
     py export_cut.py --b0 laser      # B0 rings in 4 segments for the laser
@@ -23,6 +23,7 @@ import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+OUT = HERE.parent / "fabrication"           # the exports live beside the sources, not among them
 FILES = ["cut-probe", "cut-housing", "cut-spectrum"]
 BASE = {"cut-probe": "probe", "cut-housing": "housing", "cut-spectrum": "spectrum"}   # the 3D file each includes
 LAYERS = ["cut", "engrave", "engrave_back"]
@@ -59,8 +60,8 @@ def main():
     a = ap.parse_args()
     common = {"b0_process": f'"{a.b0}"', "spec_process": f'"{a.spectrum}"', "style": f'"{a.spectrum_style}"'}
     for d in ["laser", "water-jet"]:
-        (HERE / "cut" / d).mkdir(parents=True, exist_ok=True)
-        for f in (HERE / "cut" / d).glob("*"):
+        (OUT / d).mkdir(parents=True, exist_ok=True)
+        for f in (OUT / d).glob("*"):
             f.unlink()
 
     rows, checks = [], {}
@@ -80,7 +81,7 @@ def main():
                 defs.update(piece=f'"{m.group(1)}"', idx=m.group(2))
             else:
                 defs["piece"] = f'"{name}"'
-            folder = HERE / "cut" / ("water-jet" if machine == "water-jet" else "laser")
+            folder = OUT / ("water-jet" if machine == "water-jet" else "laser")
             made = []
             for layer in LAYERS:
                 if machine == "water-jet" and layer != "cut":
@@ -94,7 +95,7 @@ def main():
                         if err.strip() and "empty" not in err.lower():
                             raise SystemExit(f"{out.name}: {err}")
                         break                                         # this piece has no such layer
-                    made.append(out.relative_to(HERE).as_posix())
+                    made.append(out.relative_to(OUT).as_posix())
             rows.append((scad, name, qty, material, machine, note, made))
             print(f"{scad:13} {name:16} x{qty:>3}  {machine:9} {len(made)} files")
 
@@ -127,7 +128,7 @@ def write_list(rows, checks, b0):
            "", "## Checks (from the .scad files)", ""]
     for scad, lines in checks.items():
         md += [f"**{scad}**", ""] + [f"- {l}" for l in lines] + [""]
-    (HERE / "CUT-LIST.md").write_text("\n".join(md), encoding="utf-8")
+    (OUT / "CUT-LIST.md").write_text("\n".join(md), encoding="utf-8")
     print("CUT-LIST.md written")
 
 

@@ -10,6 +10,7 @@ stacked = true;
 if (stacked) {
     boards();
 } else {
-    import("../../../../hardware/release/front-panel.stl");
-    translate([200, 0, 0]) import("../../../../hardware/release/class-board.stl");
+    // class-board-2026 cloned beside this repository (see housing.scad, board_dir)
+    import("../../class-board-2026/hardware/release/front-panel.stl");
+    translate([200, 0, 0]) import("../../class-board-2026/hardware/release/class-board.stl");
 }

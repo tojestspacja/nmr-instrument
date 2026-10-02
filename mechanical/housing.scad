@@ -352,10 +352,15 @@ module coupon() {
     }
 }
 
+// The board meshes are exports of the boards, owned by class-board-2026 (hardware/release/); they
+// are not copied here. This path assumes the two repositories are cloned side by side
+// (tigp-2026/nmr-instrument and tigp-2026/class-board-2026); the reference commit is in
+// ../hardware/README.md. Only previews use them - no exported part depends on them.
+board_dir = "../../class-board-2026/hardware/release/";
 module boards() {
-    color("darkgreen") import("../../../../hardware/release/front-panel.stl");
+    color("darkgreen") import(str(board_dir, "front-panel.stl"));
     color("seagreen") translate([board_x, 0, -gap]) rotate([0, 180, 0])
-        import("../../../../hardware/release/class-board.stl");
+        import(str(board_dir, "class-board.stl"));
     color("steelblue") pbox(dev_x[0], dev_x[1], dev_py[0], dev_py[1], z_dev_low, z_dev_low + dev_parts + pcb);
 }
 

@@ -5,7 +5,7 @@
 //         "engrave"      raster-engrave on the face that is up when cutting (labels, scales)
 //         "engrave_back" raster-engrave on the other face: cut "cut", flip, align, engrave this
 //         "preview"      everything, coloured, with the sheet outline (look, do not export)
-// export-cut.sh runs every part through every layer it has.
+// export_cut.py runs every part through every layer it has, into ../fabrication/.
 
 layer = "preview";
 

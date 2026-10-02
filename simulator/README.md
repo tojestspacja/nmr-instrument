@@ -1,4 +1,9 @@
-# NMR bench simulator
+# NMR bench simulator (Project 3: `simulator/`)
+
+Part of the Project 3 site: <https://tojestspacja.github.io/nmr-instrument/simulator/>. **Simulation only:** it does not
+control the instrument; the real pulse sequence is `runOneScan()` in class-board-2026
+`firmware/src/blocks/nmr/Sequencer.cpp` (reference commit in `../hardware/README.md`).
+
 
 A live 3D view of the whole setup — probe on its tripod inside the B0 Helmholtz pair, cabled to the
 housing — with a pulse experiment that solves the Bloch equations for the real design. Open
@@ -38,7 +43,7 @@ the Earth's field along B0 moves the line 42.6 Hz per µT.
 ## Rebuilding the meshes after a design change
 
 ```sh
-cd build
+cd build      # sources: ../../mechanical/*.scad; board meshes: ../../../class-board-2026/hardware/release/
 # one STL per component (OpenSCAD on PATH); the list is in index.html, PARTS
 openscad -o meshes/cradle.stl -D 'comp="cradle"' exp-probe.scad      # ... and so on
 openscad -o meshes/box.stl    -D 'comp="box"'    exp-housing.scad

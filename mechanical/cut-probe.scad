@@ -3,7 +3,7 @@
 // comes from probe.scad, so the flat parts and the 3D model cannot disagree.
 //
 // piece = one part (export it with layer = "cut" / "engrave"), or "sheets" to see them laid out.
-// export-cut.sh writes every piece; CUT-LIST.md says how many of each, from what, on which machine.
+// export_cut.py writes every piece to ../fabrication/; fabrication/CUT-LIST.md says how many of each, from what, on which machine.
 //
 // Bought, not cut: the former tube (40 x 2 mm acrylic or PVC, 125 mm long; the article's is 110),
 // the sleeve tube (35 x 2 mm acrylic, 125 mm), nylon M3 / M4 / M6 screws and threaded rod, a brass

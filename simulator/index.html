@@ -107,6 +107,10 @@ dl.ro dt { color: var(--muted); }
 dl.ro dd { margin: 0; text-align: right; }
 .advice { margin: 0; font-size: 13px; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--bg); }
 .mini { font: 600 11.5px var(--f-mono); padding: 3px 7px; margin: 2px 0; border-radius: 3px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+.simnote { flex-basis: 100%; margin: 0; font-size: 13px; padding: 7px 10px; border: 1px dashed var(--warn); border-radius: 4px; color: var(--ink); background: var(--panel); }
+.simnote b { color: var(--warn); }
+.back { font: 600 13px var(--f-mono); color: var(--accent); text-decoration: none; }
+.back:hover { text-decoration: underline; }
 .where { margin: 0; font-size: 12.5px; color: var(--muted); }
 .where b { color: var(--ink); }
 .toggles { display: grid; gap: 6px; padding-top: 4px; border-top: 1px solid var(--line); }
@@ -123,8 +127,14 @@ dl.ro dd { margin: 0; text-align: right; }
 <body>
 <div class="app">
   <header>
+    <a class="back" href="../">← Project 3</a>
     <h1>NMR bench setup</h1>
     <div class="sub">proton line <b>89.4 kHz</b> · B0 <b>2.10 mT</b> · class coil <b>400 T AWG26, 2.53 mH</b> · Helmholtz pair <b>R 200 mm, 1.5 A</b></div>
+    <p class="simnote"><b>Interactive simulation.</b> This page does not control the physical instrument.
+      Real scans are started from the board's own interface on your local Wi-Fi: <code>instrument-XXXX.local</code> → NMR →
+      Apply settings → Start. The pulse sequence simulated here is a representation of
+      <a href="https://github.com/TIGP-Experimental-Methods/class-board-2026/blob/eef00d20a10deca994a8efe07c588c22af2b9db0/firmware/src/blocks/nmr/Sequencer.cpp#L386-L500"><code>runOneScan()</code> in class-board-2026 <code>firmware/src/blocks/nmr/Sequencer.cpp</code></a>
+      (commit <code>eef00d2</code>); that firmware is the source of truth.</p>
   </header>
   <div class="main">
     <div class="stage">
@@ -136,13 +146,13 @@ dl.ro dd { margin: 0; text-align: right; }
         <button class="chipbtn" data-view="top" aria-pressed="false">Top</button>
       </div>
       <div class="hover" id="hover"><div class="n">Point at a part</div><div class="d">Drag to orbit, scroll or pinch to zoom, click a part to centre on it.</div></div>
-      <div class="clock" id="clock"><b id="clock-t">Thermal equilibrium: M along B0</b><br><span id="clock-s">Frame rotating at f_tx. Fire a pulse to start the clock.</span></div>
+      <div class="clock" id="clock"><b id="clock-t">Thermal equilibrium: M along B0</b><br><span id="clock-s">Frame rotating at f_tx. Fire a simulated pulse to start the clock.</span></div>
       <div class="loading" id="loading">Loading the bench…</div>
     </div>
 
     <aside>
       <section class="card">
-        <div class="row"><h2>Pulse experiment</h2><button class="pulse" id="pulse">Fire pulse</button></div>
+        <div class="row"><h2>Simulated pulse</h2><button class="pulse" id="pulse">Fire simulated pulse</button></div>
         <p class="where"><b>Where the sample is:</b> water in a 50 mL tube, pushed into the coil from its open end through the sleeve until the cap stops at the flange; the water fills x −58 … +45 mm of the 100 mm winding (the bottle fills the whole bore). In the 3D view each short arrow is one of 400 simulated water voxels at its real place, pointing along its magnetization: grey along B0, coloured by precession phase once tipped.</p>
         <div class="ctl">
           <label for="c-tau">Pulse length</label><input type="range" id="c-tau" min="50" max="1500" step="1" value="417"><output id="o-tau" class="num" for="c-tau">417 µs</output>
@@ -201,7 +211,7 @@ dl.ro dd { margin: 0; text-align: right; }
             <span class="why">TX pair <span class="num">590 mm</span> · RX coax <span class="num">784 mm</span> · B0 leads <span class="num">1011 mm</span>, with 15 % slack.</span></li>
         </ul>
       </section>
-      <p class="foot">Built from <code>instrument.scad</code>, <code>probe.scad</code>, <code>housing.scad</code> and <code>cut-housing.scad</code> (docs/students/yi-tsai/housing), 2 Oct 2026. The pulse experiment solves the Bloch equations for 3000 voxels of the sample in the B0 pair's real field (4th-order Helmholtz error, the Earth's field), the coil's finite-solenoid B1, reciprocity pickup, the Q = 10 tank and the receiver noise (15.6 nV/√Hz over 15 kHz). It is shown in the frame rotating at f_tx: in the lab the magnetization turns 89 400 times a second.</p>
+      <p class="foot">Built from <code>instrument.scad</code>, <code>probe.scad</code>, <code>housing.scad</code> and <code>cut-housing.scad</code> (<code>mechanical/</code> in this repository), 2 Oct 2026. The pulse experiment solves the Bloch equations for 3000 voxels of the sample in the B0 pair's real field (4th-order Helmholtz error, the Earth's field), the coil's finite-solenoid B1, reciprocity pickup, the Q = 10 tank and the receiver noise (15.6 nV/√Hz over 15 kHz). It is shown in the frame rotating at f_tx: in the lab the magnetization turns 89 400 times a second.</p>
     </aside>
   </div>
 </div>
@@ -523,7 +533,7 @@ dl.ro dd { margin: 0; text-align: right; }
   const realTime = td => td < 2.5 ? td * 0.6e-3 : 1.5e-3 + (td - 2.5) * 30e-3;
   function clockRest() {
     $("clock-t").textContent = "Thermal equilibrium: M along B0";
-    $("clock-s").textContent = "Frame rotating at f_tx. Fire a pulse to start the clock.";
+    $("clock-s").textContent = "Frame rotating at f_tx. Fire a simulated pulse to start the clock.";
   }
   pulseBtn.addEventListener("click", () => {
     if (!sim) return;

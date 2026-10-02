@@ -1,6 +1,6 @@
 // one component of the bench setup per run, in instrument.scad's world frame
-include <../../probe.scad>
-use <../../housing.scad>
+include <../../mechanical/probe.scad>
+use <../../mechanical/housing.scad>
 part = "none";
 comp = "cradle";
 $fn = 64;
