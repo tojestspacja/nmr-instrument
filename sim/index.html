@@ -107,6 +107,8 @@ dl.ro dt { color: var(--muted); }
 dl.ro dd { margin: 0; text-align: right; }
 .advice { margin: 0; font-size: 13px; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--bg); }
 .mini { font: 600 11.5px var(--f-mono); padding: 3px 7px; margin: 2px 0; border-radius: 3px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+.where { margin: 0; font-size: 12.5px; color: var(--muted); }
+.where b { color: var(--ink); }
 .toggles { display: grid; gap: 6px; padding-top: 4px; border-top: 1px solid var(--line); }
 @media (max-width: 860px) {
   .app { height: auto; grid-template-rows: auto auto; }
@@ -141,6 +143,7 @@ dl.ro dd { margin: 0; text-align: right; }
     <aside>
       <section class="card">
         <div class="row"><h2>Pulse experiment</h2><button class="pulse" id="pulse">Fire pulse</button></div>
+        <p class="where"><b>Where the sample is:</b> water in a 50 mL tube, pushed into the coil from its open end through the sleeve until the cap stops at the flange; the water fills x −58 … +45 mm of the 100 mm winding (the bottle fills the whole bore). In the 3D view each short arrow is one of 400 simulated water voxels at its real place, pointing along its magnetization: grey along B0, coloured by precession phase once tipped.</p>
         <div class="ctl">
           <label for="c-tau">Pulse length</label><input type="range" id="c-tau" min="50" max="1500" step="1" value="417"><output id="o-tau" class="num" for="c-tau">417 µs</output>
           <label for="c-ftx">f_tx</label><input type="range" id="c-ftx" min="86000" max="93000" step="1" value="89400"><output id="o-ftx" class="num" for="c-ftx">89 400 Hz</output>
@@ -155,7 +158,8 @@ dl.ro dd { margin: 0; text-align: right; }
         <dl class="ro" id="ro"></dl>
         <div class="toggles">
           <label class="tog"><input type="checkbox" id="t-field" checked> B0 field and coil axis</label>
-          <label class="tog"><input type="checkbox" id="t-spin" checked> Magnetization: net and 24 voxels</label>
+          <label class="tog"><input type="checkbox" id="t-spin" checked> Magnetization of the water voxels</label>
+          <label class="tog"><input type="checkbox" id="t-xray" checked> See inside the probe</label>
           <label class="tog"><input type="checkbox" id="t-rot"> Turn the bench slowly</label>
         </div>
       </section>
@@ -265,6 +269,7 @@ dl.ro dd { margin: 0; text-align: right; }
       orange: std(0xe08a2e), ivory: std(0xeee8d8), grey: std(0x9aa29d, { metalness: 0.3 }),
       dark: std(0x3a3f3c), black: std(0x161816), blue: std(0x9cc9e6, { transparent: true, opacity: 0.85 }),
       glass: std(0xd8eef7, { transparent: true, opacity: 0.38, roughness: 0.1, depthWrite: false }),
+      water: std(0x3f8fd8, { transparent: true, opacity: 0.32, roughness: 0.2, depthWrite: false }),
       poly: std(0xc9b48c, { transparent: true, opacity: 0.55, depthWrite: false }),
       acrylic: std(0xbfe0ea, { transparent: true, opacity: 0.38, roughness: 0.15, depthWrite: false }),
       print: std(0xe6e1d3, { transparent: true, opacity: 0.6, depthWrite: false }),
@@ -327,19 +332,36 @@ dl.ro dd { margin: 0; text-align: right; }
   const spin = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, AXIS), 46, 0xffffff, 12, 8);
   for (const mm of [spin.line.material, spin.cone.material]) { mm.depthTest = false; mm.transparent = true; }
   spin.renderOrder = 12; scene.add(spin);
-  const NISO = 24;
-  const isoGeo = new THREE.BufferGeometry();
-  isoGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(NISO * 6), 3));
-  const isoLines = new THREE.LineSegments(isoGeo, new THREE.LineBasicMaterial({ transparent: true, opacity: 0.75, depthTest: false }));
-  isoLines.renderOrder = 11; scene.add(isoLines);
-  function spinColors() { spin.setColor(new THREE.Color(css("--ink"))); isoLines.material.color = new THREE.Color(css("--accent")); }
+  // 400 water voxels, each a short arrow at its real position, along its own magnetization
+  const NV = 400;
+  const voxGeo = new THREE.BufferGeometry();
+  voxGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(NV * 6), 3));
+  voxGeo.setAttribute("color", new THREE.BufferAttribute(new Float32Array(NV * 6), 3));
+  const voxLines = new THREE.LineSegments(voxGeo, new THREE.LineBasicMaterial({ vertexColors: true, depthTest: false, transparent: true }));
+  voxLines.renderOrder = 11; scene.add(voxLines);
+  const netLabel = label("net M", "#888888", 11); scene.add(netLabel);
+  function spinColors() { spin.setColor(new THREE.Color(css("--ink"))); }
   spinColors();
+
+  // see-through probe: the parts round the sample go faint, the water shows
+  const GHOST = { former: 0.12, winding: 0.28, sleeve: 0.1, ties: 0.1, cradle: 0.12, probe_cable: 0.15, tripod: 0.15, b0_rings: 0.12, b0_windings: 0.15 };
+  let xray = true;
+  function applyXray() {
+    for (const id in GHOST) {
+      const m = meshes[id]; if (!m) continue;
+      const base = MATS[m.userData.part.mat];
+      if (xray) { const g = base.clone(); g.transparent = true; g.opacity = GHOST[id]; g.depthWrite = false; m.material = g; m.renderOrder = 3; }
+      else { m.material = base; m.renderOrder = base.transparent ? 2 : 0; }
+    }
+    if (meshes.sample) meshes.sample.material = xray ? MATS.water : MATS.glass;
+  }
 
   // ---------------------------------------------------------------- the pulse experiment
   const $ = id => document.getElementById(id);
   const pulseBtn = $("pulse");
   const ctl = { tau: $("c-tau"), ftx: $("c-ftx"), b0: $("c-b0"), earth: $("c-earth") };
-  let sample = "tube", nAvg = 1, sim = null, isoIdx = [], spec = null, specRange = null, firing = null, seed = 1;
+  const waterCentre = new THREE.Vector3(0, 0, AXIS);
+  let sample = "tube", nAvg = 1, sim = null, spec = null, specRange = null, firing = null, seed = 1;
   const fmt = (v, d = 0) => v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/,/g, " ");
   const params = () => ({ sample, nAvg, seed, tau: +ctl.tau.value, fTx: +ctl.ftx.value, b0I: +ctl.b0.value, earthPar: +ctl.earth.value, earthPerp: 0 });
   function outputs() {
@@ -351,8 +373,10 @@ dl.ro dd { margin: 0; text-align: right; }
   function runSim() {
     outputs();
     sim = NMR.setup(params());
-    const order = sim.vox.map((v, i) => [v.dw, i]).sort((a, b) => a[0] - b[0]);
-    isoIdx = Array.from({ length: NISO }, (_, j) => order[Math.round((j + 0.5) / NISO * (order.length - 1))][1]);
+    waterCentre.set(0, 0, 0);
+    for (const v of sim.vox) waterCentre.add(new THREE.Vector3(v.p[0] * 1000, v.p[1] * 1000, AXIS + v.p[2] * 1000));
+    waterCentre.divideScalar(sim.vox.length);
+    apply();
     const c = sim.fLine - sim.fLo, half = Math.max(60, Math.min(1500, 10 * (sim.fwhm || 6)));
     specRange = [c - half, c + half];
     spec = NMR.spectrum(sim, specRange[0], specRange[1], 360);
@@ -478,10 +502,20 @@ dl.ro dd { margin: 0; text-align: right; }
     for (const m of st) { ax += m[0]; ay += m[1]; az += m[2]; }
     const n = st.length, net = toScene([ax / n, ay / n, az / n]), len = net.length();
     spin.setDirection(len > 1e-6 ? net.clone().normalize() : new THREE.Vector3(0, 1, 0));
-    spin.setLength(Math.max(8, 46 * len), 12, 8);
-    const pos = isoGeo.attributes.position.array;
-    isoIdx.forEach((i, j) => { const v = toScene(st[i]).multiplyScalar(40); pos.set([0, 0, AXIS, v.x, v.y, AXIS + v.z], j * 6); });
-    isoGeo.attributes.position.needsUpdate = true;
+    spin.setLength(Math.max(6, 40 * len), 10, 7);
+    const pos = voxGeo.attributes.position.array, col = voxGeo.attributes.color.array;
+    const grey = new THREE.Color(css("--muted")), hue = new THREE.Color(), tip = new THREE.Color(), A = 7;
+    for (let j = 0; j < NV && j < sim.vox.length; j++) {
+      const v = sim.vox[j], m = st[j], d = toScene(m);
+      const x = v.p[0] * 1000, y = v.p[1] * 1000, z = AXIS + v.p[2] * 1000;
+      pos.set([x - d.x * A / 2, y - d.y * A / 2, z - d.z * A / 2, x + d.x * A / 2, y + d.y * A / 2, z + d.z * A / 2], j * 6);
+      const mt = Math.min(1, Math.hypot(m[0], m[1]));
+      hue.setHSL(((Math.atan2(m[1], m[0]) / (2 * Math.PI)) + 1) % 1, 0.9, 0.5);
+      tip.copy(grey).lerp(hue, mt);
+      col.set([grey.r, grey.g, grey.b, tip.r, tip.g, tip.b], j * 6);
+    }
+    voxGeo.attributes.position.needsUpdate = true; voxGeo.attributes.color.needsUpdate = true;
+    spin.position.copy(waterCentre); netLabel.position.copy(waterCentre).add(new THREE.Vector3(0, 0, 58));
     const on = t > 0 && t < sim.tau;
     if (meshes.winding) meshes.winding.material.emissive.setRGB(on ? 0.9 : 0, on ? 0.35 : 0, 0);
   }
@@ -495,6 +529,7 @@ dl.ro dd { margin: 0; text-align: right; }
     if (!sim) return;
     seed++; runSim();
     if (reduce) { setSpin(sim.tau + 0.05); drawPlots(Infinity); return; }
+    if (camera.position.distanceTo(waterCentre) > 600) go("probe");
     firing = performance.now() / 1000; pulseBtn.disabled = true; drawPlots(-1);
   });
 
@@ -528,7 +563,9 @@ dl.ro dd { margin: 0; text-align: right; }
 
   const tField = document.getElementById("t-field"), tSpin = document.getElementById("t-spin"), tRot = document.getElementById("t-rot");
   tField.onchange = () => fieldGroup.visible = tField.checked;
-  tSpin.onchange = () => { spin.visible = isoLines.visible = tSpin.checked; };
+  tSpin.onchange = () => { spin.visible = voxLines.visible = netLabel.visible = tSpin.checked; };
+  const tXray = document.getElementById("t-xray");
+  tXray.onchange = () => { xray = tXray.checked; applyXray(); };
   tRot.onchange = () => controls.autoRotate = tRot.checked && !reduce;
 
   function apply() {
@@ -536,6 +573,7 @@ dl.ro dd { margin: 0; text-align: right; }
       const m = meshes[p.id]; if (!m) continue;
       let on = visible[p.id] && (!p.variant || p.variant === variant);
       if (!p.ex) { on = on && explode < 0.25; }
+      if ((p.id === "sample" || p.id === "sleeve") && typeof sample !== "undefined" && sample === "bottle") on = false;   // the bottle fills the bore, no sleeve
       m.visible = on;
       if (p.ex) m.position.set(p.ex[0] * explode, p.ex[1] * explode, p.ex[2] * explode);
     }
@@ -544,7 +582,7 @@ dl.ro dd { margin: 0; text-align: right; }
   // camera presets, eased
   const VIEWS = {
     overview: { pos: [760, -980, 520], tgt: [210, 0, -70] },
-    probe:    { pos: [170, -260, 170], tgt: [0, 0, AXIS] },
+    probe:    { pos: [95, -235, 150], tgt: [-12, 0, AXIS] },
     housing:  { pos: [760, -330, 80],  tgt: [505, 0, -160] },
     top:      { pos: [210, -2, 1350],  tgt: [210, 0, -80] },
   };
@@ -588,7 +626,7 @@ dl.ro dd { margin: 0; text-align: right; }
   });
 
   // theme changes repaint the materials
-  function retheme() { const vis = {}; makeMats(); for (const id in meshes) meshes[id].material = MATS[meshes[id].userData.part.mat]; buildField(); fieldGroup.visible = tField.checked; spinColors(); swatches(); drawPlots(firing === null ? Infinity : -1); }
+  function retheme() { const vis = {}; makeMats(); for (const id in meshes) meshes[id].material = MATS[meshes[id].userData.part.mat]; applyXray(); buildField(); fieldGroup.visible = tField.checked; spinColors(); swatches(); drawPlots(firing === null ? Infinity : -1); }
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
   new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
@@ -621,7 +659,7 @@ dl.ro dd { margin: 0; text-align: right; }
   }
 
   runSim(); settle();
-  Promise.all(PARTS.map(load)).then(() => { document.getElementById("loading").hidden = true; apply(); })
+  Promise.all(PARTS.map(load)).then(() => { document.getElementById("loading").hidden = true; apply(); applyXray(); })
     .catch(e => { document.getElementById("loading").textContent = "Could not load the models: " + e.message; });
   requestAnimationFrame(frame);
 })();
