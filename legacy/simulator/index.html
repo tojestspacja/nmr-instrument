@@ -140,7 +140,8 @@ dl.ro dd { margin: 0; text-align: right; }
     <div class="stage">
       <canvas id="view" aria-label="3D view of the bench: probe on a tripod inside the B0 coil pair, cabled to the instrument housing"></canvas>
       <div class="presets" role="group" aria-label="Camera">
-        <button class="chipbtn" data-view="overview" aria-pressed="true">Overview</button>
+        <button class="chipbtn" data-view="overview" aria-pressed="true">Instrument</button>
+        <button class="chipbtn" data-view="physics" aria-pressed="false">Physics</button>
         <button class="chipbtn" data-view="probe" aria-pressed="false">Probe</button>
         <button class="chipbtn" data-view="housing" aria-pressed="false">Housing</button>
         <button class="chipbtn" data-view="top" aria-pressed="false">Top</button>
@@ -258,7 +259,9 @@ dl.ro dd { margin: 0; text-align: right; }
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(35, 1, 5, 8000);
+  // long focal length (narrow FOV): the near and far Helmholtz rings read at nearly the same size, so the open geometry
+  // looks like an instrument, not a wide-angle debug scene. Presets set a per-view fov in go(). (Verified with tools/nmr-render.)
+  const camera = new THREE.PerspectiveCamera(14, 1, 5, 14000);
   camera.up.set(0, 0, 1);
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = 0.08; controls.autoRotateSpeed = 0.6;
@@ -291,7 +294,7 @@ dl.ro dd { margin: 0; text-align: right; }
     scene.background = c("--scene");
     table.material.color = dark ? new THREE.Color(0x1c2420) : new THREE.Color(0xd3dbd5);
     grid.material.color = dark ? new THREE.Color(0x2a342f) : new THREE.Color(0xbfc9c2);
-    grid.material.opacity = 0.6; grid.material.transparent = true;
+    grid.material.opacity = 0.18; grid.material.transparent = true;   // reduced: the grid should not compete with the instrument
   }
   makeMats();
 
@@ -327,15 +330,22 @@ dl.ro dd { margin: 0; text-align: right; }
   }
   function buildField() {
     fieldGroup.clear();
-    const fc = new THREE.Color(css("--field")), ac = new THREE.Color(css("--accent"));
-    for (const x of [-120, 0, 120]) for (const z of [AXIS - 110, AXIS + 110]) {
-      const a = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(x, -150, z), 300, fc, 18, 9);
-      a.line.material.transparent = true; a.line.material.opacity = 0.55; fieldGroup.add(a);
+    const fc = new THREE.Color(css("--field")), ac = new THREE.Color(css("--accent")), ik = new THREE.Color(css("--ink"));
+    // B0 (Helmholtz axis, +y): two arrows flanking the probe, not a dense field (reduced clutter)
+    for (const x of [-90, 90]) {
+      const a = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(x, -150, AXIS), 300, fc, 18, 9);
+      a.line.material.transparent = true; a.line.material.opacity = 0.6; fieldGroup.add(a);
     }
-    const b0 = label("B0  2.10 mT", css("--field")); b0.position.set(0, 160, AXIS + 140); fieldGroup.add(b0);
+    const b0 = label("B0", css("--field")); b0.position.set(0, 165, AXIS); fieldGroup.add(b0);
+    // B1 / coil axis (+x)
     const axis = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(-150, 0, AXIS), 300, ac, 16, 8);
     axis.line.material.depthTest = false; axis.cone.material.depthTest = false; axis.renderOrder = 9; fieldGroup.add(axis);
-    const b1 = label("coil axis · B1", css("--accent")); b1.position.set(190, 0, AXIS + 18); fieldGroup.add(b1);
+    const b1 = label("coil axis ≈ B1  ⟂  B0", css("--accent")); b1.position.set(205, 0, AXIS + 16); fieldGroup.add(b1);
+    // a right-angle marker in the x–y plane at the sample, so the 90° reads without reconstructing the 3D
+    const s = 42, g = new THREE.BufferGeometry().setFromPoints(
+      [new THREE.Vector3(s, 0, AXIS), new THREE.Vector3(s, s, AXIS), new THREE.Vector3(0, s, AXIS)]);
+    const m = new THREE.Line(g, new THREE.LineBasicMaterial({ color: ik, transparent: true, opacity: 0.7, depthTest: false }));
+    m.renderOrder = 9; fieldGroup.add(m);
   }
   buildField();
 
@@ -357,7 +367,9 @@ dl.ro dd { margin: 0; text-align: right; }
   spinColors();
 
   // see-through probe: the parts round the sample go faint, the water shows
-  const GHOST = { former: 0.12, winding: 0.28, sleeve: 0.1, ties: 0.1, cradle: 0.12, probe_cable: 0.15, tripod: 0.15, b0_rings: 0.12, b0_windings: 0.15 };
+  // "See inside" keeps the winding see-through so the water shows, but the printed holder (former, sleeve, cradle,
+  // tripod) stays clearly visible so the viewer can see what physically holds the sample. (Tuned against tools/nmr-render.)
+  const GHOST = { former: 0.9, winding: 0.5, sleeve: 0.85, ties: 0.5, cradle: 0.9, probe_cable: 0.3, tripod: 0.8, b0_rings: 0.18, b0_windings: 0.35 };
   let xray = true;
   function applyXray() {
     for (const id in GHOST) {
@@ -594,22 +606,42 @@ dl.ro dd { margin: 0; text-align: right; }
     }
   }
 
-  // camera presets, eased
+  // camera presets, eased. Each sets a per-view fov, which part groups to show, and whether the field is on. Positions
+  // and fov were chosen and verified with tools/nmr-render (az/el/fov on the same geometry). Frame: +x coil/sample,
+  // +y B0, +z up. "grp" values come from PARTS: Probe, B0 coil, Instrument, Cables.
+  const PROBE_PAIR = ["Probe", "B0 coil"];
   const VIEWS = {
-    overview: { pos: [760, -980, 520], tgt: [210, 0, -70] },
-    probe:    { pos: [95, -235, 150], tgt: [-12, 0, AXIS] },
-    housing:  { pos: [760, -330, 80],  tgt: [505, 0, -160] },
-    top:      { pos: [210, -2, 1350],  tgt: [210, 0, -80] },
+    overview: { pos: [529, -847, 357], tgt: [0, 0, AXIS], fov: 14, groups: PROBE_PAIR, fields: false },      // Instrument hero
+    physics:  { pos: [0, -1116, 311],  tgt: [0, 0, AXIS], fov: 13, groups: PROBE_PAIR, fields: true },       // B0 / B1 geometry
+    probe:    { pos: [211, -366, 154], tgt: [0, 0, AXIS], fov: 18, groups: ["Probe"], fields: false },       // the sample holder
+    housing:  { pos: [905, -1078, 459], tgt: [150, 0, -20], fov: 16, groups: ["Probe", "B0 coil", "Instrument", "Cables"], fields: false },
+    top:      { pos: [120, -28, 1560], tgt: [120, 0, -40], fov: 16, groups: ["Probe", "B0 coil", "Instrument", "Cables"], fields: false },
   };
+  function applyGroups(groups) {
+    for (const p of PARTS) {
+      const show = groups.includes(p.grp);
+      visible[p.id] = show;
+      const cb = document.getElementById("p-" + p.id);
+      if (cb) cb.checked = show;
+    }
+    apply();
+  }
   let fly = null;
   function go(name, target) {
     const v = target || VIEWS[name];
+    if (v.fov) { camera.fov = v.fov; camera.updateProjectionMatrix(); }
+    if (v.groups) applyGroups(v.groups);
+    if (typeof v.fields === "boolean") { tField.checked = v.fields; fieldGroup.visible = v.fields; }
     fly = { t0: performance.now(), dur: reduce ? 1 : 900, p0: camera.position.clone(), q0: controls.target.clone(),
             p1: new THREE.Vector3(...v.pos), q1: new THREE.Vector3(...v.tgt) };
     document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === name));
   }
   document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
+  // initial state = the Instrument hero
   camera.position.set(...VIEWS.overview.pos); controls.target.set(...VIEWS.overview.tgt);
+  camera.fov = VIEWS.overview.fov; camera.updateProjectionMatrix();
+  applyGroups(VIEWS.overview.groups);
+  tField.checked = false; fieldGroup.visible = false;
 
   // hover and click
   const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let lastPick = 0, hovered = null;
