@@ -19,6 +19,8 @@ extern "C" {
 #endif
 
 NMR_API const char* nmr_config_sha256(void);
+/* struct sizes, so bindings can verify their layouts: timing, sequence, limits, model, record_meta, pipeline */
+NMR_API int32_t nmr_abi_layout(int32_t* sizes6);
 NMR_API const char* nmr_last_error(void);
 
 /* ---- pulse programs */

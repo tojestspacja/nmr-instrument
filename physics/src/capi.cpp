@@ -37,6 +37,11 @@ nmr::InstrumentModel to_model(const nmr_model* c) {
 extern "C" {
 
 const char* nmr_config_sha256(void) { return nmr::cfg::CONFIG_SHA256; }
+int32_t nmr_abi_layout(int32_t* s) {
+    s[0] = sizeof(nmr_timing); s[1] = sizeof(nmr_sequence); s[2] = sizeof(nmr_limits);
+    s[3] = sizeof(nmr_model); s[4] = sizeof(nmr_record_meta); s[5] = sizeof(nmr_pipeline);
+    return 6;
+}
 const char* nmr_last_error(void) { return g_err.c_str(); }
 
 void nmr_default_timing(nmr_timing* t) {
