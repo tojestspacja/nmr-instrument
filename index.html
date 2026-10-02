@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchtop NMR instrument</title>
+<meta name="description" content="A from-scratch benchtop NMR spectrometer: shared C++ physics core, firmware, and a browser digital twin.">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa7b4; --line:#2b3444; --accent:#58a6ff; }
+  @media (prefers-color-scheme: light){ :root:not([data-theme=dark]){ --bg:#f6f8fa; --panel:#fff; --ink:#1f2328; --muted:#57606a; --line:#d0d7de; --accent:#0969da; } }
+  :root[data-theme=dark]{ --bg:#0d1117; --panel:#161b22; --ink:#e6edf3; --muted:#9aa7b4; --line:#2b3444; --accent:#58a6ff; }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  main{max-width:720px;margin:0 auto;padding:48px 20px}
+  h1{font-size:28px;margin:0 0 6px} .lead{color:var(--muted);margin:0 0 28px}
+  .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:14px 0;text-decoration:none;color:inherit;transition:border-color .15s}
+  .card:hover{border-color:var(--accent)} .card h2{margin:0 0 4px;font-size:17px} .card p{margin:0;color:var(--muted);font-size:13.5px}
+  .tag{display:inline-block;font-size:11px;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:1px 9px;margin-left:8px;vertical-align:middle}
+  footer{color:var(--muted);font-size:12.5px;margin-top:28px;border-top:1px solid var(--line);padding-top:16px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Benchtop NMR spectrometer</h1>
+  <p class="lead">A from-scratch benchtop NMR instrument — one shared C++ physics/DSP core that runs on the microcontroller, in the host tools, and (compiled to WebAssembly) in your browser.</p>
+
+  <a class="card" href="simulator/">
+    <h2>Digital-twin simulator <span class="tag">live</span></h2>
+    <p>Run FID, Hahn-echo, inversion-recovery and CPMG experiments on a modelled water sample. Driven by the real WebAssembly core — the same code the instrument runs.</p>
+  </a>
+
+  <a class="card" href="legacy/">
+    <h2>Earlier bench walkthrough</h2>
+    <p>The original Project&nbsp;3 landing page and 3-D bench simulator, kept for reference.</p>
+  </a>
+
+  <footer>
+    Design-stage model — not a measurement. No calibrated probe, measured FID, or verified timing is claimed here.
+  </footer>
+</main>
+</body>
+</html>

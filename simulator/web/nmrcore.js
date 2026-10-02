@@ -186,4 +186,15 @@ class Core {
       return { freq_hz: o[0], amplitude: o[1], noise_rms: o[2], snr: o[3] };
     } finally { this.X.free(pf); this.X.free(pv); this.X.free(po); }
   }
+  simClipFraction() { return this.X.nmr_sim_clip_fraction(); }
+  simEmfPeak() { return this.X.nmr_sim_emf_peak(); }
+  // Design-coil fields per amp at a point [m]: { b0: [x,y,z], b1: [x,y,z] } in T/A.
+  fieldsAt(x, y, z) {
+    const p = this.X.malloc(48);
+    try {
+      this.X.nmr_fields_at(x, y, z, p, p + 24);
+      const a = new Float64Array(this.X.memory.buffer, p, 6).slice();
+      return { b0: [a[0], a[1], a[2]], b1: [a[3], a[4], a[5]] };
+    } finally { this.X.free(p); }
+  }
 }
