@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Live 3D view of the class-board NMR setup with a Bloch-equation pulse experiment.">
+<title>NMR Bench Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* what the artifact host used to supply: a page skeleton reset */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+</style>
+<style>
+/* Layout: one working screen - the bench in 3D on the left, the instrument's controls and checks in a
+   side rail; on a phone the rail drops below the view. Copper (the coil wire) is the one accent. */
+:root {
+  --bg: #e9ede9;          /* bench grey-green */
+  --panel: #f6f8f6;
+  --ink: #18211d;
+  --muted: #56645d;
+  --line: #c9d2cc;
+  --accent: #a9551f;      /* copper */
+  --accent-ink: #ffffff;
+  --field: #2a6fb0;       /* B0 */
+  --ok: #2f7d4f;
+  --warn: #a86a0c;
+  --bad: #b3342b;
+  --scene: #dfe5e0;
+  --f-display: "Saira Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111613; --panel: #171e1a; --ink: #e2e9e4; --muted: #96a59c; --line: #2b3630;
+    --accent: #e08a4f; --accent-ink: #1a0f07; --field: #6aa8e6; --ok: #58b07c; --warn: #e0a447; --bad: #ef6b5f;
+    --scene: #161d19; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111613; --panel: #171e1a; --ink: #e2e9e4; --muted: #96a59c; --line: #2b3630;
+  --accent: #e08a4f; --accent-ink: #1a0f07; --field: #6aa8e6; --ok: #58b07c; --warn: #e0a447; --bad: #ef6b5f;
+  --scene: #161d19; color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45; }
+.app { height: 100%; display: grid; grid-template-rows: auto 1fr; padding-inline: 16px; padding-block: 12px; gap: 12px; box-sizing: border-box; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 30px; letter-spacing: .01em; margin: 0; line-height: 1; text-wrap: balance; }
+.sub { color: var(--muted); font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.sub b { color: var(--ink); font-weight: 600; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 12px; min-height: 0; }
+.stage { position: relative; min-height: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--scene); }
+#view { display: block; width: 100%; height: 100%; touch-action: none; }
+.presets { position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.chipbtn { font: 600 12px var(--f-mono); padding: 6px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.chipbtn:hover { border-color: var(--accent); }
+.chipbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chipbtn:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hover { position: absolute; left: 10px; bottom: 10px; max-width: min(420px, calc(50% - 15px)); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; font-size: 13px; }
+.hover .n { font-weight: 700; }
+.hover .d { color: var(--muted); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; font: 600 13px var(--f-mono); color: var(--muted); pointer-events: none; }
+.fid { position: absolute; right: 10px; bottom: 10px; width: 240px; max-width: calc(100% - 20px); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px 6px; }
+.fid canvas { width: 100%; height: 70px; display: block; }
+.fid .t { display: flex; justify-content: space-between; font: 11px var(--f-mono); color: var(--muted); }
+aside { min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 14px; }
+section.card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 17px; letter-spacing: .06em; text-transform: uppercase; margin: 0; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pulse { font: 700 14px var(--f-body); background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 4px; padding: 9px 14px; cursor: pointer; }
+.pulse:disabled { opacity: .55; cursor: default; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.seg button { font: 600 12px var(--f-mono); padding: 6px 10px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+label.tog { display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; }
+.parts { display: grid; gap: 4px; }
+.grp { font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.sw { width: 10px; height: 10px; border-radius: 2px; flex: none; border: 1px solid var(--line); }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.checks li { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 13.5px; }
+.pill { font: 700 10.5px var(--f-mono); letter-spacing: .06em; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; align-self: start; margin-top: 2px; }
+.pill.ok { color: var(--ok); border: 1px solid var(--ok); }
+.pill.warn { color: var(--warn); border: 1px solid var(--warn); }
+.pill.bad { color: var(--bg); background: var(--bad); border: 1px solid var(--bad); }
+.checks .what { font-weight: 700; }
+.checks .why { grid-column: 2; color: var(--muted); font-size: 12.5px; }
+.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.foot { color: var(--muted); font-size: 12px; }
+.foot code { font-family: var(--f-mono); font-size: 11.5px; }
+.clock { position: absolute; right: 10px; bottom: 10px; max-width: min(360px, calc(50% - 15px)); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 7px 10px; font: 12px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.clock b { color: var(--ink); font-weight: 600; }
+.ctl { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 10px; align-items: center; font-size: 13px; }
+.ctl output { font-size: 12px; min-width: 7.5ch; text-align: right; }
+.plot { display: grid; gap: 4px; }
+.plot canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); }
+.pt { display: flex; justify-content: space-between; gap: 8px; font: 11.5px var(--f-mono); color: var(--muted); }
+dl.ro { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 12px; margin: 0; font-size: 12.5px; }
+dl.ro dt { color: var(--muted); }
+dl.ro dd { margin: 0; text-align: right; }
+.advice { margin: 0; font-size: 13px; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--bg); }
+.mini { font: 600 11.5px var(--f-mono); padding: 3px 7px; margin: 2px 0; border-radius: 3px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+.toggles { display: grid; gap: 6px; padding-top: 4px; border-top: 1px solid var(--line); }
+@media (max-width: 860px) {
+  .app { height: auto; grid-template-rows: auto auto; }
+  .main { grid-template-columns: minmax(0, 1fr); }
+  .stage { height: 62vh; min-height: 360px; }
+  aside { overflow: visible; }
+  .hover { max-width: calc(100% - 20px); bottom: auto; top: 52px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>NMR bench setup</h1>
+    <div class="sub">proton line <b>89.4 kHz</b> · B0 <b>2.10 mT</b> · class coil <b>400 T AWG26, 2.53 mH</b> · Helmholtz pair <b>R 200 mm, 1.5 A</b></div>
+  </header>
+  <div class="main">
+    <div class="stage">
+      <canvas id="view" aria-label="3D view of the bench: probe on a tripod inside the B0 coil pair, cabled to the instrument housing"></canvas>
+      <div class="presets" role="group" aria-label="Camera">
+        <button class="chipbtn" data-view="overview" aria-pressed="true">Overview</button>
+        <button class="chipbtn" data-view="probe" aria-pressed="false">Probe</button>
+        <button class="chipbtn" data-view="housing" aria-pressed="false">Housing</button>
+        <button class="chipbtn" data-view="top" aria-pressed="false">Top</button>
+      </div>
+      <div class="hover" id="hover"><div class="n">Point at a part</div><div class="d">Drag to orbit, scroll or pinch to zoom, click a part to centre on it.</div></div>
+      <div class="clock" id="clock"><b id="clock-t">Thermal equilibrium: M along B0</b><br><span id="clock-s">Frame rotating at f_tx. Fire a pulse to start the clock.</span></div>
+      <div class="loading" id="loading">Loading the bench…</div>
+    </div>
+
+    <aside>
+      <section class="card">
+        <div class="row"><h2>Pulse experiment</h2><button class="pulse" id="pulse">Fire pulse</button></div>
+        <div class="ctl">
+          <label for="c-tau">Pulse length</label><input type="range" id="c-tau" min="50" max="1500" step="1" value="417"><output id="o-tau" class="num" for="c-tau">417 µs</output>
+          <label for="c-ftx">f_tx</label><input type="range" id="c-ftx" min="86000" max="93000" step="1" value="89400"><output id="o-ftx" class="num" for="c-ftx">89 400 Hz</output>
+          <label for="c-b0">B0 current</label><input type="range" id="c-b0" min="1.4" max="1.6" step="0.001" value="1.5"><output id="o-b0" class="num" for="c-b0">1.500 A</output>
+          <label for="c-earth">Earth ∥ B0</label><input type="range" id="c-earth" min="-50" max="50" step="1" value="0"><output id="o-earth" class="num" for="c-earth">0 µT</output>
+        </div>
+        <div class="row"><span>Sample</span><div class="seg" id="smp" role="group" aria-label="Sample"><button data-s="tube" aria-pressed="true">50 mL tube</button><button data-s="bottle" aria-pressed="false">Bottle, full bore</button></div></div>
+        <div class="row"><span>Averages</span><div class="seg" id="avg" role="group" aria-label="Averages"><button data-n="1" aria-pressed="true">1</button><button data-n="4" aria-pressed="false">4</button><button data-n="16" aria-pressed="false">16</button><button data-n="64" aria-pressed="false">64</button></div></div>
+        <div class="plot"><div class="pt"><span>Receiver I channel, ADC volts</span><span>25 kS/s, IF 5.4 kHz</span></div><canvas id="p-rx" width="640" height="230"></canvas></div>
+        <div class="plot"><div class="pt"><span>Spectrum of the 200 ms record</span><span id="p-sp-l"></span></div><canvas id="p-sp" width="640" height="200"></canvas></div>
+        <p class="advice" id="advice"></p>
+        <dl class="ro" id="ro"></dl>
+        <div class="toggles">
+          <label class="tog"><input type="checkbox" id="t-field" checked> B0 field and coil axis</label>
+          <label class="tog"><input type="checkbox" id="t-spin" checked> Magnetization: net and 24 voxels</label>
+          <label class="tog"><input type="checkbox" id="t-rot"> Turn the bench slowly</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Assembly</h2>
+        <div class="row"><span>Housing</span>
+          <div class="seg" role="group" aria-label="Housing version">
+            <button id="v-box" aria-pressed="true">Laser-cut</button><button id="v-shell" aria-pressed="false">Printed</button>
+          </div>
+        </div>
+        <div>
+          <div class="row"><label for="explode">Exploded view</label><span class="num" id="explode-v">0 %</span></div>
+          <input type="range" id="explode" min="0" max="100" value="0">
+        </div>
+        <div class="parts" id="parts"></div>
+      </section>
+
+      <section class="card">
+        <h2>Checks</h2>
+        <ul class="checks">
+          <li><span class="pill bad">stop</span><span class="what">TX and RX on one coil</span>
+            <span class="why">The RX diodes clamp at ±0.7 V across the transmitter's ±7.95 V: <span class="num">1.54 A</span> through R813 trips the OPA564's 1.5 A limit on the first pulse. Needs a board-side decision (TX diodes + RX series element, or a second, crossed receive coil).</span></li>
+          <li><span class="pill warn">mind</span><span class="what">Signal size</span>
+            <span class="why">The 50 mL tube gives <span class="num">0.83 µV</span> at the coil, <span class="num">8.1 µV</span> at the tank: a fifth of the 40 µV the receiver was sized for (TeachSpin's estimate). ADC peak 0.21 V, single-sample SNR 4. Average, or use the full-bore bottle (15 µV).</span></li>
+          <li><span class="pill warn">mind</span><span class="what">90° pulse length</span>
+            <span class="why">The workbook's 417 µs assumes an endless solenoid. This coil (length 2.4 × its diameter) gives <span class="num">13.0 µT</span> rotating at its centre: 90° takes <span class="num">451 µs</span>; 417 µs tips 83°.</span></li>
+          <li><span class="pill ok">ok</span><span class="what">B0 homogeneity</span>
+            <span class="why">Worst case 1688 ppm at the winding ends, but most of the water sits where the error is under 50 ppm: simulated T2* <span class="num">72 ms</span>, line <span class="num">6 Hz</span> wide (Libbrecht's rig: about 75 ms).</span></li>
+          <li><span class="pill warn">mind</span><span class="what">B0 drift</span>
+            <span class="why">Voltage-driven, <span class="num">23 W</span> warms 9.2 kg of copper by 0.39 K/min: the line falls <span class="num">138 Hz/min</span>, 7 Hz between averaged scans against a ~2 Hz line. Drive B0 at constant current, or measure it each scan and correct f_LO.</span></li>
+          <li><span class="pill ok">ok</span><span class="what">RX tank with the coax</span>
+            <span class="why">0.78 m of RG174 adds <span class="num">79 pF</span>. Fit C710 only: tank at <span class="num">88.47 kHz</span> (−0.18 dB). All three fitted: 84.53 kHz (−3.4 dB). Or set B0 to <span class="num">1.484 A</span>.</span></li>
+          <li><span class="pill ok">ok</span><span class="what">B0 drive</span>
+            <span class="why"><span class="num">15.6 V</span> of the 18 V rail at <span class="num">1.5 A</span> of the H-bridge's 2 A trip.</span></li>
+          <li><span class="pill ok">ok</span><span class="what">Steel near the sample</span>
+            <span class="why">Nearest steel screw <span class="num">492 mm</span> away; the rings (r 217 mm) clear the housing.</span></li>
+          <li><span class="pill ok">ok</span><span class="what">Cables</span>
+            <span class="why">TX pair <span class="num">590 mm</span> · RX coax <span class="num">784 mm</span> · B0 leads <span class="num">1011 mm</span>, with 15 % slack.</span></li>
+        </ul>
+      </section>
+      <p class="foot">Built from <code>instrument.scad</code>, <code>probe.scad</code>, <code>housing.scad</code> and <code>cut-housing.scad</code> (docs/students/yi-tsai/housing), 2 Oct 2026. The pulse experiment solves the Bloch equations for 3000 voxels of the sample in the B0 pair's real field (4th-order Helmholtz error, the Earth's field), the coil's finite-solenoid B1, reciprocity pickup, the Q = 10 tank and the receiver noise (15.6 nV/√Hz over 15 kHz). It is shown in the frame rotating at f_tx: in the lab the magnetization turns 89 400 times a second.</p>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="physics.js"></script>
+<script>
+(() => {
+  const T = -193.35;                      // table top, mm (probe frame: winding centre at x = y = 0)
+  const AXIS = 33.15;                     // coil axis height above the cradle's underside
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------------------------------------------------------------- parts
+  const PARTS = [
+    { id: "sample", grp: "Probe", name: "50 mL sample tube", d: "Water, 30 × 115 mm; the cap is the end stop against the sleeve.", mat: "glass", ex: [-160, 0, 0] },
+    { id: "sleeve", grp: "Probe", name: "Sample sleeve", d: "Centres the 30 mm tube in the 36 mm bore.", mat: "blue", ex: [-95, 0, 0] },
+    { id: "former", grp: "Probe", name: "Coil former", d: "40/36 mm tube, 6 mm cheeks, a 10 mm stub to tie the leads and the cable.", mat: "orange", ex: [0, 0, 75] },
+    { id: "winding", grp: "Probe", name: "Class coil", d: "400 turns AWG26 in two layers, L 2.53 mH, 5.03 mT/A. Transmits B1 and receives the FID.", mat: "copper", ex: [0, 0, 75] },
+    { id: "ties", grp: "Probe", name: "Cable ties", d: "Leads and cable clamped to the stub; the cable tied to the anchor.", mat: "dark", ex: [0, 0, 75] },
+    { id: "probe_cable", grp: "Probe", name: "Probe cable", d: "Two-core, screened, no steel: check the plug with a phone magnetometer.", mat: "black", ex: [0, 0, 0] },
+    { id: "cradle", grp: "Probe", name: "Cradle", d: "Saddles under the cheeks, zip-tie tunnels, brass 1/4\"-20 tripod nut.", mat: "ivory", ex: [0, 0, 0] },
+    { id: "tripod", grp: "Probe", name: "Tripod column", d: "Nylon hardware: the article swaps every steel screw.", mat: "grey", ex: [0, 0, -50] },
+    { id: "b0_rings", grp: "B0 coil", name: "Helmholtz ring formers", d: "Two rings, R = spacing = 200 mm; water-jet polycarbonate stacks.", mat: "poly", ex: [0, 0, 0] },
+    { id: "b0_windings", grp: "B0 coil", name: "B0 windings", d: "2 × 312 turns AWG16, 10.3 Ω, 2.10 mT at 1.5 A from the H-bridge.", mat: "copper2", ex: [0, 0, 0] },
+    { id: "box", grp: "Instrument", name: "Laser-cut housing", d: "3 mm acrylic: cover, walls in tabs, plate on T-slot nuts, OLED hood of three frames.", mat: "acrylic", ex: [0, 0, 95], variant: "box" },
+    { id: "shell", grp: "Instrument", name: "Printed housing shell", d: "Cover and walls in one print, plate on nuts in side-open pockets.", mat: "print", ex: [0, 0, 95], variant: "shell" },
+    { id: "hood", grp: "Instrument", name: "OLED hood (printed)", d: "Surround for the display, flange under the cover.", mat: "orange", ex: [0, 0, 120], variant: "shell" },
+    { id: "panel", grp: "Instrument", name: "Front panel board", d: "180 × 100 mm, four layers: 16 SMA, OLED, TTL strip, TX COIL terminal.", mat: "pcb", ex: [0, 0, 50] },
+    { id: "main", grp: "Instrument", name: "Main board", d: "Turned over under the panel: NMR TX and RX, ADC, H-bridge, polarizer switch.", mat: "pcb2", ex: [0, 0, 0] },
+    { id: "dev", grp: "Instrument", name: "ESP32-S3 dev board", d: "Hangs 17 mm under the main board on its sockets.", mat: "devb", ex: [0, 0, -40] },
+    { id: "cable_tx", grp: "Cables", name: "TX pair", d: "To the TX COIL screw terminal on the front edge, 590 mm.", mat: "dark", ex: null },
+    { id: "cable_rx", grp: "Cables", name: "RX coax, RG174", d: "To the RX SMA on the cover, 784 mm: 79 pF that the tank has to count.", mat: "black", ex: null },
+    { id: "cable_hb", grp: "Cables", name: "B0 leads", d: "AWG18 pair to the H-BRIDGE terminal on the rear wall, 1011 mm.", mat: "copper2", ex: null },
+  ];
+
+  // ---------------------------------------------------------------- scene
+  const canvas = document.getElementById("view");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35, 1, 5, 8000);
+  camera.up.set(0, 0, 1);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.dampingFactor = 0.08; controls.autoRotateSpeed = 0.6;
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x6d746f, 0.75));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.9); sun.position.set(-500, -700, 900); scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(800, 600, 300); scene.add(fill);
+
+  const table = new THREE.Mesh(new THREE.PlaneGeometry(1500, 900), new THREE.MeshStandardMaterial({ roughness: 0.95 }));
+  table.position.set(220, 0, T - 0.6); scene.add(table);
+  const grid = new THREE.GridHelper(1500, 30); grid.rotation.x = Math.PI / 2; grid.position.set(220, 0, T - 0.3); scene.add(grid);
+
+  const MATS = {};
+  function makeMats() {
+    const c = n => new THREE.Color(css(n));
+    const dark = document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+    const std = (color, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.6, metalness: 0.0, flatShading: true }, o));
+    Object.assign(MATS, {
+      copper: std(0xb8743a, { metalness: 0.75, roughness: 0.32, emissive: 0x000000 }),
+      copper2: std(0x9c5a2c, { metalness: 0.7, roughness: 0.4 }),
+      orange: std(0xe08a2e), ivory: std(0xeee8d8), grey: std(0x9aa29d, { metalness: 0.3 }),
+      dark: std(0x3a3f3c), black: std(0x161816), blue: std(0x9cc9e6, { transparent: true, opacity: 0.85 }),
+      glass: std(0xd8eef7, { transparent: true, opacity: 0.38, roughness: 0.1, depthWrite: false }),
+      poly: std(0xc9b48c, { transparent: true, opacity: 0.55, depthWrite: false }),
+      acrylic: std(0xbfe0ea, { transparent: true, opacity: 0.38, roughness: 0.15, depthWrite: false }),
+      print: std(0xe6e1d3, { transparent: true, opacity: 0.6, depthWrite: false }),
+      pcb: std(0x1f5e3b), pcb2: std(0x2f7a55), devb: std(0x2b4f80),
+    });
+    scene.background = c("--scene");
+    table.material.color = dark ? new THREE.Color(0x1c2420) : new THREE.Color(0xd3dbd5);
+    grid.material.color = dark ? new THREE.Color(0x2a342f) : new THREE.Color(0xbfc9c2);
+    grid.material.opacity = 0.6; grid.material.transparent = true;
+  }
+  makeMats();
+
+  // ---------------------------------------------------------------- meshes
+  const meshes = {};
+  async function load(p) {
+    const b64 = await (await fetch("m/" + p.id + ".txt")).text();
+    const buf = Uint8Array.from(atob(b64.trim()), c => c.charCodeAt(0));
+    const raw = pako.ungzip(buf);
+    const dv = new DataView(raw.buffer, raw.byteOffset, raw.byteLength);
+    const nv = dv.getUint32(0, true), ni = dv.getUint32(4, true);
+    const pos = new Float32Array(raw.buffer.slice(raw.byteOffset + 8, raw.byteOffset + 8 + nv * 12));
+    const idx = new Uint32Array(raw.buffer.slice(raw.byteOffset + 8 + nv * 12, raw.byteOffset + 8 + nv * 12 + ni * 4));
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setIndex(new THREE.BufferAttribute(idx, 1));
+    g.computeVertexNormals(); g.computeBoundingSphere(); g.computeBoundingBox();
+    const m = new THREE.Mesh(g, MATS[p.mat]);
+    m.userData.part = p;
+    if (MATS[p.mat].transparent) m.renderOrder = 2;
+    scene.add(m); meshes[p.id] = m;
+  }
+
+  // ---------------------------------------------------------------- field arrows and the spin
+  const fieldGroup = new THREE.Group(); scene.add(fieldGroup);
+  function label(text, color, size = 15) {
+    const cv = document.createElement("canvas"); const ctx = cv.getContext("2d");
+    const font = `600 ${size * 4}px JetBrains Mono, monospace`; ctx.font = font;
+    cv.width = Math.ceil(ctx.measureText(text).width) + 24; cv.height = size * 5;
+    ctx.font = font; ctx.fillStyle = color; ctx.textBaseline = "middle"; ctx.fillText(text, 12, cv.height / 2);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), depthTest: false, transparent: true }));
+    sp.scale.set(cv.width / 4 * 1.0, cv.height / 4 * 1.0, 1); sp.renderOrder = 10; return sp;
+  }
+  function buildField() {
+    fieldGroup.clear();
+    const fc = new THREE.Color(css("--field")), ac = new THREE.Color(css("--accent"));
+    for (const x of [-120, 0, 120]) for (const z of [AXIS - 110, AXIS + 110]) {
+      const a = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(x, -150, z), 300, fc, 18, 9);
+      a.line.material.transparent = true; a.line.material.opacity = 0.55; fieldGroup.add(a);
+    }
+    const b0 = label("B0  2.10 mT", css("--field")); b0.position.set(0, 160, AXIS + 140); fieldGroup.add(b0);
+    const axis = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(-150, 0, AXIS), 300, ac, 16, 8);
+    axis.line.material.depthTest = false; axis.cone.material.depthTest = false; axis.renderOrder = 9; fieldGroup.add(axis);
+    const b1 = label("coil axis · B1", css("--accent")); b1.position.set(190, 0, AXIS + 18); fieldGroup.add(b1);
+  }
+  buildField();
+
+  // ---------------------------------------------------------------- magnetization, in the frame rotating at f_tx
+  // physics basis (x' = coil axis, y', z' = along B0) -> scene (x, -z, y)
+  const toScene = m => new THREE.Vector3(m[0], m[2], -m[1]);
+  const spin = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, AXIS), 46, 0xffffff, 12, 8);
+  for (const mm of [spin.line.material, spin.cone.material]) { mm.depthTest = false; mm.transparent = true; }
+  spin.renderOrder = 12; scene.add(spin);
+  const NISO = 24;
+  const isoGeo = new THREE.BufferGeometry();
+  isoGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(NISO * 6), 3));
+  const isoLines = new THREE.LineSegments(isoGeo, new THREE.LineBasicMaterial({ transparent: true, opacity: 0.75, depthTest: false }));
+  isoLines.renderOrder = 11; scene.add(isoLines);
+  function spinColors() { spin.setColor(new THREE.Color(css("--ink"))); isoLines.material.color = new THREE.Color(css("--accent")); }
+  spinColors();
+
+  // ---------------------------------------------------------------- the pulse experiment
+  const $ = id => document.getElementById(id);
+  const pulseBtn = $("pulse");
+  const ctl = { tau: $("c-tau"), ftx: $("c-ftx"), b0: $("c-b0"), earth: $("c-earth") };
+  let sample = "tube", nAvg = 1, sim = null, isoIdx = [], spec = null, specRange = null, firing = null, seed = 1;
+  const fmt = (v, d = 0) => v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/,/g, " ");
+  const params = () => ({ sample, nAvg, seed, tau: +ctl.tau.value, fTx: +ctl.ftx.value, b0I: +ctl.b0.value, earthPar: +ctl.earth.value, earthPerp: 0 });
+  function outputs() {
+    $("o-tau").textContent = ctl.tau.value + " µs";
+    $("o-ftx").textContent = fmt(+ctl.ftx.value) + " Hz";
+    $("o-b0").textContent = (+ctl.b0.value).toFixed(3) + " A";
+    $("o-earth").textContent = (+ctl.earth.value > 0 ? "+" : "") + ctl.earth.value + " µT";
+  }
+  function runSim() {
+    outputs();
+    sim = NMR.setup(params());
+    const order = sim.vox.map((v, i) => [v.dw, i]).sort((a, b) => a[0] - b[0]);
+    isoIdx = Array.from({ length: NISO }, (_, j) => order[Math.round((j + 0.5) / NISO * (order.length - 1))][1]);
+    const c = sim.fLine - sim.fLo, half = Math.max(60, Math.min(1500, 10 * (sim.fwhm || 6)));
+    specRange = [c - half, c + half];
+    spec = NMR.spectrum(sim, specRange[0], specRange[1], 360);
+    readouts();
+  }
+  function settle() { firing = null; pulseBtn.disabled = false; setSpin(0); drawPlots(Infinity); clockRest(); }
+  let deb = 0;
+  function rerun() { outputs(); clearTimeout(deb); deb = setTimeout(() => { runSim(); settle(); }, 160); }
+  Object.values(ctl).forEach(el => el.addEventListener("input", rerun));
+  function segs(id, fn) {
+    const g = $(id);
+    g.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+      g.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); fn(b);
+    }));
+  }
+  segs("smp", b => { sample = b.dataset.s; rerun(); });
+  segs("avg", b => { nAvg = +b.dataset.n; rerun(); });
+
+  function readouts() {
+    const s = sim, off = s.fLine - s.fTx, snr = s.env[s.firstSample] / s.sigmaAdc;
+    const rows = [
+      ["Proton line", fmt(s.fLine) + " Hz"],
+      ["Line − f_tx", (off >= 0 ? "+" : "−") + fmt(Math.abs(off)) + " Hz"],
+      ["f_LO", fmt(s.fLo) + " Hz"],
+      ["B1 at the centre", (s.b1Centre * 1e6).toFixed(2) + " µT rotating"],
+      ["90° at the centre", fmt(s.t90Centre * 1e6) + " µs"],
+      ["Flip at the centre", s.flipCentre.toFixed(0) + "°"],
+      ["Water in the sample", (s.vol * 1e6).toFixed(0) + " mL"],
+      ["Its magnetization", s.mTot.toExponential(2) + " A·m²"],
+      ["Coil emf", (s.emfUntuned * 1e6).toFixed(2) + " µV pk"],
+      ["At the tank (× Q, tuning)", (s.tankSignal * 1e6).toFixed(1) + " µV pk"],
+      ["ADC peak, first sample", s.env[s.firstSample].toFixed(3) + " V"],
+      ["Noise at the ADC", (s.sigmaAdc * 1e3).toFixed(1) + " mV rms"],
+      ["SNR, first sample", snr.toFixed(1)],
+      ["T2* (envelope to 1/e)", s.t2s ? (s.t2s * 1e3).toFixed(0) + " ms" : "over 200 ms"],
+      ["Linewidth", (s.fwhm ?? "–") + " Hz FWHM"],
+      ["Mz at each scan", nAvg > 1 ? (s.mzSS * 100).toFixed(0) + " % after the first (TR 3 s, T1 2.5 s)" : "100 %"],
+    ];
+    $("ro").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd class="num">${v}</dd>`).join("");
+    const a = [], tg = s.tankGain / NMR.P.Q;
+    if (Math.abs(off) > 150) a.push(`The line is ${fmt(Math.abs(off))} Hz ${off > 0 ? "above" : "below"} f_tx, so the pulse is off resonance. <button class="mini" data-fix="ftx">Set f_tx to the line</button>`);
+    if (Math.abs(s.flipCentre - 90) > 8) a.push(`The pulse tips ${s.flipCentre.toFixed(0)}° at the centre. <button class="mini" data-fix="tau">Set ${fmt(s.t90Centre * 1e6)} µs for 90°</button>`);
+    if (tg < 0.8) a.push(`The line is ${fmt(Math.abs(s.fLine - NMR.P.fTank))} Hz from the tank's ${fmt(NMR.P.fTank)} Hz, which keeps ${Math.round(tg * 100)} % of its gain.`);
+    if (snr < 5) a.push(`Single-sample SNR ${snr.toFixed(1)}: average more scans or use the full-bore bottle; the spectrum still collects the whole record.`);
+    $("advice").innerHTML = a.length ? a.join(" ") : "On resonance, 90° at the centre, inside the tank: a clean FID.";
+    $("advice").querySelectorAll("[data-fix]").forEach(b => b.addEventListener("click", () => {
+      if (b.dataset.fix === "ftx") ctl.ftx.value = Math.round(sim.fLine); else ctl.tau.value = Math.round(sim.t90Centre * 1e6);
+      runSim(); settle();
+    }));
+  }
+
+  // ---------------------------------------------------------------- plots
+  function drawPlots(tPost) {
+    if (!sim) return;
+    const mono = "20px JetBrains Mono, Consolas, monospace";
+    { // receiver output, 0..8 ms after the pulse
+      const cv = $("p-rx"), ctx = cv.getContext("2d"), w = cv.width, h = cv.height;
+      const L = 8, R = 8, Tp = 10, B = 30, tMax = 8e-3, kMax = Math.round(tMax / sim.dt);
+      const ymax = Math.max(sim.env[sim.firstSample] * 1.3, 3.5 * sim.sigmaAdc);
+      const X = t => L + (w - L - R) * t / tMax, Y = v => Tp + (h - Tp - B) * (0.5 - v / (2 * ymax));
+      ctx.clearRect(0, 0, w, h); ctx.font = mono; ctx.lineWidth = 1.5;
+      ctx.fillStyle = css("--line"); ctx.fillRect(X(0), Tp, X(NMR.P.tDead) - X(0), h - Tp - B);
+      ctx.fillStyle = css("--muted"); ctx.fillText("blanked", X(0) + 8, Tp + 22);
+      ctx.strokeStyle = css("--line"); ctx.beginPath(); ctx.moveTo(L, Y(0)); ctx.lineTo(w - R, Y(0)); ctx.stroke();
+      for (let ms = 0; ms <= 8; ms++) {
+        ctx.beginPath(); ctx.moveTo(X(ms / 1e3), h - B); ctx.lineTo(X(ms / 1e3), h - B + 6); ctx.stroke();
+        if (ms % 2 === 0) ctx.fillText(ms + " ms", Math.min(Math.max(L, X(ms / 1e3) - 14), w - 70), h - 4);
+      }
+      ctx.fillText("±" + ymax.toFixed(2) + " V", w - 130, Tp + 22);
+      ctx.setLineDash([7, 6]); ctx.strokeStyle = css("--field");
+      for (const sg of [1, -1]) {
+        ctx.beginPath();
+        for (let k = sim.firstSample; k <= kMax; k++) { const x = X(k * sim.dt), y = Y(sg * sim.env[k]); k === sim.firstSample ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      const kEnd = Math.min(kMax, Math.floor(tPost / sim.dt));
+      if (kEnd >= 0) {
+        ctx.strokeStyle = css("--accent"); ctx.lineWidth = 2.2; ctx.beginPath();
+        for (let k = 0; k <= kEnd; k++) { const x = X(k * sim.dt), y = Y(sim.I[k]); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+        ctx.stroke();
+      }
+    }
+    { // spectrum
+      const cv = $("p-sp"), ctx = cv.getContext("2d"), w = cv.width, h = cv.height;
+      const L = 8, R = 8, Tp = 10, B = 30, f0 = specRange[0], f1 = specRange[1], done = tPost >= NMR.P.tAcq;
+      const X = f => L + (w - L - R) * (f - f0) / (f1 - f0);
+      ctx.clearRect(0, 0, w, h); ctx.font = mono; ctx.lineWidth = 1.5; ctx.strokeStyle = css("--line"); ctx.fillStyle = css("--muted");
+      ctx.beginPath(); ctx.moveTo(L, h - B); ctx.lineTo(w - R, h - B); ctx.stroke();
+      const c = sim.fLine - sim.fLo, half = (f1 - f0) / 2;
+      for (const d of [-half, -half / 2, 0, half / 2, half]) {
+        const x = X(c + d);
+        ctx.beginPath(); ctx.moveTo(x, h - B); ctx.lineTo(x, h - B + 6); ctx.stroke();
+        const t = d === 0 ? fmt(sim.fLine) + " Hz" : (d > 0 ? "+" : "−") + fmt(Math.abs(d)) + " Hz";
+        const tw = ctx.measureText(t).width;
+        ctx.fillText(t, Math.max(L, Math.min(x - tw / 2, w - R - tw)), h - 4);
+      }
+      const fTxIF = NMR.P.fIF;
+      if (fTxIF > f0 && fTxIF < f1) {
+        ctx.setLineDash([5, 5]); ctx.strokeStyle = css("--field");
+        ctx.beginPath(); ctx.moveTo(X(fTxIF), Tp); ctx.lineTo(X(fTxIF), h - B); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = css("--field"); ctx.fillText("f_tx", X(fTxIF) + 6, Tp + 20);
+      }
+      if (done) {
+        const mx = Math.max(...spec);
+        ctx.strokeStyle = css("--accent"); ctx.lineWidth = 2.2; ctx.beginPath();
+        spec.forEach((v, j) => { const x = X(f0 + (f1 - f0) * j / (spec.length - 1)), y = Tp + (h - Tp - B) * (1 - v / mx * 0.92); j ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+        ctx.stroke();
+        $("p-sp-l").textContent = `peak ${fmt(sim.fLine)} Hz · ${sim.fwhm} Hz FWHM`;
+      } else {
+        ctx.fillStyle = css("--muted"); ctx.fillText("recording… the spectrum needs the whole record", L + 6, Tp + 40);
+        $("p-sp-l").textContent = "";
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------- the 3D magnetization
+  const st = [];
+  function setSpin(t) {
+    if (!sim) return;
+    NMR.state(sim, t, st);
+    let ax = 0, ay = 0, az = 0;
+    for (const m of st) { ax += m[0]; ay += m[1]; az += m[2]; }
+    const n = st.length, net = toScene([ax / n, ay / n, az / n]), len = net.length();
+    spin.setDirection(len > 1e-6 ? net.clone().normalize() : new THREE.Vector3(0, 1, 0));
+    spin.setLength(Math.max(8, 46 * len), 12, 8);
+    const pos = isoGeo.attributes.position.array;
+    isoIdx.forEach((i, j) => { const v = toScene(st[i]).multiplyScalar(40); pos.set([0, 0, AXIS, v.x, v.y, AXIS + v.z], j * 6); });
+    isoGeo.attributes.position.needsUpdate = true;
+    const on = t > 0 && t < sim.tau;
+    if (meshes.winding) meshes.winding.material.emissive.setRGB(on ? 0.9 : 0, on ? 0.35 : 0, 0);
+  }
+  // time warp: the pulse and the dead time at 0.6 ms per second, the rest of the record at 30 ms per second
+  const realTime = td => td < 2.5 ? td * 0.6e-3 : 1.5e-3 + (td - 2.5) * 30e-3;
+  function clockRest() {
+    $("clock-t").textContent = "Thermal equilibrium: M along B0";
+    $("clock-s").textContent = "Frame rotating at f_tx. Fire a pulse to start the clock.";
+  }
+  pulseBtn.addEventListener("click", () => {
+    if (!sim) return;
+    seed++; runSim();
+    if (reduce) { setSpin(sim.tau + 0.05); drawPlots(Infinity); return; }
+    firing = performance.now() / 1000; pulseBtn.disabled = true; drawPlots(-1);
+  });
+
+  // ---------------------------------------------------------------- UI
+  const partsEl = document.getElementById("parts");
+  let variant = "box", explode = 0;
+  const visible = Object.fromEntries(PARTS.map(p => [p.id, true]));
+  let lastGrp = "";
+  for (const p of PARTS) {
+    if (p.variant === "shell" && p.id === "hood") continue;      // follows the housing switch
+    if (p.grp !== lastGrp) { const g = document.createElement("div"); g.className = "grp"; g.textContent = p.grp; partsEl.append(g); lastGrp = p.grp; }
+    if (p.variant) { if (p.id === "shell") continue; }
+    const l = document.createElement("label"); l.className = "tog";
+    const id = "p-" + p.id;
+    l.innerHTML = `<input type="checkbox" id="${id}" checked><span class="sw" data-mat="${p.mat}"></span><span>${p.id === "box" ? "Housing" : p.name}</span>`;
+    l.querySelector("input").addEventListener("change", e => {
+      const ids = p.id === "box" ? ["box", "shell", "hood"] : [p.id];
+      ids.forEach(i => visible[i] = e.target.checked); apply();
+    });
+    partsEl.append(l);
+  }
+  function swatches() { document.querySelectorAll(".sw").forEach(s => { const m = MATS[s.dataset.mat]; if (m) s.style.background = "#" + m.color.getHexString(); }); }
+  swatches();
+
+  const vb = document.getElementById("v-box"), vs = document.getElementById("v-shell");
+  function setVariant(v) { variant = v; vb.setAttribute("aria-pressed", v === "box"); vs.setAttribute("aria-pressed", v === "shell"); apply(); }
+  vb.onclick = () => setVariant("box"); vs.onclick = () => setVariant("shell");
+
+  const ex = document.getElementById("explode"), exv = document.getElementById("explode-v");
+  ex.addEventListener("input", () => { explode = ex.value / 100; exv.textContent = ex.value + " %"; apply(); });
+
+  const tField = document.getElementById("t-field"), tSpin = document.getElementById("t-spin"), tRot = document.getElementById("t-rot");
+  tField.onchange = () => fieldGroup.visible = tField.checked;
+  tSpin.onchange = () => { spin.visible = isoLines.visible = tSpin.checked; };
+  tRot.onchange = () => controls.autoRotate = tRot.checked && !reduce;
+
+  function apply() {
+    for (const p of PARTS) {
+      const m = meshes[p.id]; if (!m) continue;
+      let on = visible[p.id] && (!p.variant || p.variant === variant);
+      if (!p.ex) { on = on && explode < 0.25; }
+      m.visible = on;
+      if (p.ex) m.position.set(p.ex[0] * explode, p.ex[1] * explode, p.ex[2] * explode);
+    }
+  }
+
+  // camera presets, eased
+  const VIEWS = {
+    overview: { pos: [760, -980, 520], tgt: [210, 0, -70] },
+    probe:    { pos: [170, -260, 170], tgt: [0, 0, AXIS] },
+    housing:  { pos: [760, -330, 80],  tgt: [505, 0, -160] },
+    top:      { pos: [210, -2, 1350],  tgt: [210, 0, -80] },
+  };
+  let fly = null;
+  function go(name, target) {
+    const v = target || VIEWS[name];
+    fly = { t0: performance.now(), dur: reduce ? 1 : 900, p0: camera.position.clone(), q0: controls.target.clone(),
+            p1: new THREE.Vector3(...v.pos), q1: new THREE.Vector3(...v.tgt) };
+    document.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === name));
+  }
+  document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
+  camera.position.set(...VIEWS.overview.pos); controls.target.set(...VIEWS.overview.tgt);
+
+  // hover and click
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(); let lastPick = 0, hovered = null;
+  const hoverEl = document.getElementById("hover");
+  function pick(ev) {
+    const r = canvas.getBoundingClientRect();
+    ptr.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    const hit = ray.intersectObjects(Object.values(meshes).filter(m => m.visible), false)[0];
+    return hit ? hit.object : null;
+  }
+  canvas.addEventListener("pointermove", ev => {
+    const now = performance.now(); if (now - lastPick < 90) return; lastPick = now;
+    const m = pick(ev); if (m === hovered) return; hovered = m;
+    const p = m && m.userData.part;
+    hoverEl.innerHTML = p ? `<div class="n">${p.name}</div><div class="d">${p.d}</div>`
+                          : `<div class="n">Point at a part</div><div class="d">Drag to orbit, scroll or pinch to zoom, click a part to centre on it.</div>`;
+  });
+  let down = null;
+  canvas.addEventListener("pointerdown", ev => down = [ev.clientX, ev.clientY]);
+  canvas.addEventListener("pointerup", ev => {
+    if (!down || Math.hypot(ev.clientX - down[0], ev.clientY - down[1]) > 4) return;
+    const m = pick(ev); if (!m) return;
+    const c = new THREE.Vector3(); m.geometry.boundingBox.getCenter(c).add(m.position);
+    const off = camera.position.clone().sub(controls.target);
+    const rad = m.geometry.boundingSphere.radius;
+    off.setLength(Math.max(140, rad * 3.2));
+    go(null, { pos: c.clone().add(off).toArray(), tgt: c.toArray() });
+  });
+
+  // theme changes repaint the materials
+  function retheme() { const vis = {}; makeMats(); for (const id in meshes) meshes[id].material = MATS[meshes[id].userData.part.mat]; buildField(); fieldGroup.visible = tField.checked; spinColors(); swatches(); drawPlots(firing === null ? Infinity : -1); }
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
+  new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  function resize() {
+    const r = canvas.parentElement.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(canvas.parentElement); resize();
+
+  function frame() {
+    const now = performance.now();
+    if (fly) {
+      let k = Math.min(1, (now - fly.t0) / fly.dur); const e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.q0, fly.q1, e);
+      if (k >= 1) fly = null;
+    }
+    // the experiment clock
+    if (firing !== null && sim) {
+      const td = now / 1000 - firing, t = realTime(td), tPost = t - sim.tau;
+      setSpin(t);
+      drawPlots(tPost);
+      const phase = t < sim.tau ? "pulse on: B1 tips M" : tPost < NMR.P.tDead ? "receiver blanked, M dephasing" : "recording the FID";
+      let mx = 0, my = 0;
+      for (const m of st) { mx += m[0]; my += m[1]; }
+      $("clock-t").textContent = `t = ${(t * 1e3).toFixed(t < 0.01 ? 2 : 0)} ms · ${phase}`;
+      $("clock-s").textContent = `|M⊥| ${(Math.hypot(mx, my) / st.length).toFixed(2)} of M0 · ${td < 2.5 ? "0.6 ms" : "30 ms"} per second · frame rotating at f_tx`;
+      if (tPost >= NMR.P.tAcq) { firing = null; pulseBtn.disabled = false; drawPlots(Infinity); $("clock-t").textContent = "Record complete: 200 ms"; }
+    }
+    controls.update(); renderer.render(scene, camera); requestAnimationFrame(frame);
+  }
+
+  runSim(); settle();
+  Promise.all(PARTS.map(load)).then(() => { document.getElementById("loading").hidden = true; apply(); })
+    .catch(e => { document.getElementById("loading").textContent = "Could not load the models: " + e.message; });
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
