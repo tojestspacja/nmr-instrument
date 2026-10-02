@@ -4,7 +4,7 @@
   "title": "Benchtop NMR instrument definition",
   "type": "object",
   "required": ["schema_version", "instrument", "constants", "nucleus", "sample", "b0", "rf_coil", "tx", "dds", "lo",
-               "receiver", "acquisition", "timing", "limits", "mechanical"],
+               "receiver", "acquisition", "timing", "limits", "mechanical", "pins"],
   "additionalProperties": false,
   "$defs": {
     "unit": {
@@ -51,6 +51,7 @@
     "acquisition": {"$ref": "#/$defs/group"},
     "timing": {"$ref": "#/$defs/group"},
     "limits": {"$ref": "#/$defs/group"},
-    "mechanical": {"$ref": "#/$defs/group"}
+    "mechanical": {"$ref": "#/$defs/group"},
+    "pins": {"$ref": "#/$defs/group"}
   }
 }

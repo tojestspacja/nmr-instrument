@@ -1,10 +1,24 @@
 {
  "meta": {
-  "config_sha256": "b759cbb0175ba15931b10f222b5cff59a8ffad0b9df6c0ba4a1df6c53fc36431",
+  "config_sha256": "5469d421b230e04050b1857e02686054efc885e866bb7cbee033ac091047e0a4",
   "generator": "tools/gen_config.py",
   "source": "design/instrument.yaml"
  },
  "params": {
+  "ACQUISITION_ADC_FRAME_BITS": {
+   "kind": "design",
+   "path": "acquisition.adc_frame_bits",
+   "source": "one ADS8688 conversion per I2S frame: CS low for the 32-bit left slot, high for the right slot",
+   "unit": "1",
+   "value": 64
+  },
+  "ACQUISITION_ADC_SCLK_HZ": {
+   "kind": "design",
+   "path": "acquisition.adc_sclk",
+   "source": "I2S bit clock = 160 MHz PLL / 10 (integer: no fractional-divider jitter; the S3 has no APLL)",
+   "unit": "Hz",
+   "value": 16000000.0
+  },
   "ACQUISITION_AVERAGES": {
    "kind": "target",
    "path": "acquisition.averages",
@@ -24,7 +38,7 @@
    "path": "acquisition.decimation",
    "source": "to 25 kS/s complex; must keep rate/decim > 2|IF|",
    "unit": "1",
-   "value": 4
+   "value": 5
   },
   "ACQUISITION_DURATION_S": {
    "kind": "target",
@@ -33,12 +47,19 @@
    "unit": "s",
    "value": 0.5
   },
-  "ACQUISITION_RAW_RATE_HZ": {
-   "kind": "target",
-   "path": "acquisition.raw_rate",
-   "source": "per channel; legacy rate_hz; 2 channels = 200 kS/s aggregate",
+  "ACQUISITION_I2S_SOURCE_CLOCK_HZ": {
+   "kind": "datasheet",
+   "path": "acquisition.i2s_source_clock",
+   "source": "ESP32-S3 PLL_F160M I2S clock source",
    "unit": "Hz",
-   "value": 100000.0
+   "value": 160000000.0
+  },
+  "ACQUISITION_RAW_RATE_HZ": {
+   "kind": "design",
+   "path": "acquisition.raw_rate",
+   "source": "per channel: I2S SCLK / frame_bits / 2 channels (ADR-0009); legacy 100 kS/s was not an integer division of the S3's 160 MHz",
+   "unit": "Hz",
+   "value": 125000.0
   },
   "ACQUISITION_REPETITION_TIME_S": {
    "kind": "target",
@@ -369,6 +390,132 @@
    "unit": "1",
    "value": 0.5
   },
+  "PINS_ADC_CS": {
+   "kind": "design",
+   "path": "pins.adc_cs",
+   "source": "pins.h:27 (ADS8688 /CS; I2S WS during acquisition, ADR-0009)",
+   "unit": "1",
+   "value": 10
+  },
+  "PINS_CAPTURE_SYNC": {
+   "kind": "design",
+   "path": "pins.capture_sync",
+   "source": "firmware-internal: one GPIO edge resets both MCPWM capture timers to a common timebase (no wiring)",
+   "unit": "1",
+   "value": 15
+  },
+  "PINS_CAP_DDS_SIGN": {
+   "kind": "design",
+   "path": "pins.cap_dds_sign",
+   "source": "ECO-1: AD9834 SIGN BIT OUT -> GPIO6 (unused on v0.7)",
+   "unit": "1",
+   "value": 6
+  },
+  "PINS_CAP_LO_I": {
+   "kind": "design",
+   "path": "pins.cap_lo_i",
+   "source": "ECO-1: Johnson counter LO_I -> GPIO7 (unused on v0.7)",
+   "unit": "1",
+   "value": 7
+  },
+  "PINS_DAC_CS": {
+   "kind": "design",
+   "path": "pins.dac_cs",
+   "source": "pins.h:35",
+   "unit": "1",
+   "value": 5
+  },
+  "PINS_DDS_FSYNC": {
+   "kind": "design",
+   "path": "pins.dds_fsync",
+   "source": "pins.h:49 (AD9834 FSYNC)",
+   "unit": "1",
+   "value": 41
+  },
+  "PINS_DDS_PSEL": {
+   "kind": "design",
+   "path": "pins.dds_psel",
+   "source": "pins.h:50 (AD9834 PSELECT; used with PIN/SW = 1, ADR-0005)",
+   "unit": "1",
+   "value": 42
+  },
+  "PINS_FET_GATE": {
+   "kind": "design",
+   "path": "pins.fet_gate",
+   "source": "pins.h:61 (polarizer)",
+   "unit": "1",
+   "value": 47
+  },
+  "PINS_HB_IN1": {
+   "kind": "design",
+   "path": "pins.hb_in1",
+   "source": "pins.h:59 (DRV8871)",
+   "unit": "1",
+   "value": 9
+  },
+  "PINS_HB_IN2": {
+   "kind": "design",
+   "path": "pins.hb_in2",
+   "source": "pins.h:60",
+   "unit": "1",
+   "value": 14
+  },
+  "PINS_I2C_SCL": {
+   "kind": "design",
+   "path": "pins.i2c_scl",
+   "source": "pins.h:18",
+   "unit": "1",
+   "value": 2
+  },
+  "PINS_I2C_SDA": {
+   "kind": "design",
+   "path": "pins.i2c_sda",
+   "source": "pins.h:17",
+   "unit": "1",
+   "value": 1
+  },
+  "PINS_RX_BLANK": {
+   "kind": "design",
+   "path": "pins.rx_blank",
+   "source": "pins.h:56 (DG419; 0 = blanked, 1 = receive)",
+   "unit": "1",
+   "value": 8
+  },
+  "PINS_SPI_MISO": {
+   "kind": "design",
+   "path": "pins.spi_miso",
+   "source": "pins.h:16",
+   "unit": "1",
+   "value": 13
+  },
+  "PINS_SPI_MOSI": {
+   "kind": "design",
+   "path": "pins.spi_mosi",
+   "source": "pins.h:15",
+   "unit": "1",
+   "value": 11
+  },
+  "PINS_SPI_SCLK": {
+   "kind": "design",
+   "path": "pins.spi_sclk",
+   "source": "pins.h:14 (ADS8688 / AD9834 / DAC8563 shared bus)",
+   "unit": "1",
+   "value": 12
+  },
+  "PINS_TRIG_IO": {
+   "kind": "design",
+   "path": "pins.trig_io",
+   "source": "pins.h:45",
+   "unit": "1",
+   "value": 38
+  },
+  "PINS_TX_EN": {
+   "kind": "design",
+   "path": "pins.tx_en",
+   "source": "pins.h:51 (OPA564 E/S; 1 = transmit)",
+   "unit": "1",
+   "value": 40
+  },
   "RECEIVER_ADC_BITS": {
    "kind": "datasheet",
    "path": "receiver.adc_bits",
@@ -403,6 +550,13 @@
    "source": "ADS8688 500 kSPS total",
    "unit": "Hz",
    "value": 500000.0
+  },
+  "RECEIVER_ADC_MAX_SCLK_HZ": {
+   "kind": "datasheet",
+   "path": "receiver.adc_max_sclk",
+   "source": "ADS8688 maximum SCLK",
+   "unit": "Hz",
+   "value": 17000000.0
   },
   "RECEIVER_DEAD_TIME_S": {
    "kind": "target",

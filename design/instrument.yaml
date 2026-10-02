@@ -109,10 +109,14 @@ receiver:
   adc_channel_i:    {value: 3, unit: "1", kind: design, source: "COND_OUT1 -> AIN_3P (netlist; pins.h:32)"}
   adc_channel_q:    {value: 2, unit: "1", kind: design, source: "COND_OUT2 -> AIN_2P"}
   adc_max_aggregate_rate: {value: 500.0e3, unit: Hz, kind: datasheet, source: "ADS8688 500 kSPS total"}
+  adc_max_sclk:     {value: 17.0e6, unit: Hz, kind: datasheet, source: "ADS8688 maximum SCLK"}
 
 acquisition:
-  raw_rate:         {value: 100.0e3, unit: Hz, kind: target, source: "per channel; legacy rate_hz; 2 channels = 200 kS/s aggregate"}
-  decimation:       {value: 4, unit: "1", kind: design, source: "to 25 kS/s complex; must keep rate/decim > 2|IF|"}
+  raw_rate:         {value: 125.0e3, unit: Hz, kind: design, source: "per channel: I2S SCLK / frame_bits / 2 channels (ADR-0009); legacy 100 kS/s was not an integer division of the S3's 160 MHz"}
+  decimation:       {value: 5, unit: "1", kind: design, source: "to 25 kS/s complex; must keep rate/decim > 2|IF|"}
+  adc_sclk:         {value: 16.0e6, unit: Hz, kind: design, source: "I2S bit clock = 160 MHz PLL / 10 (integer: no fractional-divider jitter; the S3 has no APLL)"}
+  adc_frame_bits:   {value: 64, unit: "1", kind: design, source: "one ADS8688 conversion per I2S frame: CS low for the 32-bit left slot, high for the right slot"}
+  i2s_source_clock: {value: 160.0e6, unit: Hz, kind: datasheet, source: "ESP32-S3 PLL_F160M I2S clock source"}
   start_delay:      {value: 1.2e-3, unit: s, kind: target, source: "end of pulse to first sample (dead time + margin)"}
   duration:         {value: 0.5, unit: s, kind: target, source: "~6 T2* of the field-limited line; legacy 2 s mostly noise (docs/first-fid.md)"}
   repetition_time:  {value: 3.0, unit: s, kind: target, source: ">= T1 for water; shorter with CuSO4 doping"}
@@ -137,3 +141,25 @@ mechanical:
   board_step_main:  "hardware/release/class-board.step"
   board_step_panel: "hardware/release/front-panel.step"
   board_gap:        {value: 0.011, unit: m, kind: design, source: "8.5 mm socket on 2.5 mm insulator (housing brief)"}
+
+pins:
+  # ESP32-S3 GPIO numbers. Board pins: class-board-2026 firmware/include/pins.h v0.7 (the electronics authority).
+  spi_sclk:   {value: 12, unit: "1", kind: design, source: "pins.h:14 (ADS8688 / AD9834 / DAC8563 shared bus)"}
+  spi_mosi:   {value: 11, unit: "1", kind: design, source: "pins.h:15"}
+  spi_miso:   {value: 13, unit: "1", kind: design, source: "pins.h:16"}
+  adc_cs:     {value: 10, unit: "1", kind: design, source: "pins.h:27 (ADS8688 /CS; I2S WS during acquisition, ADR-0009)"}
+  dac_cs:     {value: 5, unit: "1", kind: design, source: "pins.h:35"}
+  dds_fsync:  {value: 41, unit: "1", kind: design, source: "pins.h:49 (AD9834 FSYNC)"}
+  dds_psel:   {value: 42, unit: "1", kind: design, source: "pins.h:50 (AD9834 PSELECT; used with PIN/SW = 1, ADR-0005)"}
+  tx_en:      {value: 40, unit: "1", kind: design, source: "pins.h:51 (OPA564 E/S; 1 = transmit)"}
+  rx_blank:   {value: 8, unit: "1", kind: design, source: "pins.h:56 (DG419; 0 = blanked, 1 = receive)"}
+  hb_in1:     {value: 9, unit: "1", kind: design, source: "pins.h:59 (DRV8871)"}
+  hb_in2:     {value: 14, unit: "1", kind: design, source: "pins.h:60"}
+  fet_gate:   {value: 47, unit: "1", kind: design, source: "pins.h:61 (polarizer)"}
+  i2c_sda:    {value: 1, unit: "1", kind: design, source: "pins.h:17"}
+  i2c_scl:    {value: 2, unit: "1", kind: design, source: "pins.h:18"}
+  trig_io:    {value: 38, unit: "1", kind: design, source: "pins.h:45"}
+  # PROPOSED (ECO-1, bodge wires; not on the v0.7 board): beat-phase reference inputs for ADR-0006
+  cap_dds_sign: {value: 6, unit: "1", kind: design, source: "ECO-1: AD9834 SIGN BIT OUT -> GPIO6 (unused on v0.7)"}
+  cap_lo_i:     {value: 7, unit: "1", kind: design, source: "ECO-1: Johnson counter LO_I -> GPIO7 (unused on v0.7)"}
+  capture_sync: {value: 15, unit: "1", kind: design, source: "firmware-internal: one GPIO edge resets both MCPWM capture timers to a common timebase (no wiring)"}

@@ -1,0 +1,1 @@
+idf_component_register(SRCS engine.cpp INCLUDE_DIRS include REQUIRES pulse esp_driver_rmt esp_driver_mcpwm esp_driver_gpio)

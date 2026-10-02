@@ -141,6 +141,13 @@ def check(q: dict, d: dict) -> list[str]:
         errs.append("VEXT max above OPA564 absolute maximum")
     if v["tx.frequency"] > v["dds.max_output_frequency"]:
         errs.append("TX frequency above the DDS limit")
+    if abs(v["acquisition.adc_sclk"] - 2 * v["acquisition.raw_rate"] * v["acquisition.adc_frame_bits"]) > 1e-6:
+        errs.append("ADC: SCLK must equal 2 channels x raw_rate x frame_bits (one conversion per I2S frame)")
+    div = v["acquisition.i2s_source_clock"] / v["acquisition.adc_sclk"]
+    if abs(div - round(div)) > 1e-9:
+        errs.append("ADC: SCLK must be an integer division of the I2S source clock (no fractional-divider jitter)")
+    if v["acquisition.adc_sclk"] > v["receiver.adc_max_sclk"]:
+        errs.append("ADC: SCLK above the ADS8688 maximum")
     if int(v["acquisition.averages"]) % 4:
         errs.append("averages must be a multiple of 4 (CYCLOPS)")
     return errs

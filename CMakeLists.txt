@@ -11,7 +11,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # pulse-program IR + compiler: no dependencies, also compiled into the firmware
-add_library(pulse STATIC pulse/src/program.cpp pulse/src/compiler.cpp)
+add_library(pulse STATIC pulse/src/program.cpp pulse/src/compiler.cpp pulse/src/backend.cpp)
 target_include_directories(pulse PUBLIC pulse/include)
 
 # physics + DSP core
@@ -28,7 +28,7 @@ if(MINGW)
 endif()
 
 enable_testing()
-foreach(t test_bloch test_field test_dsp test_pulse test_sim)
+foreach(t test_bloch test_field test_dsp test_pulse test_sim test_backend)
   add_executable(${t} physics/tests/${t}.cpp)
   target_link_libraries(${t} PRIVATE nmrcore)
   target_include_directories(${t} PRIVATE physics/tests)
