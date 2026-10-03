@@ -364,6 +364,21 @@ module boards() {
     color("steelblue") pbox(dev_x[0], dev_x[1], dev_py[0], dev_py[1], z_dev_low, z_dev_low + dev_parts + pcb);
 }
 
+// ---------------------------------------------------------------- Phase 5: bench feet + cable strain relief
+// The enclosure (shell + bottom plate + cover standoffs + connector cut-outs) was already complete; these are the two
+// mechanical gaps (bench stability, and keeping a cable pull off the terminals/SMA). See docs/design-closure.md.
+foot_d = 14;  foot_h = 5;
+module housing_feet() color("dimgray")
+    for (x = [out_x[0] + 14, out_x[1] - 14], y = [out_py[0] + 14, out_py[1] - 14])
+        translate([x, y, z_rim - plate_t - foot_h]) cylinder(d = foot_d, h = foot_h + 0.2, $fn = 24);
+// a clamp bar just outside the front wall (TX pair + screw terminals edge): cables zip-tie to it, so a tug on the
+// cable reaches the bar, not J32 or the OPA564 output. Zip-tie slots along it.
+module strain_relief() color("dimgray")
+    translate([60, out_py[0] - foot_d, z_rim - plate_t]) difference() {
+        cube([80, 7, 16]);
+        for (sx = [12, 40, 68]) translate([sx, -1, 8]) cube([3.5, 9, 5]);
+    }
+
 // ---------------------------------------------------------------- output
 // assembly: the boards solid, the printed parts see-through (0 = invisible, 1 = solid)
 see_through = 0.5;
@@ -372,6 +387,8 @@ module housing_assembly() {
     color("ivory", see_through) shell();
     color("orange", min(1, 2 * see_through)) hood();
     color("lightblue", see_through) translate([0, 0, z_rim - plate_t]) linear_extrude(plate_t) plate2d();
+    housing_feet();
+    strain_relief();
 }
 if (part == "assembly") housing_assembly();
 

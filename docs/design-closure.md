@@ -97,6 +97,21 @@ z up). Exposed as render components (`exp-probe.scad` → sim meshes) and on the
 confirms the baseplate spans both rails + the probe. Still open for Phase 6: a full `instrument()` interference pass and
 the electronics tray's mount to this baseplate (Phase 5).
 
+### Phase 5 — electronics integration (2026-10-03): mostly already done
+
+Finding: `housing.scad` was **already a complete electronics assembly** with real board dimensions — outline 180×115 mm
+(the KiCad frame), real M3 mount holes `[[4,19],[176,19],[4,111],[176,111]]`, cover standoffs, a laser-cut bottom plate
+on nut-pocket bosses, connector cut-outs (16 SMA, OLED hood, screw terminals with cover windows + front notches, rear
+openings) and service access (removable plate). It has a defined position in `instrument.scad` (`housing_gap` = 450 mm
+from the sample, deliberately far for RF/magnet isolation). So §10's requirements were met and the "naked/floating PCB"
+concern does not apply. The two genuine gaps (§11, §12D) are now added and verified (direct OpenSCAD render + z-check):
+- **bench feet** (`housing_feet`): four feet under the bottom plate (z −40.7 → −45.7, i.e. 5 mm proud of the plate);
+- **cable strain relief** (`strain_relief`): a clamp bar outside the front/terminal wall with zip-tie slots, so a tug on
+  the TX pair reaches the bar, not J32 / the OPA564 output.
+
+The electronics stay a separate unit on the bench (not rigidly joined to the magnet baseplate — the 450 mm gap is
+intentional); the common reference is the documented layout in `instrument.scad`.
+
 **Doable now in CAD/analysis (with the `tools/nmr-render` oracle for visual checks):**
 
 - **Phase 3 — Probe mechanical closure.** Make sample positioning a real datum chain: sleeve flange + tube cap as the
