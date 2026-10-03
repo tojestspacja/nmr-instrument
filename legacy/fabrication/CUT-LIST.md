@@ -50,8 +50,8 @@ cut-spectrum.scad - do not edit; change the .scad files (machine and sheet setti
 
 ## Bought, not cut
 
-- Former: acrylic or PVC tube 40 x 2 mm, 125 mm long (cut by saw, not laser). Sleeve: acrylic tube 35 x 2 mm, 125 mm.
-- Coil: AWG26 enamelled wire, 60 m (51 m needed). B0 pair: AWG16, 2 x 392 m (784 m, about 9.2 kg).
+- Former: acrylic or PVC tube 40 x 2 mm, ~95 mm long (85 mm former, cut by saw not laser). Sleeve: acrylic tube 35 x 2 mm, ~95 mm.
+- Coil: AWG26 enamelled wire, 45 m (34 m needed for the 266-turn / 60 mm winding). B0 pair: AWG16, 2 x 392 m (784 m, about 9.2 kg).
 - Nylon: M4 or M6 threaded rod + nuts for the B0 stacks (8 per coil, M6 for the water-jet rings), M3 screws for the cradle.
 - Brass 1/4"-20 nut (tripod). Housing: M3x12 x 4 (top), M3x10 + M3 nut x 8 (plate). Solvent cement for acrylic.
 
@@ -59,8 +59,10 @@ cut-spectrum.scad - do not edit; change the .scad files (machine and sheet setti
 
 **cut-probe**
 
-- cheeks: 50 mm, bore 40.2, lead holes at r 21.8 (2.6 mm of acrylic outside them); glue 2 + 2 on the tube at 0..6 and 109..115 mm
-- cradle: base [157, 70.4] x 6, saddles 66.4 x 33.2 mm, coil axis 39.2 mm above its underside
+- frame: baseplate 261 x 392 x 15 mm; rails at x +-100 (54.4785 mm tall, ring seats 34 mm up); baseplate carries both rails + the probe: yes
+- assembly clearances: probe (cheek r 23 mm) in ring aperture r 172 -> clear; ring bottom z -183 clears baseplate top -193 by 10 mm; sample inserts/removes along x through the ring aperture (rings at y = +-100 mm, none on the x axis); probe lifts out +z through the same aperture
+- cheeks: 50 mm, bore 40.2, lead holes at r 21.8 (2.6 mm of acrylic outside them); glue 2 + 2 on the tube at 0..6 and 69..75 mm
+- cradle: base [117, 70.4] x 6, saddles 66.4 x 33.2 mm, coil axis 39.2 mm above its underside
 - B0 coil: 5 spacers + 2 flanges = 42 mm stack, channel 30 x 27 mm for 28 x 27; rings r 171.5..216.5 mm, 1 piece (water-jet), segment fits the laser bed: true
 - B0 rails: 362 x 54.4785 mm, notches 200 mm apart (Helmholtz spacing = R), rings 10 mm off the table
 

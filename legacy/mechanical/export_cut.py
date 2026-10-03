@@ -121,8 +121,8 @@ def write_list(rows, checks, b0):
         files = "<br>".join(f"`{Path(m).name}`" for m in made)
         md.append(f"| {scad} | {name}{' (' + note + ')' if note else ''} | {qty} | {material} | {machine} | {files} |")
     md += ["", "## Bought, not cut", "",
-           "- Former: acrylic or PVC tube 40 x 2 mm, 125 mm long (cut by saw, not laser). Sleeve: acrylic tube 35 x 2 mm, 125 mm.",
-           "- Coil: AWG26 enamelled wire, 60 m (51 m needed). B0 pair: AWG16, 2 x 392 m (784 m, about 9.2 kg).",
+           "- Former: acrylic or PVC tube 40 x 2 mm, ~95 mm long (85 mm former, cut by saw not laser). Sleeve: acrylic tube 35 x 2 mm, ~95 mm.",
+           "- Coil: AWG26 enamelled wire, 45 m (34 m needed for the 266-turn / 60 mm winding). B0 pair: AWG16, 2 x 392 m (784 m, about 9.2 kg).",
            "- Nylon: M4 or M6 threaded rod + nuts for the B0 stacks (8 per coil, M6 for the water-jet rings), M3 screws for the cradle.",
            "- Brass 1/4\"-20 nut (tripod). Housing: M3x12 x 4 (top), M3x10 + M3 nut x 8 (plate). Solvent cement for acrylic.",
            "", "## Checks (from the .scad files)", ""]

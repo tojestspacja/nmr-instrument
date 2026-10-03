@@ -30,7 +30,7 @@ module cheek2d(lead) as_cut() difference() {
 // on the band between the tube and the rim, top and bottom (the lead holes are at 0 and 20 deg)
 module cheek_text(lead) as_engrave() for (a = [0, 180])
     rotate(a) translate([0, (tube_od / 2 + l_cheek / 2) / 2])
-        text(a == 0 ? (lead ? "LEADS" : "SAMPLE") : "400T AWG26", size = 1.8, font = label_font,
+        text(a == 0 ? (lead ? "LEADS" : "SAMPLE") : str(turns, "T AWG26"), size = 1.8, font = label_font,
              halign = "center", valign = "center");
 module sleeve_flange2d() as_cut() difference() {
     circle(d = l_cheek, $fn = 120);
