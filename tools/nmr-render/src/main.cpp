@@ -235,6 +235,7 @@ int main(int argc, char** argv) {
     else if (preset == "physics") { fields = true; wiring = false; pcb = false; grid = false; azim = 32; elev = 15; vfov = 12; persp = false; }
     else if (preset == "probe") { fields = false; wiring = false; pcb = false; grid = false; azim = -60; elev = 16; vfov = 16; target = {0, 0, 33}; fit = 0.75; }
     else if (preset == "exploded") { fields = false; wiring = true; pcb = true; grid = false; exploded = true; explodeAmt = 1.0; azim = -58; elev = 18; vfov = 16; }
+    else if (preset == "assembly") { fields = false; wiring = true; pcb = true; grid = false; azim = -54; elev = 24; vfov = 20; }   // the whole bench
     if (projection == "ortho") persp = false; else if (projection == "perspective") persp = true;
     if (az < 1e8) azim = az; if (el < 1e8) elev = el; if (fov < 1e8) vfov = fov;
     if (showFields >= 0) fields = showFields; if (showWiring >= 0) wiring = showWiring;

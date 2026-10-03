@@ -151,6 +151,12 @@ module magnet_frame() { for (sx = [-1, 1]) color("gainsboro") b0_rail3d(sx); for
 echo(str("frame: baseplate ", plate_x[1] - plate_x[0], " x ", round(2 * plate_y), " x ", plate_t, " mm; rails at x +-", rail_x,
          " (", rail_h, " mm tall, ring seats ", round(rail_v), " mm up); baseplate carries both rails + the probe: ",
          plate_x[0] <= -rail_x - t6 && plate_x[1] >= base_x[1] && plate_y >= rail_l / 2 ? "yes" : "NO"));
+// Phase 6 interference / serviceability (probe frame: axis_z above the cradle, z_table the table/baseplate top)
+echo(str("assembly clearances: probe (cheek r ", cheek_d / 2, " mm) in ring aperture r ", round(r_w - band),
+         " -> ", cheek_d / 2 < r_w - band ? "clear" : "COLLISION",
+         "; ring bottom z ", round(axis_z - r_fl), " clears baseplate top ", round(z_table), " by ",
+         round(axis_z - r_fl - z_table), " mm; sample inserts/removes along x through the ring aperture (rings at y = +-",
+         hh_R / 2, " mm, none on the x axis); probe lifts out +z through the same aperture"));
 
 // ---------------------------------------------------------------- pieces
 // [name, material, machine, qty]

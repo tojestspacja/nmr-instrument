@@ -112,6 +112,22 @@ concern does not apply. The two genuine gaps (§11, §12D) are now added and ver
 The electronics stay a separate unit on the bench (not rigidly joined to the magnet baseplate — the 450 mm gap is
 intentional); the common reference is the documented layout in `instrument.scad`.
 
+### Phase 6 — full instrument assembly + interference/serviceability pass (2026-10-03): clean
+
+The whole bench is now one assembly (baseplate → magnet rails/braces cradling both rings → probe on its tripod at the
+magnetic centre → cables → electronics), rendered via the `tools/nmr-render` **`assembly`** preset and inspected. The
+interference/serviceability screen (AABB over the assembled scene + model self-checks + `instrument.scad` echoes) is
+clean:
+- probe radial envelope 17–23 mm sits well inside the ring aperture (171 mm) — **no collision**;
+- rings clear the baseplate by 10 mm; the tripod is seated on the plate; cables stay above the plate (no tunnelling);
+- electronics 236 mm clear of the magnet (and nearest steel 492 mm ≥ 300 mm; rings clear the housing front, 217 vs 450);
+- **serviceability:** the sample inserts/removes along x **through the ring aperture** (rings at y = ±100, nothing on
+  the x axis) without disassembling the magnet; the probe lifts out +z through the same aperture; the housing bottom
+  plate is removable.
+
+A clearance self-check echo in `cut-probe.scad` re-verifies this on any geometry change. Reference render:
+`tools/nmr-render/artifacts/render-reference/assembly.png`.
+
 **Doable now in CAD/analysis (with the `tools/nmr-render` oracle for visual checks):**
 
 - **Phase 3 — Probe mechanical closure.** Make sample positioning a real datum chain: sleeve flange + tube cap as the
