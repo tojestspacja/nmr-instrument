@@ -60,6 +60,22 @@ the measured deficiency is **length**, not orientation. The fix is a **V1 refine
 sample ∥ B0 would force B1 ∥ B0 (invalid) and require a transverse (saddle/cos-θ) coil — a separate study only, **not
 justified by this data**. V1 stays the baseline.
 
+### Phase 3 implemented — 60 mm coil adopted (2026-10-03)
+
+Done as a coupled change through the single source of truth, verified green:
+- `design/instrument.yaml`: `rf_coil` → length 0.060 m, 266 turns (2×133), B1/I **4.611195e-3 T/A** (Biot–Savart solver),
+  L ≈ 1.87 mH, R ≈ 4.46 Ω (estimates, to be measured); `gen_config` recomputed the chain and **t90 → 369 µs**,
+  coil current 6.9 mA, and passed all consistency checks. Config sha updated.
+- **Validation frozen at 100 mm:** added `legacy_probe()` + ABI `nmr_legacy_fields_at`; `test_field` and `test_golden`
+  now cross-check the solver against the Mathematica golden maps at the *frozen 100 mm* reference, independent of the
+  design coil. So the solver stays independently validated; the 60 mm field is computed by that validated solver.
+- Mechanical: `probe.scad` → 60 mm/266-turn winding (former 85 mm; the 50 mL tube overhangs 16 mm, datum = cap at the
+  sleeve flange; the sample covers the winding z 6–66 mm). Fabrication STLs + sim meshes regenerated; probe render
+  inspected (`tools/nmr-render` probe preset).
+- Tests: `ctest` 7/7, `pytest` 16/16 (golden on frozen 100 mm; parity on 60 mm config), OpenSCAD renders manifold.
+- Still to recalibrate on the bench (§16): t90 by nutation, and L/R/Q with the real matching network — the config
+  values are the best estimates, flagged accordingly.
+
 ### Shim decision (§5): defer to measurement; expect Level 0–1
 
 At a 60 mm active region the Helmholtz pair alone gives ~4 Hz RMS, comparable to the intrinsic ~2 Hz water line. That is

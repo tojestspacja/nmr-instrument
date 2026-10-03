@@ -1,6 +1,6 @@
 {
  "meta": {
-  "config_sha256": "5469d421b230e04050b1857e02686054efc885e866bb7cbee033ac091047e0a4",
+  "config_sha256": "d32b6d59481eb9d9b66f76eb6caa91f2da161ac6602dfeff143eed3f5486116a",
   "generator": "tools/gen_config.py",
   "source": "design/instrument.yaml"
  },
@@ -610,16 +610,16 @@
   "RF_COIL_B1_PER_AMP_CENTRE_T_PER_A": {
    "kind": "calculated",
    "path": "rf_coil.b1_per_amp_centre",
-   "source": "Biot-Savart, two-layer winding (legacy fieldmap-tube.json centre.b1; re-derived in physics tests)",
+   "source": "Biot-Savart, 60 mm 266-turn two-layer winding (re-derived in physics tests; 100 mm was 5.029625e-3)",
    "unit": "T/A",
-   "value": 0.005029625
+   "value": 0.004611195
   },
   "RF_COIL_INDUCTANCE_H": {
    "kind": "estimate",
    "path": "rf_coil.inductance",
-   "source": "workbook blocks/a.md; to be measured (validation/bench)",
+   "source": "scaled from the 100 mm 2.53 mH by N^2/l; to be measured (validation/bench)",
    "unit": "H",
-   "value": 0.00253
+   "value": 0.00187
   },
   "RF_COIL_LAYER1_RADIUS_M": {
    "kind": "design",
@@ -638,16 +638,16 @@
   "RF_COIL_LAYERS": {
    "kind": "design",
    "path": "rf_coil.layers",
-   "source": "222 + 178 turns",
+   "source": "133 + 133 turns",
    "unit": "1",
    "value": 2
   },
   "RF_COIL_LENGTH_M": {
    "kind": "design",
    "path": "rf_coil.length",
-   "source": "winding length",
+   "source": "winding length = B0-homogeneous active region (design-closure.md)",
    "unit": "m",
-   "value": 0.1
+   "value": 0.06
   },
   "RF_COIL_QUALITY_FACTOR": {
    "kind": "estimate",
@@ -661,14 +661,14 @@
    "path": "rf_coil.reactance",
    "source": "2 pi f_tx L",
    "unit": "ohm",
-   "value": 1421.1434191484932
+   "value": 1050.4103532836689
   },
   "RF_COIL_RESISTANCE_OHM": {
    "kind": "estimate",
    "path": "rf_coil.resistance",
-   "source": "workbook; sheet_nmr_rx.py:253",
+   "source": "scaled from 6.7 ohm by turns (266/400); to be measured",
    "unit": "ohm",
-   "value": 6.7
+   "value": 4.46
   },
   "RF_COIL_RINGDOWN_TIME_CONSTANT_S": {
    "kind": "calculated",
@@ -682,21 +682,21 @@
    "path": "rf_coil.tank_capacitance",
    "source": "1 / ((2 pi f_tx)^2 L)",
    "unit": "F",
-   "value": 1.2526931554903926e-09
+   "value": 1.6948201515458254e-09
   },
   "RF_COIL_TANK_PARALLEL_RESISTANCE_OHM": {
    "kind": "calculated",
    "path": "rf_coil.tank_parallel_resistance",
    "source": "Q omega L",
    "unit": "ohm",
-   "value": 14211.434191484932
+   "value": 10504.103532836687
   },
   "RF_COIL_TURNS": {
    "kind": "design",
    "path": "rf_coil.turns",
-   "source": "workbook blocks/a.md; legacy probe.scad",
+   "source": "2 layers x 133 over the 60 mm winding (design-closure: 60 mm active region)",
    "unit": "1",
-   "value": 400
+   "value": 266
   },
   "RF_COIL_WIRE_PITCH_M": {
    "kind": "datasheet",
@@ -829,14 +829,14 @@
    "path": "tx.b1_rotating_centre",
    "source": "1/2 * b1_per_amp_centre * coil_current",
    "unit": "T",
-   "value": 1.2829238597834753e-05
+   "value": 1.591323919178634e-05
   },
   "TX_COIL_CURRENT_A": {
    "kind": "calculated",
    "path": "tx.coil_current",
    "source": "(V_tx - V_diode) / |R + j omega L| (untuned coil during TX, ADR-0007)",
    "unit": "A",
-   "value": 0.005101469233922908
+   "value": 0.006902002275673156
   },
   "TX_CURRENT_LIMIT_A": {
    "kind": "design",
@@ -850,7 +850,7 @@
    "path": "tx.excitation_bandwidth",
    "source": "~1/(4 t90): +-half-width of a hard 90 pulse's flat region",
    "unit": "Hz",
-   "value": 545.8515283842795
+   "value": 677.5067750677506
   },
   "TX_FREQUENCY_HZ": {
    "kind": "target",
@@ -871,21 +871,21 @@
    "path": "tx.t180",
    "source": "2 x t90",
    "unit": "s",
-   "value": 0.000916
+   "value": 0.000738
   },
   "TX_T90_CALCULATED_S": {
    "kind": "calculated",
    "path": "tx.t90_calculated",
    "source": "pi/2 = 2 pi gamma_bar B1rot t  ->  t = 1/(4 gamma_bar B1rot)",
    "unit": "s",
-   "value": 0.00045768886293540134
+   "value": 0.00036898833451838613
   },
   "TX_T90_S": {
    "kind": "calculated",
    "path": "tx.t90",
-   "source": "pi/(2 gamma B1rot) at the coil centre with the ADR-0007 TX series diodes (5.10 mA); legacy 417 us had no diode drop. Replace with a nutation measurement",
+   "source": "pi/(2 gamma B1rot), 60 mm coil (B1/I 4.611 mT/A, ~6.9 mA into the lower-L coil). Recalibrate by nutation on the bench",
    "unit": "s",
-   "value": 0.000458
+   "value": 0.000369
   }
  },
  "strings": {

@@ -40,6 +40,14 @@ SampleGeometry design_sample() {
     return {SAMPLE_RADIUS_M, SAMPLE_X_MIN_M, SAMPLE_X_CYL_END_M, SAMPLE_CONE_LENGTH_M};
 }
 
+ProbeGeometry legacy_probe() {   // frozen 100 mm / 400-turn reference the golden maps were computed for (do not change)
+    ProbeGeometry pg;
+    pg.mu0 = cfg::CONSTANTS_MU0_H_PER_M;
+    pg.b0 = helmholtz_pair(1, 0.2, 0.2, 312, 0.028, 0.027, 5, 5);
+    pg.rf = layered_solenoid(0, {0.020225, 0.020675}, {222, 178}, 0.45e-3, -0.05);
+    return pg;
+}
+
 void transverse(Vec3 b0, Vec3 b1, double& b1_perp, double& phi) {
     const Vec3 n = b0 * (1.0 / b0.norm());
     Vec3 ex = Vec3{1, 0, 0} - n * n.x;

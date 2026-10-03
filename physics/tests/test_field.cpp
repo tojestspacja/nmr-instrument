@@ -51,13 +51,15 @@ int main() {
         CHECK_NEAR(ax, -1.152 * std::pow(s / R, 4), 0, 0.01, "Helmholtz axial error ~ -144/125 (s/R)^4");
         CHECK_NEAR(rad, -0.432 * std::pow(s / R, 4), 0, 0.01, "Helmholtz radial error ~ -(3/8)(144/125) (s/R)^4");
     }
-    // the design coils against the legacy Biot-Savart map (Mathematica, legacy/simulator/m/fieldmap-tube.json)
+    // the FROZEN 100 mm reference coils against the legacy Biot-Savart map (Mathematica, fieldmap-tube.json). Uses
+    // legacy_probe(), not the current design, so this stays an independent solver cross-check after the design coil
+    // changes (e.g. to the 60 mm active region). See docs/design-closure.md.
     {
-        const ProbeGeometry pg = design_probe();
+        const ProbeGeometry pg = legacy_probe();
         // B0 centre: 2.1034711 mT at 1.5 A (map header B0_centre_mT_at_1.5A)
         CHECK_NEAR(pg.b0.field_per_amp({0, 0, 0}, MU0).y * 1.5, 2.1034711e-3, 0, 2e-7, "B0 centre, finite-section pair (golden: map)");
-        // B1 centre per amp: two-layer winding, 5.029625e-3 T/A (map centre.b1; also in instrument.yaml)
-        CHECK_NEAR(pg.rf.field_per_amp({0, 0, 0}, MU0).x, cfg::RF_COIL_B1_PER_AMP_CENTRE_T_PER_A, 0, 2e-6, "B1/I at the coil centre (golden: map)");
+        // B1 centre per amp: frozen 100 mm two-layer winding, 5.029625e-3 T/A (map centre.b1)
+        CHECK_NEAR(pg.rf.field_per_amp({0, 0, 0}, MU0).x, 5.029625e-3, 0, 2e-6, "B1/I at the 100 mm reference centre (golden: map)");
         // voxel spot checks from the audit (position mm -> b1perp T/A, phi rad)
         struct Spot { double x, y, z, b1, phi; };
         const Spot spots[] = {{-56.75e-3, -12.75e-3, -5.25e-3, 1.558114e-3, -0.20769}, {5.75e-3, -0.25e-3, 4.75e-3, 4.966064e-3, -0.00833}};

@@ -66,6 +66,8 @@ NMR_API int32_t nmr_voxelize(double grid_m);
 NMR_API int32_t nmr_voxels(double* out7, int32_t cap_voxels);
 /* field of the design coils per amp at a point: b0[3], b1[3] [T/A] */
 NMR_API void nmr_fields_at(double x, double y, double z, double* b0, double* b1);
+/* same, for the frozen 100 mm reference coil the golden maps were computed for (independent solver cross-check) */
+NMR_API void nmr_legacy_fields_at(double x, double y, double z, double* b0, double* b1);
 
 /* run a program on the current voxels; returns the number of acquisition records */
 NMR_API int32_t nmr_simulate(const uint8_t* prog, int32_t n, const nmr_model* m);

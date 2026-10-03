@@ -166,6 +166,15 @@ void nmr_fields_at(double x, double y, double z, double* b0, double* b1) {
     b1[0] = b.x; b1[1] = b.y; b1[2] = b.z;
 }
 
+// Fields of the frozen 100 mm reference coil (legacy_probe) — the geometry the golden maps were computed for. The
+// golden tests use this so the solver stays independently cross-validated after the design coil changes.
+void nmr_legacy_fields_at(double x, double y, double z, double* b0, double* b1) {
+    static const nmr::ProbeGeometry pg = nmr::legacy_probe();
+    const nmr::Vec3 a = pg.b0.field_per_amp({x, y, z}, pg.mu0), b = pg.rf.field_per_amp({x, y, z}, pg.mu0);
+    b0[0] = a.x; b0[1] = a.y; b0[2] = a.z;
+    b1[0] = b.x; b1[1] = b.y; b1[2] = b.z;
+}
+
 int32_t nmr_simulate(const uint8_t* b, int32_t n, const nmr_model* c) {
     pulse::Program p;
     if (!load_prog(b, n, p)) return -1;

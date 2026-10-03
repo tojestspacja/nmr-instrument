@@ -32,7 +32,7 @@ def test_fieldmap_every_voxel(sample):
     p = np.array(d["p"]) / 1000.0
     df_err = b1_err = phi_err = 0.0
     for k in range(len(p)):
-        b0, b1 = core.fields_at(*p[k])
+        b0, b1 = core.legacy_fields_at(*p[k])   # frozen 100 mm reference the maps were computed for
         df = LEG["gamma_bar_hz_per_t"] * np.linalg.norm(b0) * LEG["b0_current_a"] - LEG["f_tx_hz"]
         b1p, phi = transverse(b0, b1)
         df_err = max(df_err, abs(df - d["df"][k]))
@@ -43,7 +43,7 @@ def test_fieldmap_every_voxel(sample):
     assert df_err <= 2e-3
     assert b1_err <= 1e-5
     assert phi_err <= 1.5e-4
-    b0c, b1c = core.fields_at(0, 0, 0)
+    b0c, b1c = core.legacy_fields_at(0, 0, 0)
     assert np.linalg.norm(b0c) * 1.5 * 1e3 == pytest.approx(d["B0_centre_mT_at_1.5A"], rel=1e-9)
     assert b1c[0] == pytest.approx(d["centre"]["b1"], rel=1e-9)
 

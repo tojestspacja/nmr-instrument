@@ -49,11 +49,11 @@ include <nmr-params.scad>
 module leadin(d, c) translate([0, 0, -eps]) cylinder(d1 = d + 2 * c, d2 = d, h = c + eps);
 
 // ---------------------------------------------------------------- coil (from the docs)
-turns   = 400;
+turns   = 266;            // 2 layers x 133 over the 60 mm winding (design-closure.md: 60 mm active region)
 wire_d  = 0.45;           // AWG26 enamelled, overall diameter (the article's AWG24 is 0.55)
 wire_cu = 0.405;          // AWG26 copper diameter, for the mass to buy
 wind_d  = 40;             // winding surface (former outside diameter)
-wind_l  = 100;            // winding length
+wind_l  = 60;             // winding length = B0-homogeneous active region (design-closure.md; was 100 mm)
 tube_t  = 2;              // former wall
 cheek_t = 6;              // end cheek thickness (article: 6 mm end pieces)
 cheek_h = 3;              // cheek height above the winding surface
@@ -289,7 +289,7 @@ if (part == "cradle") cradle();
 wire_m = turns * PI * (wind_d + build) / 1000;
 echo(str("winding: ", per_layer, " turns per layer, ", layers, " layers (", build, " mm), wire about ",
          round(wire_m), " m, ", round(wire_m * PI * pow(wire_cu / 2, 2) * 8.96), " g of copper (buy more)"));
-echo(str("B/I = mu0 N / l = ", round(mu0 * turns / (wind_l / 1000) * 1e5) / 100, " mT/A (docs: 5.03)"));
+echo(str("B/I = mu0 N / l = ", round(mu0 * turns / (wind_l / 1000) * 1e5) / 100, " mT/A long-solenoid approx (Biot-Savart solver: 4.61 mT/A at 60 mm)"));
 echo(str("bottle (no sleeve): at most ", bore - fit, " mm diameter; water inside the winding ",
          round(PI * pow((bore - fit) / 2, 2) * wind_l / 1000), " mL (docs: 60-250 mL)"));
 smp_body = [-fl_t - cap_h + cap_h, -fl_t - cap_h + smp_l - cone_l];      // tube body, former z
@@ -319,11 +319,14 @@ sleeve_wall = (sleeve_od - sleeve_id) / 2;
 tip_z       = -fl_t - cap_h + smp_l;                 // 50 mL tube tip, in the former frame (z along the axis)
 fixing_gap  = (base_x[1] - 3.5) - (base_x[1] - anchor[0] - 2);   // corner fixing hole vs anchor block edge
 assert(sleeve_wall >= 0.8, str("sleeve wall ", sleeve_wall, " mm is under the 0.8 mm print minimum"));
-assert(tip_z <= former_l, str("50 mL tube tip (", tip_z, " mm) runs past the former end (", former_l, " mm)"));
+// the sample must cover the full winding (the active region) — the tube may legitimately overhang the shorter former
+assert(smp_body[0] <= z_wind[0] && smp_body[1] >= z_wind[1],
+       str("sample body z ", smp_body[0], "..", smp_body[1], " does not cover the winding z ", z_wind[0], "..", z_wind[1]));
 assert(build <= cheek_h, str("winding build ", build, " mm stands above the ", cheek_h, " mm cheek rim"));
 assert(hh_I < hb_trip && hh_I * hh_ohm <= vext_max, "B0 pair exceeds the H-bridge current or +VEXT limit");
-echo(str("CHECK ok: sleeve wall ", round(sleeve_wall * 100) / 100, " mm; tube tip ", round(tip_z),
-         "/", former_l, " mm; fixing-to-anchor gap ", round(fixing_gap), " mm; lead-in chamfer ", chamf, " mm"));
+echo(str("CHECK ok: sleeve wall ", round(sleeve_wall * 100) / 100, " mm; winding z ", z_wind[0], "..", z_wind[1],
+         " covered by sample z ", round(smp_body[0]), "..", round(smp_body[1]), "; tube tip ", round(tip_z),
+         " mm (overhang ", round(tip_z - former_l), " mm past the ", former_l, " mm former); lead-in chamfer ", chamf, " mm"));
 
 // ---------------------------------------------------------------- bill of materials (one place, for the build)
 echo("BOM printed (PLA/PETG): former x1, sleeve x1, cradle x1  (OpenSCAD -> STL; see part=)");

@@ -64,24 +64,27 @@ b0:
 
 rf_coil:
   # the class probe coil (transmit and receive)
-  turns:            {value: 400, unit: "1", kind: design, source: "workbook blocks/a.md; legacy probe.scad"}
-  length:           {value: 0.100, unit: m, kind: design, source: "winding length"}
-  layers:           {value: 2, unit: "1", kind: design, source: "222 + 178 turns"}
+  # 60 mm active region (docs/design-closure.md): the 100 mm/400-turn coil was too long for the B0-homogeneous volume
+  # (receive-weighted field RMS 24 Hz, only 11 % of signal within +-5 Hz). 60 mm keeps 78 % of signal at ~4.4 Hz RMS.
+  # The golden maps + golden tests stay on the frozen 100 mm reference (legacy_probe); see design-closure.md.
+  turns:            {value: 266, unit: "1", kind: design, source: "2 layers x 133 over the 60 mm winding (design-closure: 60 mm active region)"}
+  length:           {value: 0.060, unit: m, kind: design, source: "winding length = B0-homogeneous active region (design-closure.md)"}
+  layers:           {value: 2, unit: "1", kind: design, source: "133 + 133 turns"}
   layer1_radius:    {value: 0.020225, unit: m, kind: design, source: "former 40 mm + 0.45 mm wire / 2 (legacy nmr_exact.wls:50)"}
   layer2_radius:    {value: 0.020675, unit: m, kind: design, source: "second layer (legacy nmr_exact.wls:50)"}
   wire_pitch:       {value: 0.45e-3, unit: m, kind: datasheet, source: "AWG26 enamelled outer diameter"}
-  inductance:       {value: 2.53e-3, unit: H, kind: estimate, source: "workbook blocks/a.md; to be measured (validation/bench)"}
-  resistance:       {value: 6.7, unit: ohm, kind: estimate, source: "workbook; sheet_nmr_rx.py:253"}
+  inductance:       {value: 1.87e-3, unit: H, kind: estimate, source: "scaled from the 100 mm 2.53 mH by N^2/l; to be measured (validation/bench)"}
+  resistance:       {value: 4.46, unit: ohm, kind: estimate, source: "scaled from 6.7 ohm by turns (266/400); to be measured"}
   quality_factor:   {value: 10.0, unit: "1", kind: estimate, source: "sheet_nmr_rx.py:253; to be measured"}
-  b1_per_amp_centre: {value: 5.029625e-3, unit: T/A, kind: calculated,
-                      source: "Biot-Savart, two-layer winding (legacy fieldmap-tube.json centre.b1; re-derived in physics tests)"}
+  b1_per_amp_centre: {value: 4.611195e-3, unit: T/A, kind: calculated,
+                      source: "Biot-Savart, 60 mm 266-turn two-layer winding (re-derived in physics tests; 100 mm was 5.029625e-3)"}
 
 tx:
   frequency:        {value: 89400.0, unit: Hz, kind: target, source: "legacy default f_tx; retune to the measured line"}
   amplitude:        {value: 7.95, unit: V, kind: design, source: "OPA564 swing at +VEXT 18 V, G 25 (sheet_nmr_tx.py:145)"}
   current_limit:    {value: 1.5, unit: A, kind: design, source: "OPA564 ISET R809 11k"}
-  t90:              {value: 458e-6, unit: s, kind: calculated, source: "pi/(2 gamma B1rot) at the coil centre with the ADR-0007 TX series diodes (5.10 mA); legacy 417 us had no diode drop. Replace with a nutation measurement"}
-  t180:             {value: 916e-6, unit: s, kind: calculated, source: "2 x t90"}
+  t90:              {value: 369e-6, unit: s, kind: calculated, source: "pi/(2 gamma B1rot), 60 mm coil (B1/I 4.611 mT/A, ~6.9 mA into the lower-L coil). Recalibrate by nutation on the bench"}
+  t180:             {value: 738e-6, unit: s, kind: calculated, source: "2 x t90"}
   series_diode_drop: {value: 0.7, unit: V, kind: estimate, source: "silicon diode at mA (ADR-0007 TX series crossed diodes)"}
 
 dds:

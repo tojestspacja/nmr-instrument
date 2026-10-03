@@ -77,6 +77,7 @@ class Core:
         L.nmr_voxelize.argtypes = [C.c_double]
         L.nmr_voxels.argtypes = [C.c_void_p, C.c_int32]
         L.nmr_fields_at.argtypes = [C.c_double] * 3 + [C.c_void_p, C.c_void_p]
+        L.nmr_legacy_fields_at.argtypes = [C.c_double] * 3 + [C.c_void_p, C.c_void_p]
         L.nmr_simulate.argtypes = [C.c_void_p, C.c_int32, C.POINTER(Model)]
         L.nmr_record.argtypes = [C.c_int32, C.POINTER(RecordMeta), C.c_void_p, C.c_void_p, C.c_int32]
         L.nmr_load_record.argtypes = [C.POINTER(RecordMeta), C.c_void_p, C.c_void_p]
@@ -129,6 +130,11 @@ class Core:
     def fields_at(self, x, y, z):
         b0 = (C.c_double * 3)(); b1 = (C.c_double * 3)()
         self.L.nmr_fields_at(x, y, z, b0, b1)
+        return np.array(b0[:]), np.array(b1[:])
+
+    def legacy_fields_at(self, x, y, z):   # frozen 100 mm reference coil (golden cross-check)
+        b0 = (C.c_double * 3)(); b1 = (C.c_double * 3)()
+        self.L.nmr_legacy_fields_at(x, y, z, b0, b1)
         return np.array(b0[:]), np.array(b1[:])
 
     def voxelize(self, grid_m: float) -> np.ndarray:

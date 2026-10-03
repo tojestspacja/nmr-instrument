@@ -38,6 +38,11 @@ struct ProbeGeometry {
 ProbeGeometry design_probe();
 SampleGeometry design_sample();
 
+// Frozen 100 mm / 400-turn reference coil + the B0 pair, independent of the current config. This is the geometry the
+// Mathematica golden field maps (validation/physics/golden) were computed for; the golden tests use it so the
+// solver stays independently cross-validated even after the design coil changes (e.g. to the 60 mm active region).
+ProbeGeometry legacy_probe();
+
 // Centred grid of pitch g over the sample; fields computed by Biot-Savart for every voxel.
 std::vector<Voxel> voxelize(const ProbeGeometry& pg, const SampleGeometry& sg, double g);
 
