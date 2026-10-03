@@ -1,7 +1,8 @@
 // one component of the bench setup per run, in instrument.scad's world frame
-include <../../mechanical/probe.scad>
+include <../../mechanical/cut-probe.scad>   // brings probe.scad + the magnet frame/baseplate modules (Phase 4)
 use <../../mechanical/housing.scad>
 part = "none";
+piece = "none";                              // suppress cut-probe's sheet layout
 comp = "cradle";
 $fn = 64;
 housing_gap = 450;
@@ -31,6 +32,8 @@ if (comp == "probe_cable") cable();
 if (comp == "b0_rings")    for (s = [-1, 1]) translate([0, s * hh_R / 2, axis_z]) b0_ring();
 if (comp == "b0_windings") for (s = [-1, 1]) translate([0, s * hh_R / 2, axis_z]) b0_winding();
 if (comp == "tripod")  translate([0, 0, T]) cylinder(d = 25, h = -T);
+if (comp == "baseplate")    baseplate();
+if (comp == "magnet_frame") magnet_frame();
 if (comp == "cable_tx") run(tx_route, 4);
 if (comp == "cable_rx") run(rx_route, 2.8);
 if (comp == "cable_hb") run(hb_route, 6);

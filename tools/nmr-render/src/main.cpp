@@ -112,6 +112,8 @@ static Mat material(const std::string& id) {
     if (id == "probe_cable" || id == "cable_rx") return {0.09, 0.09, 0.09, 1.00, "wiring"};
     if (id == "cable_tx")    return {0.23, 0.25, 0.24, 1.00, "wiring"};
     if (id == "cable_hb")    return {0.62, 0.36, 0.17, 1.00, "wiring"};
+    if (id == "baseplate")   return {0.80, 0.66, 0.45, 1.00, "frame"};   // ply base
+    if (id == "magnet_frame") return {0.74, 0.76, 0.78, 1.00, "frame"};  // rails + braces
     return {0.7, 0.7, 0.7, 1.0, "holder"};
 }
 
@@ -229,7 +231,7 @@ int main(int argc, char** argv) {
     V3 bg = {0.94, 0.95, 0.96};
     V3 target = {20, 0, 33};          // probe/sample region (winding centre x=0, coil axis z=AXIS~33)
     double fit = 1.25;                // framing margin
-    if (preset == "instrument") { fields = false; wiring = false; pcb = false; grid = false; azim = -58; elev = 18; vfov = 14; }
+    if (preset == "instrument") { fields = false; wiring = false; pcb = false; grid = false; azim = -58; elev = 12; vfov = 15; }
     else if (preset == "physics") { fields = true; wiring = false; pcb = false; grid = false; azim = 32; elev = 15; vfov = 12; persp = false; }
     else if (preset == "probe") { fields = false; wiring = false; pcb = false; grid = false; azim = -60; elev = 16; vfov = 16; target = {0, 0, 33}; fit = 0.75; }
     else if (preset == "exploded") { fields = false; wiring = true; pcb = true; grid = false; exploded = true; explodeAmt = 1.0; azim = -58; elev = 18; vfov = 16; }
@@ -258,6 +260,7 @@ int main(int argc, char** argv) {
         if (g == "holder" && !holder) return false;
         if (g == "housing" && (preset == "physics" || preset == "probe" || preset == "instrument")) return false;
         if (g == "wiring" && preset == "instrument") return false;
+        if (g == "frame" && (preset == "physics" || preset == "probe")) return false;   // frame only in instrument/exploded
         if (g == "b0" && (preset == "probe" || preset == "exploded")) return false;
         if (g == "pcb" && preset == "probe") return false;
         return true;

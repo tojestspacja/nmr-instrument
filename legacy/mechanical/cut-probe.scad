@@ -130,6 +130,28 @@ module b0_brace2d() as_cut(b_kerf) difference() {
 module b0_text() as_engrave() if (!jet) translate([0, r_w - band / 2 + 1])
     text(str("B0 ", round(nmr_B0 * 1e4) / 10, " mT  ", hh_N, " T"), size = 4, font = label_font, halign = "center", valign = "center");
 
+// ---------------------------------------------------------------- 3D magnet frame + baseplate (assembly view)
+// Faithful solids built from the SAME rail/ring numbers above (the 2D parts remain authoritative for cutting).
+// World frame: x = coil axis, y = B0 axis, z = up. Ties the two rails (x = +-rail_x), the braces, the ring stacks and
+// the probe cradle onto one baseplate -> a single mechanical reference. See docs/design-closure.md (Phase 4).
+plate_t = 15;                                      // baseplate (18 mm ply in practice)
+plate_x = [-rail_x - 35, base_x[1] + 55];          // under the magnet, out to carry the cradle + cable anchor
+plate_y = rail_l / 2 + 15;
+module b0_rail3d(sx) translate([sx * rail_x, 0, z_table]) difference() {
+    translate([-t6 / 2, -rail_l / 2, 0]) cube([t6, rail_l, rail_h]);
+    for (s = [-1, 1]) translate([-t6, s * hh_R / 2 - (stack + 1) / 2, rail_v]) cube([2 * t6, stack + 1, rail_h]);   // ring seats
+    translate([-t6, -rail_l / 2 + 10, -1]) cube([2 * t6, 8, rail_v / 2 + 1]);                                       // lighten
+    translate([-t6, rail_l / 2 - 18, -1]) cube([2 * t6, 8, rail_v / 2 + 1]);
+}
+module b0_brace3d(sy) translate([-brace_l / 2, sy * (rail_l / 2 - 35) - t6 / 2, z_table]) cube([brace_l, t6, rail_v]);
+module b0_stack3d(sy) translate([0, sy * hh_R / 2, axis_z]) rotate([90, 0, 0])   // ring former stack (flanges+spacers)
+    rotate_extrude($fn = 120) translate([r_w - band, -stack / 2]) square([r_fl - (r_w - band), stack]);
+module baseplate() color("burlywood") translate([plate_x[0], -plate_y, z_table - plate_t]) cube([plate_x[1] - plate_x[0], 2 * plate_y, plate_t]);
+module magnet_frame() { for (sx = [-1, 1]) color("gainsboro") b0_rail3d(sx); for (sy = [-1, 1]) color("gainsboro") b0_brace3d(sy); }
+echo(str("frame: baseplate ", plate_x[1] - plate_x[0], " x ", round(2 * plate_y), " x ", plate_t, " mm; rails at x +-", rail_x,
+         " (", rail_h, " mm tall, ring seats ", round(rail_v), " mm up); baseplate carries both rails + the probe: ",
+         plate_x[0] <= -rail_x - t6 && plate_x[1] >= base_x[1] && plate_y >= rail_l / 2 ? "yes" : "NO"));
+
 // ---------------------------------------------------------------- pieces
 // [name, material, machine, qty]
 pieces = [

@@ -86,6 +86,17 @@ shim only if the *mapped* field / *measured* linewidth demand it. Do not add hig
 
 ## Phases 3–10 — staged plan
 
+### Phase 4 implemented — magnet structural closure + baseplate (2026-10-03)
+
+The B0 pair already had laser-cut rails + braces (`cut-probe.scad`) that seat both ring stacks at the 200 mm spacing,
+but they were never in the 3-D assembly and there was no common base. Added (faithful solids from the same rail/ring
+numbers, in `cut-probe.scad`): `b0_rail3d`/`b0_brace3d` (the two rails at x = ±100 seating the rings, tied by braces)
+and a `baseplate()` that carries both rails **and** the probe tripod — one mechanical reference (x coil axis, y B0,
+z up). Exposed as render components (`exp-probe.scad` → sim meshes) and on the website (new "Frame" group); the renderer
+`instrument`/`exploded` presets show the supported instrument on its base, verified by inspection. Clearance echo
+confirms the baseplate spans both rails + the probe. Still open for Phase 6: a full `instrument()` interference pass and
+the electronics tray's mount to this baseplate (Phase 5).
+
 **Doable now in CAD/analysis (with the `tools/nmr-render` oracle for visual checks):**
 
 - **Phase 3 — Probe mechanical closure.** Make sample positioning a real datum chain: sleeve flange + tube cap as the

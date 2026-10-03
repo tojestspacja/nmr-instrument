@@ -243,6 +243,8 @@ dl.ro dd { margin: 0; text-align: right; }
     { id: "tripod", grp: "Probe", name: "Tripod column", d: "Nylon hardware: the article swaps every steel screw.", mat: "grey", ex: [0, 0, -50] },
     { id: "b0_rings", grp: "B0 coil", name: "Helmholtz ring formers", d: "Two rings, R = spacing = 200 mm; water-jet polycarbonate stacks.", mat: "poly", ex: [0, 0, 0] },
     { id: "b0_windings", grp: "B0 coil", name: "B0 windings", d: "2 × 312 turns AWG16, 10.3 Ω, 2.10 mT at 1.5 A from the H-bridge.", mat: "copper2", ex: [0, 0, 0] },
+    { id: "magnet_frame", grp: "Frame", name: "B0 rails + braces", d: "Two laser-cut rails seat both ring stacks at the 200 mm Helmholtz spacing; braces tie them. On the baseplate.", mat: "grey", ex: [0, 0, 0] },
+    { id: "baseplate", grp: "Frame", name: "Baseplate", d: "One reference for the magnet, the probe tripod and the electronics — the common datum (design-closure Phase 4).", mat: "print", ex: [0, 0, -80] },
     { id: "box", grp: "Instrument", name: "Laser-cut housing", d: "3 mm acrylic: cover, walls in tabs, plate on T-slot nuts, OLED hood of three frames.", mat: "acrylic", ex: [0, 0, 95], variant: "box" },
     { id: "shell", grp: "Instrument", name: "Printed housing shell", d: "Cover and walls in one print, plate on nuts in side-open pockets.", mat: "print", ex: [0, 0, 95], variant: "shell" },
     { id: "hood", grp: "Instrument", name: "OLED hood (printed)", d: "Surround for the display, flange under the cover.", mat: "orange", ex: [0, 0, 120], variant: "shell" },
@@ -610,12 +612,13 @@ dl.ro dd { margin: 0; text-align: right; }
   // and fov were chosen and verified with tools/nmr-render (az/el/fov on the same geometry). Frame: +x coil/sample,
   // +y B0, +z up. "grp" values come from PARTS: Probe, B0 coil, Instrument, Cables.
   const PROBE_PAIR = ["Probe", "B0 coil"];
+  const ALL = ["Probe", "B0 coil", "Frame", "Instrument", "Cables"];
   const VIEWS = {
-    overview: { pos: [529, -847, 357], tgt: [0, 0, AXIS], fov: 14, groups: PROBE_PAIR, fields: false },      // Instrument hero
+    overview: { pos: [529, -890, 300], tgt: [0, 0, -40], fov: 15, groups: ["Probe", "B0 coil", "Frame"], fields: false },  // Instrument hero
     physics:  { pos: [0, -1116, 311],  tgt: [0, 0, AXIS], fov: 13, groups: PROBE_PAIR, fields: true },       // B0 / B1 geometry
     probe:    { pos: [211, -366, 154], tgt: [0, 0, AXIS], fov: 18, groups: ["Probe"], fields: false },       // the sample holder
-    housing:  { pos: [905, -1078, 459], tgt: [150, 0, -20], fov: 16, groups: ["Probe", "B0 coil", "Instrument", "Cables"], fields: false },
-    top:      { pos: [120, -28, 1560], tgt: [120, 0, -40], fov: 16, groups: ["Probe", "B0 coil", "Instrument", "Cables"], fields: false },
+    housing:  { pos: [905, -1078, 459], tgt: [150, 0, -20], fov: 16, groups: ALL, fields: false },
+    top:      { pos: [120, -28, 1560], tgt: [120, 0, -40], fov: 16, groups: ALL, fields: false },
   };
   function applyGroups(groups) {
     for (const p of PARTS) {
